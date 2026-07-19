@@ -1,142 +1,158 @@
 ﻿'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { playPageTurnSound } from '@/lib/sound';
+import ChoiceButton from './ChoiceButton';
 
-type AnimPhase = 'idle' | 'exit' | 'enter';
+type AnimPhase = 'idle' | 'exiting' | 'entering';
 
-const EXIT_MS = 220;
-const ENTER_MS = 220;
+/* 古籍翻页动画时长（ms）— 缓慢克制 */
+const EXIT_MS = 250;
+const ENTER_MS = 250;
 
 interface ManuscriptPageProps {
-  pageKey: string;
   speaker?: string;
   text: string;
   isTitle?: boolean;
   canTurn?: boolean;
   onTurn?: () => void;
-  footer?: React.ReactNode;
+  choices?: { id: string; text: string }[];
+  onChoice?: (index: number) => void;
+  footer?: ReactNode;
 }
 
 export default function ManuscriptPage({
-  pageKey,
   speaker,
   text,
   isTitle = false,
   canTurn = false,
   onTurn,
+  choices,
+  onChoice,
   footer,
 }: ManuscriptPageProps) {
-  const [phase, setPhase] = useState<AnimPhase>('idle');
+  const [phase, setPhase] = useState<AnimPhase>('entering');
+  const mountedRef = useRef(false);
   const turningRef = useRef(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const onTurnRef = useRef(onTurn);
-  const prevKeyRef = useRef(pageKey);
-  const timerRef = useRef<number | null>(null);
-
+  const onChoiceRef = useRef(onChoice);
   onTurnRef.current = onTurn;
-
-  const clearTimer = useCallback(() => {
-    if (timerRef.current !== null) {
-      window.clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
-  }, []);
-
-  // Handle pageKey changes (internal turn or external navigation)
+  onChoiceRef.current = onChoice;
+  /* 首次挂载入场动画 */
   useEffect(() => {
-    if (prevKeyRef.current === pageKey) return;
-
-    const wasInternal = turningRef.current;
-    prevKeyRef.current = pageKey;
-
-    if (wasInternal) return;
-
-    // External navigation: animate new page in
-    clearTimer();
-    setPhase('enter');
-    timerRef.current = window.setTimeout(() => {
+    mountedRef.current = true;
+    timerRef.current = setTimeout(() => {
+      if (!mountedRef.current) return;
       setPhase('idle');
-      timerRef.current = null;
     }, ENTER_MS);
-  }, [pageKey, clearTimer]);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => clearTimer();
-  }, [clearTimer]);
-
-  const requestTurn = useCallback(() => {
-    if (!canTurn || turningRef.current || phase !== 'idle') return;
-
-    turningRef.current = true;
-    clearTimer();
-    playPageTurnSound();
-
-    // Exit phase — old page fades out
-    setPhase('exit');
-
-    timerRef.current = window.setTimeout(() => {
-      // Advance to next beat (parent state update)
-      onTurnRef.current?.();
-
-      clearTimer();
-
-      // Enter phase — new page fades in (text + phase batched by React)
-      setPhase('enter');
-
-      timerRef.current = window.setTimeout(() => {
-        setPhase('idle');
-        turningRef.current = false;
+    return () => {
+      mountedRef.current = false;
+      if (timerRef.current !== null) {
+        clearTimeout(timerRef.current);
         timerRef.current = null;
-      }, ENTER_MS);
-    }, EXIT_MS);
-  }, [canTurn, phase, clearTimer]);
+      }
+    };
+  }, []);
+  /* 翻页：淡出 → 下一内容 → 淡入 */
+  const startExit = useCallback(
+    (onComplete: () => void) => {
+      if (phase !== 'idle' || turningRef.current) return;
+      turningRef.current = true;
+      setPhase('exiting');
+      playPageTurnSound();
 
-  const handleClick = (event: React.MouseEvent) => {
-    if ((event.target as HTMLElement).closest('[data-no-turn]')) return;
-    requestTurn();
-  };
+      timerRef.current = setTimeout(() => {
+        if (!mountedRef.current) return;
+        onComplete();
+        setPhase('entering');
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      requestTurn();
-    }
-  };
+        timerRef.current = setTimeout(() => {
+          if (!mountedRef.current) return;
+          setPhase('idle');
+          turningRef.current = false;
+        }, ENTER_MS);
+      }, EXIT_MS);
+    },
+    [phase],
+  );
+
+  const handlePageClick = useCallback(
+    (event: React.MouseEvent) => {
+      if ((event.target as HTMLElement).closest('[data-no-turn]')) return;
+      if (!canTurn || choices) return;
+      startExit(() => onTurnRef.current?.());
+    },
+    [canTurn, choices, startExit],
+  );
+
+  const handleChoiceSelect = useCallback(
+    (index: number) => {
+      startExit(() => onChoiceRef.current?.(index));
+    },
+    [startExit],
+  );
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        if (canTurn && !choices) {
+          startExit(() => onTurnRef.current?.());
+        }
+      }
+    },
+    [canTurn, choices, startExit],
+  );
 
   const phaseClass =
-    phase === 'exit'
+    phase === 'exiting'
       ? 'manuscript-page--exit'
-      : phase === 'enter'
+      : phase === 'entering'
         ? 'manuscript-page--enter'
         : '';
 
+  const isInteractive = canTurn && phase === 'idle' && !choices;
+  /* 为每段文字绑定独立 key，确保 remount 时彻底销毁旧 DOM */
+  const contentKey = text;
   return (
     <div className="manuscript-stage mx-auto w-full max-w-2xl">
       <article
-        className={`manuscript-page ${phaseClass} ${canTurn ? 'manuscript-page--interactive' : ''}`}
-        onClick={handleClick}
+        className={`manuscript-page ${phaseClass}`}
+        onClick={handlePageClick}
         onKeyDown={handleKeyDown}
-        role={canTurn ? 'button' : undefined}
-        tabIndex={canTurn ? 0 : undefined}
-        aria-label={canTurn ? '点击翻页' : undefined}
+        role={isInteractive ? 'button' : undefined}
+        tabIndex={isInteractive ? 0 : undefined}
+        aria-label={isInteractive ? '点击翻页' : undefined}
       >
         <div className="manuscript-sheet">
           <div className="manuscript-corner-curl" aria-hidden />
+          <div className="manuscript-paper-texture" aria-hidden />
 
           {!isTitle && speaker && speaker !== '旁白' && (
             <header className="manuscript-speaker">{speaker}</header>
           )}
 
-          {/* key={pageKey} ensures React cleanly unmounts old text DOM,
-              preventing any text-ghosting / duplication between pages */}
-          <div key={pageKey} className={isTitle ? 'manuscript-title-text' : 'manuscript-body-text'}>
-            <p>{text}</p>
+          <div className={isTitle ? 'manuscript-title-text' : 'manuscript-body-text'}>
+            <p key={contentKey}>{text}</p>
           </div>
 
-          {canTurn && phase === 'idle' && (
+          {choices && choices.length > 0 && (
+            <div className="manuscript-choices">
+              {choices.map((choice, index) => (
+                <ChoiceButton
+                  key={choice.id}
+                  index={index}
+                  text={choice.text}
+                  onSelect={() => handleChoiceSelect(index)}
+                />
+              ))}
+            </div>
+          )}
+
+          {canTurn && phase === 'idle' && !choices && (
             <p className="manuscript-turn-hint" aria-hidden>
-              ﹀
+              ─ 续 ─
             </p>
           )}
 

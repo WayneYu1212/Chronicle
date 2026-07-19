@@ -1,9 +1,8 @@
-"use client";
+﻿"use client";
 
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import ManuscriptChoices from "@/components/ManuscriptChoices";
 import ManuscriptPage from "@/components/ManuscriptPage";
 import WoodButton from "@/components/WoodButton";
 import { applyEffects, createInitialSave, loadSave, writeSave } from "@/lib/save";
@@ -141,41 +140,35 @@ function GameContent() {
       </header>
 
       <section className="mx-auto w-full max-w-2xl flex-1">
-        {isChoice ? (
-          <ManuscriptChoices
-            text={currentBeat.text}
-            choices={currentBeat.choices!}
-            onSelect={handleChoice}
-          />
-        ) : (
-          <ManuscriptPage
-            pageKey={currentBeat.id}
-            speaker={isTitle ? undefined : currentBeat.speaker}
-            text={currentBeat.text}
-            isTitle={isTitle}
-            canTurn={!isEnd}
-            onTurn={advance}
-            footer={
-              isEnd ? (
-                <div className="flex flex-col items-center gap-3 pt-6">
-                  <WoodButton href="/" className="text-sm opacity-80">
-                    返回首页
-                  </WoodButton>
-                  <WoodButton
-                    href="/game?mode=new"
-                    onClick={() => {
-                      const initial = createInitialSave(chapterId);
-                      writeSave(initial);
-                    }}
-                    className="text-sm opacity-80"
-                  >
-                    重读本章
-                  </WoodButton>
-                </div>
-              ) : undefined
-            }
-          />
-        )}
+        <ManuscriptPage
+          key={currentBeat.id}
+          speaker={isTitle ? undefined : currentBeat.speaker}
+          text={currentBeat.text}
+          isTitle={isTitle}
+          canTurn={!isEnd && !isChoice}
+          onTurn={advance}
+          choices={isChoice ? currentBeat.choices : undefined}
+          onChoice={isChoice ? handleChoice : undefined}
+          footer={
+            isEnd ? (
+              <div className="flex flex-col items-center gap-3 pt-6">
+                <WoodButton href="/" className="text-sm opacity-80">
+                  返回首页
+                </WoodButton>
+                <WoodButton
+                  href="/game?mode=new"
+                  onClick={() => {
+                    const initial = createInitialSave(chapterId);
+                    writeSave(initial);
+                  }}
+                  className="text-sm opacity-80"
+                >
+                  重读本章
+                </WoodButton>
+              </div>
+            ) : undefined
+          }
+        />
       </section>
 
       <footer className="mx-auto mt-10 w-full max-w-2xl border-t border-paper-edge/40 pt-4 text-center text-xs tracking-wider text-ink-faint">
