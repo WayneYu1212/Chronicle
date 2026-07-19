@@ -1,0 +1,78 @@
+{
+  "id": "chapter01",
+  "title": "第一章",
+  "subtitle": "第十三页",
+  "beats": [
+    {
+      "id": "beat-01",
+      "type": "title",
+      "text": "雨已经下了三天。"
+    },
+    {
+      "id": "beat-02",
+      "speaker": "旁白",
+      "text": "老板把几箱旧纸推到我的面前。"
+    },
+    {
+      "id": "beat-03",
+      "speaker": "老板",
+      "text": "今天把这些整理完。"
+    },
+    {
+      "id": "beat-04",
+      "speaker": "旁白",
+      "text": "我伸手，却发现其中一页，没有第一页。"
+    },
+    {
+      "id": "beat-05",
+      "speaker": "旁白",
+      "text": "那是一张没有第一页的纸。我轻轻展开，墨迹已经模糊。"
+    },
+    {
+      "id": "beat-06",
+      "speaker": "老板",
+      "text": "这张纸……不是这里的。"
+    },
+    {
+      "id": "beat-07",
+      "type": "choice",
+      "text": "你准备——",
+      "choices": [
+        {
+          "id": "choice-paper",
+          "text": "继续寻找同样纸张",
+          "effects": { "paper": 1 },
+          "goto": "beat-08a"
+        },
+        {
+          "id": "choice-trust",
+          "text": "先询问老板",
+          "effects": { "trust": 1, "trust_yimin": 1 },
+          "goto": "beat-08b"
+        }
+      ]
+    },
+    {
+      "id": "beat-08a",
+      "speaker": "旁白",
+      "text": "我在箱底又翻出两页。纸缘一样毛糙，墨色一样淡，却都不知从何处来。",
+      "next": "beat-09"
+    },
+    {
+      "id": "beat-08b",
+      "speaker": "老板",
+      "text": "别问太多。问多了，纸也会烫手。",
+      "next": "beat-09"
+    },
+    {
+      "id": "beat-09",
+      "speaker": "旁白",
+      "text": "雨声又紧了一层。这一页残卷，像是某个更大故事的开头——而开头，已经被人撕走了。"
+    },
+    {
+      "id": "beat-10",
+      "speaker": "旁白",
+      "text": "【第一章 · 试玩结束。后续章节开发中。】"
+    }
+  ]
+}

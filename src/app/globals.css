@@ -1,0 +1,348 @@
+@import url("https://cdn.jsdelivr.net/npm/lxgw-wenkai-web@1.7.0/style.css");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-title: "LXGW WenKai", "Noto Serif SC", serif;
+  --font-body: "Noto Serif SC", "LXGW WenKai", serif;
+  --paper: #f7f1e3;
+  --ink: #2f2a25;
+  --cinnabar: #8c3a2b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(140, 58, 43, 0.18);
+  color: var(--ink);
+}
+
+@layer components {
+  .paper-frame {
+    @apply relative overflow-hidden rounded-sm border border-paper-edge/60 bg-paper shadow-[inset_0_0_80px_rgba(212,196,168,0.35)];
+  }
+
+  .paper-frame::before {
+    content: "";
+    @apply pointer-events-none absolute inset-0 opacity-40;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(212, 196, 168, 0.5), transparent 45%),
+      radial-gradient(circle at 100% 100%, rgba(212, 196, 168, 0.45), transparent 40%);
+  }
+
+  .wood-button {
+    @apply relative min-w-[140px] rounded-sm border border-wood-dark/30 bg-gradient-to-b from-wood-light to-wood px-8 py-3 font-body text-base tracking-[0.2em] text-paper transition-all duration-300;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 2px 6px rgba(74, 53, 40, 0.25);
+  }
+
+  .wood-button:hover {
+    @apply from-wood to-wood-dark;
+    transform: translateY(-1px);
+  }
+
+  .wood-button:active {
+    transform: translateY(0);
+    box-shadow: inset 0 2px 4px rgba(74, 53, 40, 0.35);
+  }
+
+  .wood-button:disabled {
+    @apply cursor-not-allowed opacity-50;
+    transform: none;
+  }
+
+  .dialogue-box {
+    @apply paper-frame mx-auto w-full max-w-2xl px-6 py-8 sm:px-10 sm:py-10;
+  }
+
+  .page-title {
+    @apply font-title text-4xl tracking-[0.35em] text-ink sm:text-5xl;
+  }
+
+  .chapter-label {
+    @apply font-title text-sm tracking-[0.4em] text-cinnabar;
+  }
+
+  .manuscript-stage {
+    perspective: 1400px;
+    perspective-origin: center 20%;
+  }
+
+  .manuscript-page {
+    @apply relative w-full;
+    min-height: min(62vh, 520px);
+    transform-style: preserve-3d;
+    transform-origin: center bottom;
+  }
+
+ .manuscript-sheet {
+    @apply relative flex h-full min-h-[min(62vh,520px)] flex-col border border-paper-edge/70 bg-paper px-8 py-10 sm:px-12 sm:py-12;
+    will-change: opacity, transform;
+    backface-visibility: hidden;
+   box-shadow:
+      inset 0 0 80px rgba(212, 196, 168, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      0 16px 36px rgba(74, 53, 40, 0.1),
+      0 4px 10px rgba(74, 53, 40, 0.06);
+  }
+
+  .manuscript-sheet::before {
+    content: "";
+    @apply pointer-events-none absolute inset-0 opacity-35;
+    will-change: opacity;
+    transition: opacity 250ms ease;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(212, 196, 168, 0.55), transparent 42%),
+      radial-gradient(circle at 100% 100%, rgba(212, 196, 168, 0.45), transparent 38%);
+  }
+
+  .manuscript-page--interactive .manuscript-sheet {
+    cursor: pointer;
+  }
+
+  .manuscript-page--interactive .manuscript-sheet:hover {
+    box-shadow:
+      inset 0 0 80px rgba(212, 196, 168, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      0 18px 40px rgba(74, 53, 40, 0.12),
+      0 4px 10px rgba(74, 53, 40, 0.06);
+  }
+
+ .manuscript-corner-curl {
+    @apply pointer-events-none absolute bottom-0 right-0 h-24 w-24;
+    opacity: 0;
+    background:
+      linear-gradient(
+        225deg,
+        transparent 35%,
+        rgba(200, 180, 150, 0.45) 35%,
+        rgba(170, 148, 120, 0.7) 52%,
+        rgba(150, 130, 100, 0.85) 100%
+      );
+    transform-origin: bottom right;
+    will-change: opacity, transform;
+    transition: none;
+  }
+
+  .manuscript-speaker {
+    @apply relative z-[1] mb-6 border-b border-paper-edge/50 pb-3 font-title text-lg tracking-[0.3em] text-cinnabar;
+  }
+
+  .manuscript-body-text {
+    @apply relative z-[1] flex-1;
+  }
+
+  .manuscript-body-text p {
+    @apply m-0 whitespace-pre-wrap text-base leading-[2.1] tracking-[0.08em] text-ink;
+  }
+
+  .manuscript-title-text {
+    @apply relative z-[1] flex flex-1 items-center justify-center text-center;
+  }
+
+  .manuscript-title-text p {
+    @apply m-0 font-title text-2xl leading-[2] tracking-[0.25em] text-ink sm:text-3xl;
+  }
+
+  .manuscript-turn-hint {
+    @apply relative z-[1] mt-auto pt-8 text-center;
+    font-size: 16px;
+    color: rgba(47, 42, 37, 0.2);
+    line-height: 1;
+    animation: hint-pulse 3s ease-in-out infinite;
+    user-select: none;
+  }
+
+@keyframes hint-pulse {
+  0%, 100% { opacity: 0.3; transform: translateY(0); }
+  50% { opacity: 0.7; transform: translateY(-2px); }
+}
+
+  .manuscript-footer {
+    @apply relative z-[1];
+  }
+
+  .manuscript-sheet--choices {
+    cursor: default;
+  }
+
+  .manuscript-choices {
+    @apply relative z-[1] mt-8 space-y-3;
+  }
+}
+
+@keyframes page-turn-out {
+  0% {
+    opacity: 1;
+    transform: rotateX(0deg) translateY(0px);
+    box-shadow:
+      inset 0 0 80px rgba(212, 196, 168, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      0 16px 36px rgba(74, 53, 40, 0.1),
+      0 4px 10px rgba(74, 53, 40, 0.06);
+    filter: saturate(1) brightness(1);
+  }
+  30% {
+    opacity: 0.85;
+    transform: rotateX(-2deg) translateY(-3px);
+    box-shadow:
+      inset 0 0 80px rgba(212, 196, 168, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      0 14px 30px rgba(74, 53, 40, 0.12),
+      0 3px 8px rgba(74, 53, 40, 0.08);
+    filter: saturate(1.02) brightness(1.03);
+  }
+  60% {
+    opacity: 0.5;
+    transform: rotateX(-4deg) translateY(-6px);
+    box-shadow:
+      inset 0 0 80px rgba(212, 196, 168, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      0 8px 20px rgba(74, 53, 40, 0.06),
+      0 2px 6px rgba(74, 53, 40, 0.03);
+    filter: saturate(1.04) brightness(1.06);
+  }
+  100% {
+    opacity: 0;
+    transform: rotateX(-5deg) translateY(-10px);
+    box-shadow:
+      inset 0 0 80px rgba(212, 196, 168, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      0 2px 8px rgba(74, 53, 40, 0.02);
+    filter: saturate(1.08) brightness(1.1);
+  }
+}
+
+@keyframes page-turn-in {
+  0% {
+    opacity: 0;
+    transform: rotateX(3deg) translateY(6px);
+    box-shadow:
+      inset 0 0 80px rgba(212, 196, 168, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      0 2px 6px rgba(74, 53, 40, 0.02);
+    filter: saturate(1.08) brightness(1.1);
+  }
+  40% {
+    opacity: 0.6;
+    transform: rotateX(1.5deg) translateY(3px);
+    box-shadow:
+      inset 0 0 80px rgba(212, 196, 168, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      0 8px 18px rgba(74, 53, 40, 0.08),
+      0 2px 6px rgba(74, 53, 40, 0.04);
+    filter: saturate(1.04) brightness(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateX(0deg) translateY(0px);
+    box-shadow:
+      inset 0 0 80px rgba(212, 196, 168, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      0 16px 36px rgba(74, 53, 40, 0.1),
+      0 4px 10px rgba(74, 53, 40, 0.06);
+    filter: saturate(1) brightness(1);
+  }
+}
+
+.manuscript-page--exit .manuscript-sheet {
+  animation: page-turn-out 220ms ease-in forwards;
+}
+
+.manuscript-page--exit .manuscript-sheet::before {
+  opacity: 0.12;
+}
+
+.manuscript-page--enter .manuscript-sheet {
+  animation: page-turn-in 220ms ease-out forwards;
+}
+
+.manuscript-page--enter .manuscript-sheet::before {
+  opacity: 0.12;
+}
+
+.manuscript-page--exit .manuscript-corner-curl {
+  opacity: 1;
+  animation: curl-up 220ms ease-in forwards;
+}
+
+@keyframes curl-up {
+  0% {
+    transform: scale(0.85) rotate(2deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.8;
+    transform: scale(1.0) rotate(0deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.12) rotate(-3deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.15) rotate(-4deg);
+  }
+}
+
+.manuscript-page--enter .manuscript-corner-curl {
+  opacity: 0;
+  animation: curl-down 220ms ease-out forwards;
+}
+
+@keyframes curl-down {
+  0% {
+    opacity: 1;
+    transform: scale(1.15) rotate(-4deg);
+  }
+  40% {
+    opacity: 0.8;
+    transform: scale(1.05) rotate(-1deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.85) rotate(2deg);
+  }
+}
+
+@keyframes paper-fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.paper-flake {
+  position: fixed;
+  width: 6px;
+  height: 8px;
+  background: rgba(212, 196, 168, 0.55);
+  pointer-events: none;
+  animation: paper-fall linear infinite;
+  z-index: 0;
+}
