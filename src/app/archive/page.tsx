@@ -1,74 +1,15 @@
-import WoodButton from "@/components/WoodButton";
+"use client";
 
-const PLACEHOLDER_ITEMS = [
-  {
-    id: "fragment-13",
-    title: "残页·第十三页",
-    source: "未知",
-    author: "未知",
-    acquired: "第一章",
-    locked: false,
-    preview: "雨已经下了三天。其中一页，没有第一页。",
-  },
-  {
-    id: "priest-manuscript",
-    title: "教士口述稿",
-    source: "□□□□",
-    author: "□□□□",
-    acquired: "未获得",
-    locked: true,
-    preview: "庚寅之劫的真相，在不同的人看来，都是不同的。",
-  },
-];
+import { useEffect, useState } from "react";
+import BookShell from "@/components/BookShell";
+import { loadSave } from "@/lib/save";
+import archive from "@/story/archive.json";
 
 export default function ArchivePage() {
-  return (
-    <main className="min-h-screen px-4 py-10 sm:px-6">
-      <div className="mx-auto max-w-2xl">
-        <header className="mb-10 text-center">
-          <p className="chapter-label">史料</p>
-          <h1 className="mt-3 font-title text-3xl tracking-[0.3em]">残卷库</h1>
-          <p className="mt-4 text-sm leading-relaxed tracking-wide text-ink-light">
-            旅途中获得的残页、书信与口述，将在此汇集。
-          </p>
-        </header>
-
-        <div className="space-y-5">
-          {PLACEHOLDER_ITEMS.map((item) => (
-            <article
-              key={item.id}
-              className={`dialogue-box ${item.locked ? "opacity-60" : ""}`}
-            >
-              <h2 className="font-title text-lg tracking-[0.2em] text-cinnabar">
-                {item.locked ? "□□□□□□□□" : item.title}
-              </h2>
-              <dl className="mt-4 space-y-2 text-sm tracking-wide text-ink-light">
-                <div className="flex gap-3">
-                  <dt className="text-ink-faint">来源</dt>
-                  <dd>{item.source}</dd>
-                </div>
-                <div className="flex gap-3">
-                  <dt className="text-ink-faint">作者</dt>
-                  <dd>{item.author}</dd>
-                </div>
-                <div className="flex gap-3">
-                  <dt className="text-ink-faint">获得</dt>
-                  <dd>{item.acquired}</dd>
-                </div>
-              </dl>
-              {!item.locked && (
-                <p className="mt-4 border-t border-paper-edge/40 pt-4 leading-relaxed text-ink">
-                  {item.preview}
-                </p>
-              )}
-            </article>
-          ))}
-        </div>
-
-        <div className="mt-10 flex justify-center">
-          <WoodButton href="/">返回首页</WoodButton>
-        </div>
-      </div>
-    </main>
-  );
+  const [unlocked, setUnlocked] = useState<string[]>([]);
+  useEffect(() => setUnlocked(loadSave()?.unlockedArchive ?? []), []);
+  const visible = archive.filter((item) => unlocked.includes(item.id));
+  const left = <div className="archive-index"><div className="vertical-title"><span>案头笺记</span><small>所得诸纸</small></div><h1>史料目录</h1><p>这里只记录亲手查验过的东西。来源未明之处，宁缺勿补。</p><ol>{archive.map((item, index) => <li key={item.id} className={unlocked.includes(item.id) ? "" : "is-locked"}><span>{String(index + 1).padStart(2, "0")}</span>{unlocked.includes(item.id) ? item.title : "尚未获得"}</li>)}</ol></div>;
+  const right = <div className="archive-list">{visible.length ? visible.map((item) => <article key={item.id}><header><small>{item.acquired}</small><h2>{item.title}</h2></header><dl><div><dt>来源</dt><dd>{item.source}</dd></div><div><dt>作者</dt><dd>{item.author}</dd></div></dl><blockquote>{item.preview}</blockquote>{item.notes.map((note) => <p key={note}>· {note}</p>)}</article>) : <div className="empty-archive"><span>空</span><p>尚未查验任何残页。</p><a href="/game?mode=continue">回到书坊</a></div>}</div>;
+  return <BookShell left={left} right={right} chapter="笺记" progress={`${visible.length} 件`} />;
 }

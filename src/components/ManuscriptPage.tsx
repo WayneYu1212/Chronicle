@@ -1,14 +1,7 @@
-﻿'use client';
+"use client";
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
-import { playPageTurnSound } from '@/lib/sound';
-import ChoiceButton from './ChoiceButton';
-
-type AnimPhase = 'idle' | 'exiting' | 'entering';
-
-/* 古籍翻页动画时长（ms）— 缓慢克制 */
-const EXIT_MS = 250;
-const ENTER_MS = 250;
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import ChoiceButton from "./ChoiceButton";
 
 interface ManuscriptPageProps {
   speaker?: string;
@@ -21,144 +14,40 @@ interface ManuscriptPageProps {
   footer?: ReactNode;
 }
 
-export default function ManuscriptPage({
-  speaker,
-  text,
-  isTitle = false,
-  canTurn = false,
-  onTurn,
-  choices,
-  onChoice,
-  footer,
-}: ManuscriptPageProps) {
-  const [phase, setPhase] = useState<AnimPhase>('entering');
-  const mountedRef = useRef(false);
-  const turningRef = useRef(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const onTurnRef = useRef(onTurn);
-  const onChoiceRef = useRef(onChoice);
-  onTurnRef.current = onTurn;
-  onChoiceRef.current = onChoice;
-  /* 首次挂载入场动画 */
-  useEffect(() => {
-    mountedRef.current = true;
-    timerRef.current = setTimeout(() => {
-      if (!mountedRef.current) return;
-      setPhase('idle');
-    }, ENTER_MS);
-    return () => {
-      mountedRef.current = false;
-      if (timerRef.current !== null) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
-      }
-    };
+export default function ManuscriptPage({ speaker, text, isTitle, canTurn, onTurn, choices, onChoice, footer }: ManuscriptPageProps) {
+  const [visible, setVisible] = useState(false);
+  const [leaving, setLeaving] = useState(false);
+  const busy = useRef(false);
+  useEffect(() => { const timer = window.setTimeout(() => setVisible(true), 40); return () => window.clearTimeout(timer); }, []);
+
+  const transition = useCallback((done?: () => void) => {
+    if (busy.current) return;
+    busy.current = true;
+    setLeaving(true);
+    window.setTimeout(() => done?.(), 230);
   }, []);
-  /* 翻页：淡出 → 下一内容 → 淡入 */
-  const startExit = useCallback(
-    (onComplete: () => void) => {
-      if (phase !== 'idle' || turningRef.current) return;
-      turningRef.current = true;
-      setPhase('exiting');
-      playPageTurnSound();
 
-      timerRef.current = setTimeout(() => {
-        if (!mountedRef.current) return;
-        onComplete();
-        setPhase('entering');
+  const handleClick = (event: React.MouseEvent) => {
+    if ((event.target as HTMLElement).closest("button, a") || !canTurn || choices) return;
+    transition(onTurn);
+  };
 
-        timerRef.current = setTimeout(() => {
-          if (!mountedRef.current) return;
-          setPhase('idle');
-          turningRef.current = false;
-        }, ENTER_MS);
-      }, EXIT_MS);
-    },
-    [phase],
-  );
-
-  const handlePageClick = useCallback(
-    (event: React.MouseEvent) => {
-      if ((event.target as HTMLElement).closest('[data-no-turn]')) return;
-      if (!canTurn || choices) return;
-      startExit(() => onTurnRef.current?.());
-    },
-    [canTurn, choices, startExit],
-  );
-
-  const handleChoiceSelect = useCallback(
-    (index: number) => {
-      startExit(() => onChoiceRef.current?.(index));
-    },
-    [startExit],
-  );
-
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        if (canTurn && !choices) {
-          startExit(() => onTurnRef.current?.());
-        }
-      }
-    },
-    [canTurn, choices, startExit],
-  );
-
-  const phaseClass =
-    phase === 'exiting'
-      ? 'manuscript-page--exit'
-      : phase === 'entering'
-        ? 'manuscript-page--enter'
-        : '';
-
-  const isInteractive = canTurn && phase === 'idle' && !choices;
-  /* 为每段文字绑定独立 key，确保 remount 时彻底销毁旧 DOM */
-  const contentKey = text;
   return (
-    <div className="manuscript-stage mx-auto w-full max-w-2xl">
-      <article
-        className={`manuscript-page ${phaseClass}`}
-        onClick={handlePageClick}
-        onKeyDown={handleKeyDown}
-        role={isInteractive ? 'button' : undefined}
-        tabIndex={isInteractive ? 0 : undefined}
-        aria-label={isInteractive ? '点击翻页' : undefined}
-      >
-        <div className="manuscript-sheet">
-          <div className="manuscript-corner-curl" aria-hidden />
-          <div className="manuscript-paper-texture" aria-hidden />
-
-          {!isTitle && speaker && speaker !== '旁白' && (
-            <header className="manuscript-speaker">{speaker}</header>
-          )}
-
-          <div className={isTitle ? 'manuscript-title-text' : 'manuscript-body-text'}>
-            <p key={contentKey}>{text}</p>
-          </div>
-
-          {choices && choices.length > 0 && (
-            <div className="manuscript-choices">
-              {choices.map((choice, index) => (
-                <ChoiceButton
-                  key={choice.id}
-                  index={index}
-                  text={choice.text}
-                  onSelect={() => handleChoiceSelect(index)}
-                />
-              ))}
-            </div>
-          )}
-
-          {canTurn && phase === 'idle' && !choices && (
-            <p className="manuscript-turn-hint" aria-hidden>
-              ─ 续 ─
-            </p>
-          )}
-
-          {footer && <div className="manuscript-footer" data-no-turn>{footer}</div>}
-        </div>
-      </article>
-    </div>
+    <article
+      className={`narrative-page ${visible ? "is-visible" : ""} ${leaving ? "is-leaving" : ""} ${canTurn ? "is-clickable" : ""}`}
+      onClick={handleClick}
+      onKeyDown={(event) => { if ((event.key === "Enter" || event.key === " ") && canTurn && !choices) { event.preventDefault(); transition(onTurn); } }}
+      tabIndex={canTurn ? 0 : undefined}
+      role={canTurn ? "button" : undefined}
+      aria-label={canTurn ? "继续阅读" : undefined}
+    >
+      {speaker && speaker !== "旁白" && <header className="speaker-tag"><span>{speaker}</span></header>}
+      <div className={isTitle ? "chapter-leaf" : "narrative-copy"}>
+        {text.split("\n").map((line, index) => <p key={`${index}-${line}`}>{line || "\u00a0"}</p>)}
+      </div>
+      {choices && <div className="choice-list">{choices.map((choice, index) => <ChoiceButton key={choice.id} text={choice.text} index={index} onSelect={() => transition(() => onChoice?.(index))} />)}</div>}
+      {canTurn && !choices && <div className="continue-mark" aria-hidden><i />续页</div>}
+      {footer && <div className="narrative-footer">{footer}</div>}
+    </article>
   );
 }

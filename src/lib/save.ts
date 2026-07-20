@@ -48,6 +48,8 @@ export function createInitialSave(chapterId: string): SaveData {
     variables: { ...DEFAULT_VARIABLES },
     unlockedArchive: [],
     unlockedCharacters: [],
+    completedActivities: [],
+    clues: [],
     savedAt: Date.now(),
   };
 }
