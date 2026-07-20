@@ -32,6 +32,10 @@ export default function ManuscriptPage({ speaker, text, isTitle, canTurn, onTurn
     transition(onTurn);
   };
 
+  const speakerKind = speaker === "我" ? "self" : speaker === "旁白" ? "narrator" : speaker ? "other" : "plain";
+  const speakerLabel = speaker === "旁白" ? "记" : speaker;
+  const paragraphs = text.split("\n").map((line, index) => <p key={`${index}-${line}`}>{line || "\u00a0"}</p>);
+
   return (
     <article
       className={`narrative-page ${visible ? "is-visible" : ""} ${leaving ? "is-leaving" : ""} ${canTurn ? "is-clickable" : ""}`}
@@ -41,10 +45,19 @@ export default function ManuscriptPage({ speaker, text, isTitle, canTurn, onTurn
       role={canTurn ? "button" : undefined}
       aria-label={canTurn ? "继续阅读" : undefined}
     >
-      {speaker && speaker !== "旁白" && <header className="speaker-tag"><span>{speaker}</span></header>}
-      <div className={isTitle ? "chapter-leaf" : "narrative-copy"}>
-        {text.split("\n").map((line, index) => <p key={`${index}-${line}`}>{line || "\u00a0"}</p>)}
-      </div>
+      {isTitle ? (
+        <div className="chapter-leaf">{paragraphs}</div>
+      ) : (
+        <div className={`dialogue-block dialogue-block--${speakerKind}`}>
+          {speakerLabel && (
+            <aside className="speaker-rail" aria-label={`说话者：${speaker}`}>
+              <span className="speaker-label">{speakerLabel}</span>
+              <i className="speaker-line" aria-hidden />
+            </aside>
+          )}
+          <div className="narrative-copy">{paragraphs}</div>
+        </div>
+      )}
       {choices && <div className="choice-list">{choices.map((choice, index) => <ChoiceButton key={choice.id} text={choice.text} index={index} onSelect={() => transition(() => onChoice?.(index))} />)}</div>}
       {canTurn && !choices && <div className="continue-mark" aria-hidden><i />续页</div>}
       {footer && <div className="narrative-footer">{footer}</div>}

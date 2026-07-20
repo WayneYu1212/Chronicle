@@ -114,10 +114,13 @@ function GameContent() {
         <div><dt>掌柜</dt><dd>{save.variables.trust > 3 ? "渐信" : save.variables.trust < 0 ? "存疑" : "平常"}</dd></div>
       </dl>
       <div className="clue-notes">
-        <h3>案头笺记</h3>
-        {save.clues.length ? save.clues.slice(-4).map((clue) => <p key={clue}>· {clue}</p>) : <p>尚无可记之事。</p>}
+        <span className="clue-kind">自查</span>
+        <h3 className="clue-heading">案头笺记</h3>
+        <div className="clue-content">
+          {save.clues.length ? save.clues.slice(-4).map((clue) => <p key={clue}>· {clue}</p>) : <p>尚无可记之事。</p>}
+        </div>
       </div>
-      <blockquote>纸寿千年，语存一日。所抄为何，须自己看清。</blockquote>
+      <p className="ledger-motto">纸寿千年，语存一日。所抄为何，须自己看清。</p>
     </aside>
   );
 
