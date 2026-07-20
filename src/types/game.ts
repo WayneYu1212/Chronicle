@@ -42,7 +42,10 @@ export interface ComparisonConfig {
 }
 
 export interface AssemblyConfig {
-  fragments: { id: string; text: string; order: number }[];
+  fragments: { id: string; text: string; back: string; edge: string; order: number }[];
+  question: string;
+  options: { id: string; text: string; correct?: boolean; feedback: string }[];
+  completionClue: string;
 }
 
 export interface StoryChoice {

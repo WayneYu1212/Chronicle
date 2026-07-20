@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import ChoiceButton from "./ChoiceButton";
+import SentenceText from "./SentenceText";
 
 interface ManuscriptPageProps {
   speaker?: string;
@@ -34,7 +35,7 @@ export default function ManuscriptPage({ speaker, text, isTitle, canTurn, onTurn
 
   const speakerKind = speaker === "我" ? "self" : speaker === "旁白" ? "narrator" : speaker ? "other" : "plain";
   const speakerLabel = speaker === "旁白" ? "记" : speaker;
-  const paragraphs = text.split("\n").map((line, index) => <p key={`${index}-${line}`}>{line || "\u00a0"}</p>);
+  const paragraphs = <SentenceText text={text} />;
 
   return (
     <article

@@ -2,6 +2,6 @@
   "/_not-found/page": "/_not-found",
   "/archive/page": "/archive",
   "/settings/page": "/settings",
-  "/game/page": "/game",
-  "/page": "/"
+  "/page": "/",
+  "/game/page": "/game"
 }

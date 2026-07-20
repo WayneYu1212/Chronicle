@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { StoryBeat } from "@/types/game";
+import SentenceText from "./SentenceText";
 
 interface ActivityStageProps {
   beat: StoryBeat;
@@ -55,7 +56,7 @@ function SortingActivity({ beat, onComplete }: ActivityStageProps) {
         <span>今日书课</span>
         <strong>{Object.keys(sorted).length}/{config.required}</strong>
       </div>
-      <p className="activity-copy">{beat.text}</p>
+      <p className="activity-copy"><SentenceText text={beat.text} /></p>
       <div className="document-tray">
         {remaining.map((document) => (
           <button
@@ -68,7 +69,7 @@ function SortingActivity({ beat, onComplete }: ActivityStageProps) {
           >
             <small>{document.mark ?? "无记"}</small>
             <b>{document.title}</b>
-            <span>{document.excerpt}</span>
+            <SentenceText text={document.excerpt} />
           </button>
         ))}
       </div>
@@ -87,7 +88,7 @@ function SortingActivity({ beat, onComplete }: ActivityStageProps) {
           </button>
         ))}
       </div>
-      <p className="work-feedback" aria-live="polite">{message}</p>
+      <p className="work-feedback" aria-live="polite"><SentenceText text={message} /></p>
       {normalDone && (
         <button className="seal-action" type="button" onClick={() => onComplete({ wage: 18 })}>
           <span>记</span> 普通文稿已清
@@ -109,10 +110,10 @@ function InspectionActivity({ beat, onComplete }: ActivityStageProps) {
   return (
     <section className="activity inspection" aria-label="残页查验">
       <div className="activity-heading"><span>查验残页</span><strong>{found.length}/{config.required}</strong></div>
-      <p className="activity-copy">{beat.text}</p>
+      <p className="activity-copy"><SentenceText text={beat.text} /></p>
       <div className="inspection-sheet">
         <span className="folio-number">十三</span>
-        <p>{config.document.excerpt}</p>
+        <p><SentenceText text={config.document.excerpt} /></p>
         {config.hotspots.map((spot, index) => (
           <button
             type="button"
@@ -123,7 +124,7 @@ function InspectionActivity({ beat, onComplete }: ActivityStageProps) {
           >{index + 1}</button>
         ))}
       </div>
-      <p className="work-feedback" aria-live="polite">{detail}</p>
+      <p className="work-feedback" aria-live="polite"><SentenceText text={detail} /></p>
       {done && <button className="seal-action" type="button" onClick={() => onComplete({ clues: config.hotspots.map((spot) => spot.label), archive: beat.unlockArchive, paper: 1 })}><span>录</span> 写入笺记</button>}
     </section>
   );
@@ -136,11 +137,11 @@ function ComparisonActivity({ beat, onComplete }: ActivityStageProps) {
   return (
     <section className="activity" aria-label="文稿比对">
       <div className="activity-heading"><span>两纸互校</span><strong>比</strong></div>
-      <p className="activity-copy">{config.question}</p>
+      <p className="activity-copy"><SentenceText text={config.question} /></p>
       <div className="comparison-spread">
         {config.documents.map((document) => (
           <article key={document.id} className="comparison-document">
-            <small>{document.title}</small><p>{document.excerpt}</p>
+            <small>{document.title}</small><p><SentenceText text={document.excerpt} /></p>
             <dl><div><dt>纸</dt><dd>{document.paper}</dd></div><div><dt>墨</dt><dd>{document.ink}</dd></div><div><dt>字</dt><dd>{document.handwriting}</dd></div></dl>
           </article>
         ))}
@@ -150,7 +151,7 @@ function ComparisonActivity({ beat, onComplete }: ActivityStageProps) {
           <button type="button" key={option.id} onClick={() => { setFeedback(option.feedback); setSolved(Boolean(option.correct)); }}>{option.text}</button>
         ))}
       </div>
-      <p className="work-feedback">{feedback}</p>
+      <p className="work-feedback"><SentenceText text={feedback} /></p>
       {solved && <button className="seal-action" type="button" onClick={() => onComplete({ clues: ["残页同源"] })}><span>合</span> 收下判断</button>}
     </section>
   );
@@ -159,28 +160,70 @@ function ComparisonActivity({ beat, onComplete }: ActivityStageProps) {
 function AssemblyActivity({ beat, onComplete }: ActivityStageProps) {
   const config = beat.assembly!;
   const [order, setOrder] = useState<string[]>([]);
-  const [message, setMessage] = useState("依照撕口与文意，把三片残纸接回原序。");
+  const [side, setSide] = useState<"front" | "back">("front");
+  const [joined, setJoined] = useState(false);
+  const [solved, setSolved] = useState(false);
+  const [message, setMessage] = useState("先看正面文字，也要翻看纸背。撕口、折痕和旧墨比句意更可靠。");
   const available = config.fragments.filter((fragment) => !order.includes(fragment.id));
   const correct = useMemo(() => order.length === config.fragments.length && order.every((id, index) => config.fragments.find((fragment) => fragment.id === id)?.order === index), [config.fragments, order]);
-  const add = (id: string) => setOrder((current) => current.includes(id) ? current : [...current, id]);
+  const add = (id: string) => {
+    setJoined(false);
+    setSolved(false);
+    setOrder((current) => current.includes(id) ? current : [...current, id]);
+  };
+  const remove = (id: string) => {
+    setJoined(false);
+    setSolved(false);
+    setOrder((current) => current.filter((item) => item !== id));
+  };
   const check = () => {
-    if (correct) setMessage("纸口相合。残句终于连成了一段话。");
-    else { setMessage("文气在中间断了。再按撕口重排。 "); setOrder([]); }
+    if (correct) {
+      setJoined(true);
+      setMessage("三道撕口和两条横折同时接上。纸背的西字也连成了同一行。");
+    } else {
+      setMessage("正面的句意勉强能读，纸背的旧墨却接不上。翻到纸背，再按折痕重排。");
+    }
   };
   return (
-    <section className="activity" aria-label="残页拼接">
-      <div className="activity-heading"><span>缀合残纸</span><strong>{order.length}/{config.fragments.length}</strong></div>
-      <p className="activity-copy">{beat.text}</p>
+    <section className="activity assembly-activity" aria-label="残页校勘">
+      <div className="activity-heading"><span>缀合与辨源</span><strong>{joined ? "辨" : `${order.length}/${config.fragments.length}`}</strong></div>
+      <p className="activity-copy"><SentenceText text={joined ? config.question : beat.text} /></p>
+      <div className="folio-side-toggle" aria-label="查看纸面">
+        <button type="button" className={side === "front" ? "is-active" : ""} onClick={() => setSide("front")}>汉文正面</button>
+        <button type="button" className={side === "back" ? "is-active" : ""} onClick={() => setSide("back")}>西字纸背</button>
+      </div>
       <div className="assembly-line">
-        {order.map((id) => { const fragment = config.fragments.find((item) => item.id === id)!; return <button type="button" key={id} onClick={() => setOrder((current) => current.filter((item) => item !== id))}>{fragment.text}</button>; })}
+        {order.map((id) => {
+          const fragment = config.fragments.find((item) => item.id === id)!;
+          return (
+            <button type="button" key={id} className={`manuscript-fragment fragment-${fragment.order + 1}`} onClick={() => remove(id)}>
+              <small>{fragment.edge}</small>
+              <SentenceText text={side === "front" ? fragment.text : fragment.back} />
+            </button>
+          );
+        })}
         {order.length === 0 && <span>将残片放到这里</span>}
       </div>
       <div className="fragment-tray">
-        {available.map((fragment) => <button type="button" draggable key={fragment.id} onClick={() => add(fragment.id)}>{fragment.text}</button>)}
+        {available.map((fragment) => (
+          <button type="button" draggable key={fragment.id} className="manuscript-fragment" onClick={() => add(fragment.id)}>
+            <small>{fragment.edge}</small>
+            <SentenceText text={side === "front" ? fragment.text : fragment.back} />
+          </button>
+        ))}
       </div>
-      <p className="work-feedback">{message}</p>
-      {!correct && order.length === config.fragments.length && <button className="ink-action" type="button" onClick={check}>核对次序</button>}
-      {correct && <button className="seal-action" type="button" onClick={() => onComplete({ clues: ["西门残句"], archive: beat.unlockArchive })}><span>缀</span> 收入残卷</button>}
+      {joined && (
+        <div className="source-options">
+          {config.options.map((option) => (
+            <button type="button" key={option.id} onClick={() => { setMessage(option.feedback); setSolved(Boolean(option.correct)); }}>
+              {option.text}
+            </button>
+          ))}
+        </div>
+      )}
+      <p className="work-feedback" aria-live="polite"><SentenceText text={message} /></p>
+      {!joined && order.length === config.fragments.length && <button className="ink-action" type="button" onClick={check}>以纸背核对</button>}
+      {solved && <button className="seal-action" type="button" onClick={() => onComplete({ clues: [config.completionClue], archive: beat.unlockArchive })}><span>录</span> 著录来源</button>}
     </section>
   );
 }
