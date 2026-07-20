@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/UUWayne/Desktop/Chronicle/src/app/layout.tsx"],"sourcesContent":["import type { Metadata, Viewport } from \"next\";\nimport \"./globals.css\";\n\nexport const metadata: Metadata = { title: \"佣书 · Chronicle\", description: \"一款关于历史如何被保存的互动叙事游戏。\" };\nexport const viewport: Viewport = { width: \"device-width\", initialScale: 1, themeColor: \"#241c17\" };\n\nexport default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {\n  return <html lang=\"zh-CN\"><body>{children}</body></html>;\n}\n"],"names":[],"mappings":";;;;;;;;;;;AAGO,MAAM,WAAqB;IAAE,OAAO;IAAkB,aAAa;AAAsB;AACzF,MAAM,WAAqB;IAAE,OAAO;IAAgB,cAAc;IAAG,YAAY;AAAU;AAEnF,SAAS,WAAW,EAAE,QAAQ,EAA2C;IACtF,qBAAO,8OAAC;QAAK,MAAK;kBAAQ,cAAA,8OAAC;sBAAM;;;;;;;;;;;AACnC","debugId":null}},
-    {"offset": {"line": 44, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/UUWayne/Desktop/Chronicle/node_modules/next/src/server/route-modules/app-page/vendored/rsc/react-jsx-dev-runtime.ts"],"sourcesContent":["module.exports = (\n  require('../../module.compiled') as typeof import('../../module.compiled')\n).vendored['react-rsc']!.ReactJsxDevRuntime\n"],"names":["module","exports","require","vendored","ReactJsxDevRuntime"],"mappings":"AAAAA,OAAOC,OAAO,GACZC,QAAQ,4HACRC,QAAQ,CAAC,YAAY,CAAEC,kBAAkB","ignoreList":[0],"debugId":null}}]
-}

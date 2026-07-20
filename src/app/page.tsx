@@ -13,7 +13,7 @@ export default function HomePage() {
   const open = (mode: "new" | "continue") => {
     if (opening) return;
     setOpening(true);
-    window.setTimeout(() => router.push(`/game?mode=${mode}`), 2250);
+    window.setTimeout(() => router.push(`/game?mode=${mode}`), 2220);
   };
 
   return (
@@ -24,7 +24,8 @@ export default function HomePage() {
         <span className="opening-page-block" aria-hidden>
           <span className="opening-leaf opening-leaf-left">
             <i className="opening-rule" />
-            <small>听雨书坊</small>
+            <b>第一章</b>
+            <small>第十三页</small>
           </span>
           <span className="opening-gutter" />
           <span className="opening-leaf opening-leaf-right">

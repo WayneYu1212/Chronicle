@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import ActivityStage from "@/components/ActivityStage";
@@ -40,6 +40,26 @@ function GameContent() {
   const [beatId, setBeatId] = useState("");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [showDelayedControls, setShowDelayedControls] = useState(false);
+  const [showFlyleaf, setShowFlyleaf] = useState(mode === "new");
+  const [pageTurn, setPageTurn] = useState<"forward" | "backward" | null>(null);
+  const turnTimers = useRef<number[]>([]);
+  const turning = useRef(false);
+
+  const performPageTurn = useCallback((action: () => void, direction: "forward" | "backward" = "forward") => {
+    if (turning.current) return;
+    turning.current = true;
+    setPageTurn(direction);
+    turnTimers.current.push(window.setTimeout(action, 350));
+    turnTimers.current.push(window.setTimeout(() => {
+      setPageTurn(null);
+      turning.current = false;
+    }, 760));
+  }, []);
+
+  useEffect(() => () => {
+    turnTimers.current.forEach((timer) => window.clearTimeout(timer));
+    turning.current = false;
+  }, []);
 
   useEffect(() => {
     if (!chapter) return;
@@ -48,7 +68,14 @@ function GameContent() {
     setSave(initial);
     setBeatId(chapter.beats[initial.beatIndex]?.id ?? chapter.beats[0].id);
     setHistory([]);
+    setShowFlyleaf(mode === "new");
   }, [chapter, chapterId, mode]);
+
+  useEffect(() => {
+    if (!save || !showFlyleaf || mode !== "new") return;
+    const timer = window.setTimeout(() => performPageTurn(() => setShowFlyleaf(false)), 1150);
+    return () => window.clearTimeout(timer);
+  }, [mode, performPageTurn, save, showFlyleaf]);
 
   useEffect(() => {
     setShowDelayedControls(false);
@@ -120,17 +147,43 @@ function GameContent() {
   const activity = ACTIVITY_TYPES.has(currentBeat.type ?? "");
   const choices = currentBeat.type === "choice" ? currentBeat.choices : undefined;
   const isEnd = resolveNext(currentBeat) === null;
-  const segment = currentIndex < 9 ? "开工" : currentIndex < 18 ? "旧纸" : currentIndex < 42 ? "残页" : currentIndex < 54 ? "来客" : "夜谈";
+  const segment = currentIndex < 12 ? "开工" : currentIndex < 22 ? "旧纸" : currentIndex < 48 ? "残页" : currentIndex < 61 ? "来客" : "夜谈";
+  const atmosphere = currentIndex < 22
+    ? { verse: "大陆沉秋雨\n长河走暮雷", author: "屈大均《翁山诗外》" }
+    : currentIndex < 61
+      ? { verse: "霖雨从东来\n玄云覆山冈", author: "陈恭尹《雨夜旅江阁述怀》" }
+      : { verse: "松风一接梦魂清\n夜久流泉渐有声", author: "屈大均《夜宿广州北郊作》" };
 
-  const left = (
+  const sceneLeft = (
     <aside className="scene-leaf">
       <div className="vertical-title"><span>听雨书坊</span><small>康熙九年</small></div>
       <div className="ledger-date">康熙九年 · 九月廿三</div>
       <h2>{segment}</h2>
       <p className="ledger-objective">{activity ? "案上旧纸待理。所得判断，稍后记入课簿。" : "雨声隔着门板，纸墨气压在屋里。"}</p>
-      <div className="scene-impression" aria-hidden><i /><span>旧纸入匣<br />残墨留痕</span></div>
+      <figure className="atmosphere-verse">
+        <blockquote>{atmosphere.verse.split("\n").map((line) => <span key={line}>{line}</span>)}</blockquote>
+        <figcaption>{atmosphere.author}</figcaption>
+      </figure>
       <p className="ledger-motto">纸寿千年，语存一日。所抄为何，须自己看清。</p>
     </aside>
+  );
+
+  const flyleafLeft = (
+    <aside className="flyleaf flyleaf--chapter" aria-label="卷首">
+      <small>佣书</small>
+      <h1>第一章</h1>
+      <p>第十三页</p>
+      <i aria-hidden>录</i>
+    </aside>
+  );
+
+  const flyleafRight = (
+    <section className="flyleaf flyleaf--time" aria-label="时间地点">
+      <span>康熙九年</span>
+      <strong>广州</strong>
+      <em>雨</em>
+      <small>九月廿三</small>
+    </section>
   );
 
   const attributes = (
@@ -154,8 +207,8 @@ function GameContent() {
     </div>
   );
 
-  const right = activity ? (
-    <ActivityStage key={currentBeat.id} beat={currentBeat} onComplete={handleActivity} showSkip={showDelayedControls} />
+  const storyRight = activity ? (
+    <ActivityStage key={currentBeat.id} beat={currentBeat} onComplete={(result) => performPageTurn(() => handleActivity(result))} showSkip={showDelayedControls} />
   ) : (
     <ManuscriptPage
       key={currentBeat.id}
@@ -163,20 +216,30 @@ function GameContent() {
       text={currentBeat.text}
       isTitle={currentBeat.type === "title"}
       canTurn={!isEnd && !choices}
-      onTurn={() => advance()}
+      onTurn={() => performPageTurn(() => advance())}
       choices={choices}
-      onChoice={handleChoice}
+      onChoice={(index) => performPageTurn(() => handleChoice(index))}
       footer={isEnd ? <Link className="seal-action" href="/archive"><span>终</span> 查看本章笺记</Link> : undefined}
     />
   );
 
   const controls = history.length > 0 && showDelayedControls ? (
-    <button type="button" className="previous-page" onClick={goBack} title="翻回上一页" aria-label="翻回上一页">
+    <button type="button" className="previous-page" onClick={() => performPageTurn(goBack, "backward")} title="翻回上一页" aria-label="翻回上一页">
       <span aria-hidden>←</span><small>前页</small>
     </button>
   ) : null;
 
-  return <BookShell left={left} right={right} chapter={chapter.subtitle} progress={`${currentIndex + 1} / ${chapter.beats.length}`} attributes={attributes} controls={controls} />;
+  return (
+    <BookShell
+      left={showFlyleaf ? flyleafLeft : sceneLeft}
+      right={showFlyleaf ? flyleafRight : storyRight}
+      chapter={showFlyleaf ? "卷首" : chapter.subtitle}
+      progress={showFlyleaf ? "扉页" : `${currentIndex + 1} / ${chapter.beats.length}`}
+      attributes={showFlyleaf ? undefined : attributes}
+      controls={showFlyleaf ? undefined : controls}
+      pageTurn={pageTurn}
+    />
+  );
 }
 
 export default function GamePage() {

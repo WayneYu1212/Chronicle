@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import ChoiceButton from "./ChoiceButton";
 import SentenceText from "./SentenceText";
 
@@ -16,21 +16,9 @@ interface ManuscriptPageProps {
 }
 
 export default function ManuscriptPage({ speaker, text, isTitle, canTurn, onTurn, choices, onChoice, footer }: ManuscriptPageProps) {
-  const [visible, setVisible] = useState(false);
-  const [leaving, setLeaving] = useState(false);
-  const busy = useRef(false);
-  useEffect(() => { const timer = window.setTimeout(() => setVisible(true), 40); return () => window.clearTimeout(timer); }, []);
-
-  const transition = useCallback((done?: () => void) => {
-    if (busy.current) return;
-    busy.current = true;
-    setLeaving(true);
-    window.setTimeout(() => done?.(), 230);
-  }, []);
-
   const handleClick = (event: React.MouseEvent) => {
     if ((event.target as HTMLElement).closest("button, a") || !canTurn || choices) return;
-    transition(onTurn);
+    onTurn?.();
   };
 
   const speakerKind = speaker === "我" ? "self" : speaker === "旁白" ? "narrator" : speaker ? "other" : "plain";
@@ -39,9 +27,9 @@ export default function ManuscriptPage({ speaker, text, isTitle, canTurn, onTurn
 
   return (
     <article
-      className={`narrative-page ${visible ? "is-visible" : ""} ${leaving ? "is-leaving" : ""} ${canTurn ? "is-clickable" : ""}`}
+      className={`narrative-page ${canTurn ? "is-clickable" : ""}`}
       onClick={handleClick}
-      onKeyDown={(event) => { if ((event.key === "Enter" || event.key === " ") && canTurn && !choices) { event.preventDefault(); transition(onTurn); } }}
+      onKeyDown={(event) => { if ((event.key === "Enter" || event.key === " ") && canTurn && !choices) { event.preventDefault(); onTurn?.(); } }}
       tabIndex={canTurn ? 0 : undefined}
       role={canTurn ? "button" : undefined}
       aria-label={canTurn ? "继续阅读" : undefined}
@@ -60,7 +48,7 @@ export default function ManuscriptPage({ speaker, text, isTitle, canTurn, onTurn
           {speakerKind === "narrator" && <i className="narrator-ink-drop" aria-hidden />}
         </div>
       )}
-      {choices && <div className="choice-list">{choices.map((choice, index) => <ChoiceButton key={choice.id} text={choice.text} index={index} onSelect={() => transition(() => onChoice?.(index))} />)}</div>}
+      {choices && <div className="choice-list">{choices.map((choice, index) => <ChoiceButton key={choice.id} text={choice.text} index={index} onSelect={() => onChoice?.(index)} />)}</div>}
       {canTurn && !choices && <div className="continue-mark" aria-hidden><i />续页</div>}
       {footer && <div className="narrative-footer">{footer}</div>}
     </article>

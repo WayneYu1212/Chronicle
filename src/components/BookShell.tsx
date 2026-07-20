@@ -10,9 +10,10 @@ interface BookShellProps {
   progress?: string;
   attributes?: ReactNode;
   controls?: ReactNode;
+  pageTurn?: "forward" | "backward" | null;
 }
 
-export default function BookShell({ left, right, chapter, progress, attributes, controls }: BookShellProps) {
+export default function BookShell({ left, right, chapter, progress, attributes, controls, pageTurn }: BookShellProps) {
   const [showAttributes, setShowAttributes] = useState(false);
 
   return (
@@ -45,6 +46,12 @@ export default function BookShell({ left, right, chapter, progress, attributes, 
           )}
           <span className="page-folio">{progress ?? "听雨书坊"}</span>
         </div>
+        {pageTurn && (
+          <div className={`page-turn-leaf page-turn-leaf--${pageTurn}`} aria-hidden>
+            <div className="page-turn-face page-turn-face--front"><i /><span /></div>
+            <div className="page-turn-face page-turn-face--back"><i /><span /></div>
+          </div>
+        )}
         {controls}
       </section>
     </main>
