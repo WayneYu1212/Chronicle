@@ -13,7 +13,7 @@ export default function HomePage() {
   const open = (mode: "new" | "continue") => {
     if (opening) return;
     setOpening(true);
-    window.setTimeout(() => router.push(`/game?mode=${mode}`), 1650);
+    window.setTimeout(() => router.push(`/game?mode=${mode}`), 2250);
   };
 
   return (

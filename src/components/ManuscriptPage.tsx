@@ -57,6 +57,7 @@ export default function ManuscriptPage({ speaker, text, isTitle, canTurn, onTurn
             </aside>
           )}
           <div className="narrative-copy">{paragraphs}</div>
+          {speakerKind === "narrator" && <i className="narrator-ink-drop" aria-hidden />}
         </div>
       )}
       {choices && <div className="choice-list">{choices.map((choice, index) => <ChoiceButton key={choice.id} text={choice.text} index={index} onSelect={() => transition(() => onChoice?.(index))} />)}</div>}

@@ -31,7 +31,15 @@ export interface SortingConfig {
 
 export interface InspectionConfig {
   document: ManuscriptDocument;
-  hotspots: { id: string; label: string; detail: string }[];
+  verso?: string;
+  hotspots: {
+    id: string;
+    label: string;
+    detail: string;
+    x?: number;
+    y?: number;
+    side?: "front" | "back";
+  }[];
   required: number;
 }
 

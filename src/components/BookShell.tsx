@@ -1,17 +1,28 @@
+"use client";
+
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 interface BookShellProps {
   left: ReactNode;
   right: ReactNode;
   chapter?: string;
   progress?: string;
+  attributes?: ReactNode;
+  controls?: ReactNode;
 }
 
-export default function BookShell({ left, right, chapter, progress }: BookShellProps) {
+export default function BookShell({ left, right, chapter, progress, attributes, controls }: BookShellProps) {
+  const [showAttributes, setShowAttributes] = useState(false);
+
   return (
     <main className="reading-desk">
       <nav className="book-ribbons" aria-label="书内导航">
+        {attributes && (
+          <button type="button" className={showAttributes ? "is-active" : ""} aria-expanded={showAttributes} onClick={() => setShowAttributes((current) => !current)} title="查看书课与账目">
+            课簿
+          </button>
+        )}
         <Link href="/" title="合卷">卷首</Link>
         <Link href="/archive" title="查看史料">笺记</Link>
         <Link href="/settings" title="设置">杂项</Link>
@@ -19,15 +30,22 @@ export default function BookShell({ left, right, chapter, progress }: BookShellP
       <section className="open-book" aria-label="摊开的线装书">
         <div className="book-page book-page-left">
           <div className="book-rule" aria-hidden />
-          {left}
+          <div className="book-page-scroll">{left}</div>
           <span className="page-folio">{chapter ?? "佣书"}</span>
         </div>
         <div className="book-gutter" aria-hidden><i /><i /><i /><i /></div>
         <div className="book-page book-page-right">
           <div className="book-rule" aria-hidden />
-          {right}
+          <div className="book-page-scroll">{right}</div>
+          {attributes && (
+            <aside className={`attribute-leaf ${showAttributes ? "is-open" : ""}`} aria-hidden={!showAttributes}>
+              <button type="button" className="attribute-close" onClick={() => setShowAttributes(false)} aria-label="合上课簿" title="合上课簿">×</button>
+              {attributes}
+            </aside>
+          )}
           <span className="page-folio">{progress ?? "听雨书坊"}</span>
         </div>
+        {controls}
       </section>
     </main>
   );
