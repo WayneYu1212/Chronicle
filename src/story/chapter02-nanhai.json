@@ -1,0 +1,176 @@
+{
+  "id": "chapter02-nanhai",
+  "title": "第二章",
+  "subtitle": "南海旧稿",
+  "date": "康熙九年 · 九月廿四",
+  "place": "广州府至南海县",
+  "weather": "雨后水涨",
+  "beats": [
+    {
+      "id": "nanhai-title",
+      "type": "title",
+      "text": "第二章 · 南海旧稿\n\n同行路线",
+      "noteUpdates": {
+        "add": [
+          { "id": "today-nanhai", "type": "to_check", "title": "今日工作", "content": "随沈掌柜前往南海，验看一户旧藏中的残缺卷册。", "status": "active" }
+        ]
+      }
+    },
+    {
+      "id": "nanhai-map",
+      "type": "map",
+      "text": "沈掌柜展开一张旧舆图，用朱笔圈出南海。图中旧字多有漫漶，真正可信的地点名由我重新题写。",
+      "map": {
+        "available": ["guangzhou", "nanhai", "panyu", "zhaoqing", "xiqiao", "chaozhou"],
+        "selectable": ["nanhai"],
+        "destination": "nanhai",
+        "confirmLabel": "沿水路前往南海"
+      }
+    },
+    {
+      "id": "nanhai-departure",
+      "speaker": "旁白",
+      "text": "卯时的珠江还蒙着薄雾。沈掌柜雇了一条载纸的小艇，箱笼只带了一只，里面放着空白题签、细麻绳、两把竹尺和昨夜锁起的第十三页。他没有携带兵器，也没有告诉船家此行收什么书。"
+    },
+    {
+      "id": "nanhai-boss-01",
+      "speaker": "沈掌柜",
+      "text": "我年轻时听人说过那份稿子。有人称它是亲历，有人说它只是从澳门转来的传闻。二十年里，每个经手人都抄下一点，也删去一点。我知道这些纸曾经存在，却不知道哪一层文字最早。"
+    },
+    {
+      "id": "nanhai-boss-02",
+      "speaker": "我",
+      "text": "掌柜带我来，是要找出哪一份才是真的？"
+    },
+    {
+      "id": "nanhai-boss-03",
+      "speaker": "沈掌柜",
+      "text": "我若知道真假，便不必带你。今日只做佣书该做的事：记清从谁手里接纸，纸原来放在哪里，哪一笔墨早，哪一笔墨晚。人的话可以慢慢问，纸上的次序先不要弄乱。",
+      "noteUpdates": {
+        "add": [
+          { "id": "boss-position", "type": "judgement", "title": "沈掌柜所求", "content": "他收集过互相矛盾的旧闻，也担心自己留下错误的版本；此行先查材料来路，不先断定内容真假。", "confidence": 4 }
+        ]
+      }
+    },
+    {
+      "id": "nanhai-house",
+      "speaker": "旁白",
+      "text": "旧宅在水田尽头。门楣上的三朵梅花已经被烟熏黑，院中晾着新抄的蒙学书。接待我们的是旧主人之孙周砚秋，年纪与我相仿。他承认祖父留下过一只书箱，却坚持箱中只有诗稿和田契。"
+    },
+    {
+      "id": "nanhai-zhou",
+      "speaker": "周砚秋",
+      "text": "家祖已经去世十七年。老人晚年记性不好，同一件事常说出两种年月。你们若把他随口写下的东西当作实录，错处也会跟着传下去。我可以让你们看书，但不能答应你们把每个字都带走。"
+    },
+    {
+      "id": "nanhai-box",
+      "speaker": "旁白",
+      "text": "书箱底部有一册无题抄本。正文使用寻常竹纸，中间却夹着一张白棉纸，纸幅短半寸，装订孔也不在同一条线上。那页的页脚被剪去，只剩一圈暗红封蜡和两行被水浸淡的字。"
+    },
+    {
+      "id": "nanhai-inspection",
+      "type": "inspection",
+      "text": "先移动灯盏查验夹页。纸筋、装订孔和删改墨层能够说明它何时进入这册书，却不能直接证明文字内容可靠。",
+      "unlockArchive": ["nanhai-insert"],
+      "inspection": {
+        "required": 3,
+        "document": {
+          "id": "nanhai-insert",
+          "title": "南海旧藏夹页",
+          "excerpt": "……城中死伤不可计。后有朱笔改作：城中扰攘，民多避去。两句交叠，末行只余‘闻之于海上人’六字。",
+          "paper": "白棉纸，纸幅较短",
+          "ink": "灰墨正文，朱笔删改",
+          "handwriting": "两手抄录，先后不一",
+          "mark": "无页码",
+          "archiveId": "nanhai-insert",
+          "anomalous": true
+        },
+        "verso": "纸背残留旧折，折内有暗红封蜡；装订孔穿过已经干透的朱墨。",
+        "hotspots": [
+          { "id": "nanhai-fibre", "label": "同源纸筋", "detail": "斜光下的帘纹间距与第十三页接近，纸张可能出自同一批白棉纸。", "x": 28, "y": 31, "side": "front" },
+          { "id": "nanhai-binding", "label": "后穿装订孔", "detail": "孔边压住已经干透的朱墨，说明删改完成以后，这张纸才被装入无题抄本。", "x": 78, "y": 24, "side": "back" },
+          { "id": "nanhai-redaction", "label": "朱笔改句", "detail": "朱笔没有抹去原句，只在行旁写下较缓和的说法。改写者似乎既不愿照录，也不愿彻底销毁。", "x": 58, "y": 55, "side": "front" },
+          { "id": "nanhai-wax", "label": "封蜡旧折", "detail": "封蜡位于装订孔之外。它在编册前曾作为单页折叠递送。", "x": 25, "y": 77, "side": "back" }
+        ]
+      },
+      "noteUpdates": {
+        "add": [
+          { "id": "nanhai-seen", "type": "observation", "title": "南海夹页", "content": "夹页与第十三页纸筋接近，先有灰墨正文，后有朱笔改句，最后才被装入现存抄本。" },
+          { "id": "nanhai-question", "type": "question", "title": "两种说法", "content": "“死伤不可计”与“民多避去”为何同时留在纸上？改写者想纠错、避祸，还是保留争议？" }
+        ]
+      }
+    },
+    {
+      "id": "nanhai-after-inspection",
+      "speaker": "沈掌柜",
+      "text": "纸是真的，装入此册的次序也看得清。至于上面哪一句更可信，我们还缺说话人的姓名、成文日期和另一份旁证。你若只写‘旧稿一页’，后人会把两层文字当成同一人的话；你若替它选一句，另一句便会从此消失。"
+    },
+    {
+      "id": "nanhai-critical-choice",
+      "type": "choice",
+      "text": "周砚秋只准我们抄录一次。沈掌柜把空白题签推到我面前，让我决定这页如何收入卷册。这项著录会决定下一步接触哪一类材料。",
+      "choices": [
+        { "id": "preserve-original", "text": "照录灰墨与朱笔全文，不删任何一句，并注明两层书写次序。", "effects": { "trust_yimin": 2, "paper": 1 }, "goto": "nanhai-preserve-result" },
+        { "id": "omit-doubt", "text": "只录能够确认来源与年代的部分，把两句存疑叙述暂不收入正文。", "effects": { "trust_qing": 2, "trust": 1 }, "goto": "nanhai-omit-result" },
+        { "id": "parallel-note", "text": "两句并存，另写校记说明证据边界，等待其他版本互证。", "effects": { "trust": 2, "paper": 1 }, "goto": "nanhai-parallel-result" }
+      ]
+    },
+    {
+      "id": "nanhai-preserve-result",
+      "speaker": "周砚秋",
+      "text": "你肯把改过的字也留下，我便再给你看祖父的一封家书。它未必证明原句，却能说明他为什么不敢删干净。下一步，你们可以去西樵寻找替他誊稿的僧人。",
+      "next": "nanhai-preserve-ending",
+      "locationUpdates": { "investigate": ["nanhai"], "unlock": ["xiqiao"] },
+      "noteUpdates": {
+        "add": [
+          { "id": "archive-principle-original", "type": "judgement", "title": "著录原则", "content": "原文与改文都应保存，删改本身也是材料。下一步追查西樵誊稿人。", "confidence": 3 }
+        ],
+        "update": [{ "id": "today-nanhai", "status": "resolved" }]
+      }
+    },
+    {
+      "id": "nanhai-preserve-ending",
+      "type": "title",
+      "terminal": true,
+      "text": "南海路线 · 遗民记忆\n\n下一站：西樵山\n\n你保留了未经完全证实的声音，也承担了它可能误导后人的风险。"
+    },
+    {
+      "id": "nanhai-omit-result",
+      "speaker": "沈掌柜",
+      "text": "这样著录最稳妥，却会让后来的人只看见纸墨，看不见纸上争执过什么。广州修志局正在收旧方志，你若坚持这套取舍，下一步应去查看官修底稿如何处理同类文字。",
+      "next": "nanhai-omit-ending",
+      "locationUpdates": { "investigate": ["nanhai"] },
+      "noteUpdates": {
+        "add": [
+          { "id": "archive-principle-verified", "type": "judgement", "title": "著录原则", "content": "未有旁证的叙述暂不收入正文。下一步返回广州，对照官修地方志底稿。", "confidence": 4 }
+        ],
+        "update": [{ "id": "today-nanhai", "status": "resolved" }]
+      }
+    },
+    {
+      "id": "nanhai-omit-ending",
+      "type": "title",
+      "terminal": true,
+      "text": "南海路线 · 官方史料\n\n下一站：广州修志局\n\n你提高了正文的可验证性，也让缺少旁证的记忆暂时退出了记录。"
+    },
+    {
+      "id": "nanhai-parallel-result",
+      "speaker": "沈掌柜",
+      "text": "这张题签不会替后人作决定，却把决定所需的证据留下了。肇庆还有一页据说出自同一批纸，下一步应先核对页次，再判断两种说法是否来自同一条传抄链。",
+      "next": "nanhai-parallel-ending",
+      "locationUpdates": { "investigate": ["nanhai"], "unlock": ["zhaoqing"] },
+      "noteUpdates": {
+        "add": [
+          { "id": "archive-principle-critical", "type": "judgement", "title": "著录原则", "content": "保留互相冲突的文字，同时写明来源、次序和证据不足之处。下一步核对肇庆异页。", "confidence": 5 }
+        ],
+        "update": [{ "id": "today-nanhai", "status": "resolved" }]
+      }
+    },
+    {
+      "id": "nanhai-parallel-ending",
+      "type": "title",
+      "terminal": true,
+      "text": "南海路线 · 校勘者\n\n下一站：肇庆府\n\n你没有替材料消除矛盾。你记录了矛盾如何形成，以及目前仍缺少什么。"
+    }
+  ]
+}

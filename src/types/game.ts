@@ -7,6 +7,27 @@ export interface GameVariables {
   trust_priest: number;
 }
 
+export type LocationStatus = "undiscovered" | "discovered" | "investigated";
+
+export interface MapLocation {
+  id: string;
+  name: string;
+  x: number;
+  y: number;
+  labelX: number;
+  labelY: number;
+  record: string;
+  clue: string;
+  investigatedRecord: string;
+}
+
+export interface MapConfig {
+  available: string[];
+  selectable: string[];
+  destination?: string;
+  confirmLabel?: string;
+}
+
 export type DocumentCategory = "家书" | "契约" | "佛经" | "地方志" | "诗稿" | "账本" | "杂纸";
 
 export interface ManuscriptDocument {
@@ -61,6 +82,8 @@ export interface StoryChoice {
   text: string;
   effects?: Partial<GameVariables>;
   goto?: string;
+  chapter?: string;
+  unlockLocations?: string[];
 }
 
 export type PlayerNoteType = "observation" | "judgement" | "question" | "to_check" | "clue";
@@ -83,23 +106,32 @@ export interface NoteUpdates {
 
 export interface StoryBeat {
   id: string;
-  type?: "dialogue" | "choice" | "title" | "sorting" | "inspection" | "comparison" | "assembly";
+  type?: "dialogue" | "choice" | "title" | "sorting" | "inspection" | "comparison" | "assembly" | "map";
   speaker?: string;
   text: string;
+  terminal?: boolean;
   next?: string;
   choices?: StoryChoice[];
   sorting?: SortingConfig;
   inspection?: InspectionConfig;
   comparison?: ComparisonConfig;
   assembly?: AssemblyConfig;
+  map?: MapConfig;
   unlockArchive?: string[];
   noteUpdates?: NoteUpdates;
+  locationUpdates?: {
+    unlock?: string[];
+    investigate?: string[];
+  };
 }
 
 export interface StoryChapter {
   id: string;
   title: string;
   subtitle?: string;
+  date?: string;
+  place?: string;
+  weather?: string;
   beats: StoryBeat[];
 }
 
@@ -112,6 +144,8 @@ export interface SaveData {
   completedActivities: string[];
   clues: string[];
   playerNotes: PlayerNote[];
+  unlockedLocations: string[];
+  investigatedLocations: string[];
   savedAt: number;
 }
 

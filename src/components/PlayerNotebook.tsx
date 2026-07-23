@@ -12,15 +12,18 @@ const NOTE_LABELS: Record<PlayerNoteType, string> = {
 
 interface PlayerNotebookProps {
   notes: PlayerNote[];
+  date?: string;
+  place?: string;
+  weather?: string;
 }
 
-export default function PlayerNotebook({ notes }: PlayerNotebookProps) {
+export default function PlayerNotebook({ notes, date = "康熙九年 · 九月廿三", place = "广州城西", weather = "秋雨未歇" }: PlayerNotebookProps) {
   return (
     <aside className="player-notebook" aria-label="佣书手札" aria-live="polite">
       <header className="notebook-heading">
         <div className="vertical-title"><span>佣书手札</span><small>听雨书坊</small></div>
         <div>
-          <p className="ledger-date">康熙九年 · 九月廿三</p>
+          <p className="ledger-date">{date}</p>
           <h2>案头校记</h2>
           <p>亲眼所见与心中所疑，分笔记下。</p>
         </div>
@@ -29,8 +32,8 @@ export default function PlayerNotebook({ notes }: PlayerNotebookProps) {
       <div className="notebook-entries">
         {notes.length === 0 && (
           <section className="notebook-atmosphere" aria-label="时地与天气">
-            <span>广州城西</span>
-            <strong>秋雨未歇</strong>
+            <span>{place}</span>
+            <strong>{weather}</strong>
             <blockquote>
               秋阴不散霜飞晚<br />
               留得枯荷听雨声

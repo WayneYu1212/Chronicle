@@ -4,6 +4,7 @@ import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "rea
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import ActivityStage from "@/components/ActivityStage";
+import type { ActivityResult } from "@/components/ActivityStage";
 import BookShell from "@/components/BookShell";
 import ManuscriptPage from "@/components/ManuscriptPage";
 import PlayerNotebook from "@/components/PlayerNotebook";
@@ -11,7 +12,7 @@ import { applyEffects, applyNoteUpdates, createInitialPlayerNotes, createInitial
 import { getChapter, getFirstChapterId } from "@/lib/story";
 import type { SaveData, StoryBeat } from "@/types/game";
 
-const ACTIVITY_TYPES = new Set(["sorting", "inspection", "comparison", "assembly"]);
+const ACTIVITY_TYPES = new Set(["sorting", "inspection", "comparison", "assembly", "map"]);
 type HistoryEntry = { beatId: string; save: SaveData };
 
 function normalizeSave(data: SaveData): SaveData {
@@ -30,13 +31,15 @@ function normalizeSave(data: SaveData): SaveData {
     completedActivities: data.completedActivities ?? [],
     clues: data.clues ?? [],
     playerNotes: data.playerNotes ?? createInitialPlayerNotes(),
+    unlockedLocations: data.unlockedLocations ?? ["guangzhou"],
+    investigatedLocations: data.investigatedLocations ?? [],
   };
 }
 
 function GameContent() {
   const searchParams = useSearchParams();
   const mode = searchParams.get("mode") ?? "new";
-  const chapterId = getFirstChapterId();
+  const [chapterId, setChapterId] = useState(getFirstChapterId());
   const chapter = getChapter(chapterId);
   const [save, setSave] = useState<SaveData | null>(null);
   const [beatId, setBeatId] = useState("");
@@ -64,14 +67,16 @@ function GameContent() {
   }, []);
 
   useEffect(() => {
-    if (!chapter) return;
     const existing = mode === "continue" ? loadSave() : null;
-    const initial = existing?.chapterId === chapterId ? normalizeSave(existing) : createInitialSave(chapterId);
+    const initial = existing ? normalizeSave(existing) : createInitialSave(getFirstChapterId());
+    const initialChapter = getChapter(initial.chapterId) ?? getChapter(getFirstChapterId());
+    if (!initialChapter) return;
+    setChapterId(initialChapter.id);
     setSave(initial);
-    setBeatId(chapter.beats[initial.beatIndex]?.id ?? chapter.beats[0].id);
+    setBeatId(initialChapter.beats[initial.beatIndex]?.id ?? initialChapter.beats[0].id);
     setHistory([]);
     setShowFlyleaf(mode === "new");
-  }, [chapter, chapterId, mode]);
+  }, [mode]);
 
   useEffect(() => {
     if (!save || !showFlyleaf || mode !== "new") return;
@@ -88,24 +93,38 @@ function GameContent() {
   const currentIndex = useMemo(() => chapter?.beats.findIndex((beat) => beat.id === beatId) ?? -1, [chapter, beatId]);
   const currentBeat = chapter?.beats[currentIndex];
 
-  const commit = useCallback((nextBeatId: string, nextSave: SaveData, index: number) => {
+  const commit = useCallback((nextChapterId: string, nextBeatId: string, nextSave: SaveData, index: number) => {
     if (save && beatId) setHistory((current) => [...current, { beatId, save }]);
-    const enteringBeat = chapter?.beats.find((beat) => beat.id === nextBeatId);
+    const nextChapter = getChapter(nextChapterId);
+    const enteringBeat = nextChapter?.beats.find((beat) => beat.id === nextBeatId);
+    const unlockedLocations = Array.from(new Set([
+      ...nextSave.unlockedLocations,
+      ...(enteringBeat?.locationUpdates?.unlock ?? []),
+    ]));
+    const investigatedLocations = Array.from(new Set([
+      ...nextSave.investigatedLocations,
+      ...(enteringBeat?.locationUpdates?.investigate ?? []),
+    ]));
     const data = {
       ...nextSave,
+      chapterId: nextChapterId,
       playerNotes: applyNoteUpdates(nextSave.playerNotes, enteringBeat?.noteUpdates, enteringBeat?.id),
+      unlockedLocations,
+      investigatedLocations,
       beatIndex: index,
       savedAt: Date.now(),
     };
+    setChapterId(nextChapterId);
     setSave(data);
     writeSave(data);
     setBeatId(nextBeatId);
-  }, [beatId, chapter, save]);
+  }, [beatId, save]);
 
   const goBack = useCallback(() => {
     const previous = history.at(-1);
     if (!previous) return;
     setHistory((current) => current.slice(0, -1));
+    setChapterId(previous.save.chapterId);
     setSave(previous.save);
     setBeatId(previous.beatId);
     writeSave(previous.save);
@@ -113,6 +132,7 @@ function GameContent() {
 
   const resolveNext = useCallback((beat: StoryBeat) => {
     if (!chapter) return null;
+    if (beat.terminal) return null;
     const index = beat.next ? chapter.beats.findIndex((item) => item.id === beat.next) : chapter.beats.findIndex((item) => item.id === beat.id) + 1;
     return index >= 0 && index < chapter.beats.length ? { beat: chapter.beats[index], index } : null;
   }, [chapter]);
@@ -120,19 +140,25 @@ function GameContent() {
   const advance = useCallback((override?: SaveData) => {
     if (!currentBeat || !save) return;
     const resolved = resolveNext(currentBeat);
-    if (resolved) commit(resolved.beat.id, override ?? save, resolved.index);
-  }, [commit, currentBeat, resolveNext, save]);
+    if (resolved) commit(chapterId, resolved.beat.id, override ?? save, resolved.index);
+  }, [chapterId, commit, currentBeat, resolveNext, save]);
 
   const handleChoice = useCallback((choiceIndex: number) => {
     if (!currentBeat?.choices || !save || !chapter) return;
     const choice = currentBeat.choices[choiceIndex];
-    const nextSave = { ...save, variables: applyEffects(save.variables, choice.effects) };
-    const gotoIndex = choice.goto ? chapter.beats.findIndex((beat) => beat.id === choice.goto) : -1;
-    if (gotoIndex >= 0) commit(chapter.beats[gotoIndex].id, nextSave, gotoIndex);
+    const nextSave = {
+      ...save,
+      variables: applyEffects(save.variables, choice.effects),
+      unlockedLocations: Array.from(new Set([...save.unlockedLocations, ...(choice.unlockLocations ?? [])])),
+    };
+    const targetChapterId = choice.chapter ?? chapterId;
+    const targetChapter = getChapter(targetChapterId);
+    const gotoIndex = choice.goto && targetChapter ? targetChapter.beats.findIndex((beat) => beat.id === choice.goto) : -1;
+    if (gotoIndex >= 0 && targetChapter) commit(targetChapterId, targetChapter.beats[gotoIndex].id, nextSave, gotoIndex);
     else advance(nextSave);
-  }, [advance, chapter, commit, currentBeat, save]);
+  }, [advance, chapter, chapterId, commit, currentBeat, save]);
 
-  const handleActivity = useCallback((result: { clues?: string[]; archive?: string[]; wage?: number; paper?: number }) => {
+  const handleActivity = useCallback((result: ActivityResult) => {
     if (!save || !currentBeat) return;
     const nextSave: SaveData = {
       ...save,
@@ -144,6 +170,7 @@ function GameContent() {
       completedActivities: Array.from(new Set([...save.completedActivities, currentBeat.id])),
       clues: Array.from(new Set([...save.clues, ...(result.clues ?? [])])),
       unlockedArchive: Array.from(new Set([...save.unlockedArchive, ...(result.archive ?? []), ...(currentBeat.unlockArchive ?? [])])),
+      unlockedLocations: Array.from(new Set([...save.unlockedLocations, ...(result.location ? [result.location] : [])])),
     };
     advance(nextSave);
   }, [advance, currentBeat, save]);
@@ -155,7 +182,7 @@ function GameContent() {
   const activity = ACTIVITY_TYPES.has(currentBeat.type ?? "");
   const choices = currentBeat.type === "choice" ? currentBeat.choices : undefined;
   const isEnd = resolveNext(currentBeat) === null;
-  const sceneLeft = <PlayerNotebook notes={save.playerNotes} />;
+  const sceneLeft = <PlayerNotebook notes={save.playerNotes} date={chapter.date} place={chapter.place} weather={chapter.weather} />;
 
   const flyleafLeft = (
     <aside className="flyleaf flyleaf--chapter" aria-label="卷首">
@@ -197,10 +224,17 @@ function GameContent() {
   );
 
   const storyRight = activity ? (
-    <ActivityStage key={currentBeat.id} beat={currentBeat} onComplete={(result) => performPageTurn(() => handleActivity(result))} showSkip={showDelayedControls} />
+    <ActivityStage
+      key={`${chapterId}:${currentBeat.id}`}
+      beat={currentBeat}
+      onComplete={(result) => performPageTurn(() => handleActivity(result))}
+      showSkip={showDelayedControls}
+      unlockedLocations={save.unlockedLocations}
+      investigatedLocations={save.investigatedLocations}
+    />
   ) : (
     <ManuscriptPage
-      key={currentBeat.id}
+      key={`${chapterId}:${currentBeat.id}`}
       speaker={currentBeat.type === "title" ? undefined : currentBeat.speaker}
       text={currentBeat.text}
       isTitle={currentBeat.type === "title"}

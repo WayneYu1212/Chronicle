@@ -2,15 +2,26 @@
 
 import { useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import type { StoryBeat } from "@/types/game";
+import LingnanMap from "./LingnanMap";
 import SentenceText from "./SentenceText";
+
+export interface ActivityResult {
+  clues?: string[];
+  archive?: string[];
+  wage?: number;
+  paper?: number;
+  location?: string;
+}
 
 interface ActivityStageProps {
   beat: StoryBeat;
-  onComplete: (result: { clues?: string[]; archive?: string[]; wage?: number; paper?: number }) => void;
+  onComplete: (result: ActivityResult) => void;
   showSkip?: boolean;
+  unlockedLocations?: string[];
+  investigatedLocations?: string[];
 }
 
-export default function ActivityStage({ beat, onComplete, showSkip = false }: ActivityStageProps) {
+export default function ActivityStage({ beat, onComplete, showSkip = false, unlockedLocations = [], investigatedLocations = [] }: ActivityStageProps) {
   let stage = null;
   if (beat.type === "sorting" && beat.sorting) {
     stage = <SortingActivity beat={beat} onComplete={onComplete} />;
@@ -24,12 +35,23 @@ export default function ActivityStage({ beat, onComplete, showSkip = false }: Ac
   else if (beat.type === "assembly" && beat.assembly) {
     stage = <AssemblyActivity beat={beat} onComplete={onComplete} />;
   }
+  else if (beat.type === "map" && beat.map) {
+    stage = (
+      <LingnanMap
+        config={beat.map}
+        unlockedLocations={unlockedLocations}
+        investigatedLocations={investigatedLocations}
+        onComplete={(location) => onComplete({ location })}
+      />
+    );
+  }
 
   const skip = () => {
     if (beat.type === "sorting") onComplete({ wage: 2 });
     else if (beat.type === "inspection") onComplete({ clues: beat.inspection?.hotspots.slice(0, beat.inspection.required).map((spot) => spot.label), archive: beat.unlockArchive, paper: 1 });
     else if (beat.type === "comparison") onComplete({ clues: ["残页同源"] });
     else if (beat.type === "assembly") onComplete({ clues: beat.assembly ? [beat.assembly.completionClue] : [], archive: beat.unlockArchive });
+    else if (beat.type === "map" && beat.map?.destination) onComplete({ location: beat.map.destination });
   };
 
   return (

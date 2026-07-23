@@ -34,6 +34,7 @@ export default function BookShell({ left, right, chapter, progress, attributes, 
         )}
         <Link href="/" title="合卷">卷首</Link>
         <Link href="/archive" title="查看史料">笺记</Link>
+        <Link href="/map" title="查看岭南舆图">舆图</Link>
         <Link href="/settings" title="设置">杂项</Link>
       </nav>
       <section className={`open-book book-binding-${binding}`} aria-label="摊开的线装书">

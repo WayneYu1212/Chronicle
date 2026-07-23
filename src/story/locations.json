@@ -1,0 +1,70 @@
+{
+  "locations": [
+    {
+      "id": "guangzhou",
+      "name": "广州府",
+      "x": 47.79,
+      "y": 49.02,
+      "labelX": 12,
+      "labelY": -10,
+      "record": "听雨书坊所在地。三箱旧纸与第十三页都从这里进入玩家的手中。",
+      "clue": "沈掌柜旧稿",
+      "investigatedRecord": "两种地方志在广州留下互相冲突的记载，删改痕迹已经录入手札。"
+    },
+    {
+      "id": "nanhai",
+      "name": "南海县",
+      "x": 47.79,
+      "y": 42.78,
+      "labelX": -22,
+      "labelY": -52,
+      "record": "沈掌柜旧友的遗稿曾在此处转手，现存卷册缺少一页。",
+      "clue": "缺失页",
+      "investigatedRecord": "旧藏本的装订孔、纸筋与译抄页相合，但内容仍缺少旁证。"
+    },
+    {
+      "id": "panyu",
+      "name": "番禺",
+      "x": 41.8,
+      "y": 46.79,
+      "labelX": -70,
+      "labelY": -8,
+      "record": "珠江水路交会之地，书商和脚夫带来的传闻在此混杂。",
+      "clue": "尚无确证",
+      "investigatedRecord": "待后续章节补录。"
+    },
+    {
+      "id": "zhaoqing",
+      "name": "肇庆府",
+      "x": 22.11,
+      "y": 42.78,
+      "labelX": -12,
+      "labelY": -48,
+      "record": "缺页清单记载曾有一页见于肇庆，持有人不详。",
+      "clue": "一页见于肇庆",
+      "investigatedRecord": "待后续章节补录。"
+    },
+    {
+      "id": "xiqiao",
+      "name": "西樵山",
+      "x": 25.82,
+      "y": 60.7,
+      "labelX": -18,
+      "labelY": -48,
+      "record": "传闻有遗民文稿藏入山中寺院，目前没有可靠著录。",
+      "clue": "疑似藏稿处",
+      "investigatedRecord": "待后续章节补录。"
+    },
+    {
+      "id": "chaozhou",
+      "name": "潮州府",
+      "x": 82.38,
+      "y": 41,
+      "labelX": -48,
+      "labelY": -48,
+      "record": "传闻当地另有一份关于广州旧事的抄本，来源尚未核实。",
+      "clue": "异本传闻",
+      "investigatedRecord": "待后续章节补录。"
+    }
+  ]
+}

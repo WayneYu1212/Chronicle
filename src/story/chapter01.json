@@ -153,8 +153,8 @@
     { "id": "evening-03", "speaker": "老板", "text": "这些箱子属于一位旧友。他病得很重，想在闭眼前把散在外面的纸找齐。今日门外那个人也在找，但他替谁办事，我还不知道。" },
     { "id": "evening-04", "speaker": "老板", "text": "你可以到此为止。今日分类、跑腿和杂役共记十二文，仍到结账日再领。明早若来抄《通鉴》，另照字数算。你若愿意继续，明日卯时随我去西关收一批遗书。去了以后，看见什么、听见什么，都不能随便问姓名。" },
     { "id": "final-choice", "type": "choice", "text": "灯花爆了一声。门外的雨水沿石阶流过，那枚陌生人留下的制钱还躺在门槛边。", "choices": [
-      { "id": "accept", "text": "让掌柜把今日余下的十文记账，答应明日同行。", "effects": { "trust": 2, "wage": 10 }, "goto": "ending-accept" },
-      { "id": "ask-night", "text": "让掌柜把今日余下的十文记账，再问今晚这些箱子放在哪里。", "effects": { "trust": 1, "paper": 1, "wage": 10 }, "goto": "ending-night" }
+      { "id": "accept", "text": "答应同行。明日卯时随沈掌柜去南海收取旧稿。", "effects": { "trust": 2, "trust_yimin": 1, "wage": 10 }, "chapter": "chapter02-nanhai", "goto": "nanhai-title", "unlockLocations": ["nanhai"] },
+      { "id": "stay", "text": "婉拒同行。留下照看书坊，继续靠抄书挣取工钱。", "effects": { "trust": -1, "wage": 10 }, "chapter": "chapter02-guangzhou", "goto": "guangzhou-title" }
     ]},
     { "id": "ending-accept", "speaker": "我", "text": "卯时以前，我会到。", "next": "ending-01" },
     { "id": "ending-night", "speaker": "老板", "text": "问得对。今晚你别回前街，从后门走。箱子留在这里，我留下守。若明早门上的封条破了，你便当从未见过我。", "next": "ending-01" },

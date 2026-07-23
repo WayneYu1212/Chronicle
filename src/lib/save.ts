@@ -78,6 +78,8 @@ export function createInitialSave(chapterId: string): SaveData {
     completedActivities: [],
     clues: [],
     playerNotes: createInitialPlayerNotes(),
+    unlockedLocations: ["guangzhou"],
+    investigatedLocations: [],
     savedAt: Date.now(),
   };
 }
