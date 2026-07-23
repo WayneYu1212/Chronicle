@@ -11,10 +11,13 @@ interface BookShellProps {
   attributes?: ReactNode;
   controls?: ReactNode;
   pageTurn?: "forward" | "backward" | null;
+  mobileLeftLabel?: string;
+  binding?: "left" | "right";
 }
 
-export default function BookShell({ left, right, chapter, progress, attributes, controls, pageTurn }: BookShellProps) {
+export default function BookShell({ left, right, chapter, progress, attributes, controls, pageTurn, mobileLeftLabel, binding = "left" }: BookShellProps) {
   const [showAttributes, setShowAttributes] = useState(false);
+  const [showMobileLeft, setShowMobileLeft] = useState(false);
 
   return (
     <main className="reading-desk">
@@ -24,11 +27,16 @@ export default function BookShell({ left, right, chapter, progress, attributes, 
             课簿
           </button>
         )}
+        {mobileLeftLabel && (
+          <button type="button" className={`mobile-left-ribbon ${showMobileLeft ? "is-active" : ""}`} aria-expanded={showMobileLeft} onClick={() => setShowMobileLeft((current) => !current)}>
+            {mobileLeftLabel}
+          </button>
+        )}
         <Link href="/" title="合卷">卷首</Link>
         <Link href="/archive" title="查看史料">笺记</Link>
         <Link href="/settings" title="设置">杂项</Link>
       </nav>
-      <section className="open-book" aria-label="摊开的线装书">
+      <section className={`open-book book-binding-${binding}`} aria-label="摊开的线装书">
         <div className="book-page book-page-left">
           <div className="book-rule" aria-hidden />
           <div className="book-page-scroll">{left}</div>
@@ -42,6 +50,12 @@ export default function BookShell({ left, right, chapter, progress, attributes, 
             <aside className={`attribute-leaf ${showAttributes ? "is-open" : ""}`} aria-hidden={!showAttributes}>
               <button type="button" className="attribute-close" onClick={() => setShowAttributes(false)} aria-label="合上课簿" title="合上课簿">×</button>
               {attributes}
+            </aside>
+          )}
+          {mobileLeftLabel && (
+            <aside className={`mobile-left-leaf ${showMobileLeft ? "is-open" : ""}`} aria-hidden={!showMobileLeft}>
+              <button type="button" className="attribute-close" onClick={() => setShowMobileLeft(false)} aria-label={`合上${mobileLeftLabel}`} title={`合上${mobileLeftLabel}`}>×</button>
+              {left}
             </aside>
           )}
           <span className="page-folio">{progress ?? "听雨书坊"}</span>

@@ -63,6 +63,24 @@ export interface StoryChoice {
   goto?: string;
 }
 
+export type PlayerNoteType = "observation" | "judgement" | "question" | "to_check" | "clue";
+
+export interface PlayerNote {
+  id: string;
+  type: PlayerNoteType;
+  title: string;
+  content: string;
+  confidence?: 1 | 2 | 3 | 4 | 5;
+  status?: "active" | "resolved";
+  sourceBeatId?: string;
+}
+
+export interface NoteUpdates {
+  add?: PlayerNote[];
+  update?: (Partial<PlayerNote> & { id: string })[];
+  remove?: string[];
+}
+
 export interface StoryBeat {
   id: string;
   type?: "dialogue" | "choice" | "title" | "sorting" | "inspection" | "comparison" | "assembly";
@@ -75,6 +93,7 @@ export interface StoryBeat {
   comparison?: ComparisonConfig;
   assembly?: AssemblyConfig;
   unlockArchive?: string[];
+  noteUpdates?: NoteUpdates;
 }
 
 export interface StoryChapter {
@@ -92,6 +111,7 @@ export interface SaveData {
   unlockedCharacters: string[];
   completedActivities: string[];
   clues: string[];
+  playerNotes: PlayerNote[];
   savedAt: number;
 }
 

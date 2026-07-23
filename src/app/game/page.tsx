@@ -6,7 +6,8 @@ import Link from "next/link";
 import ActivityStage from "@/components/ActivityStage";
 import BookShell from "@/components/BookShell";
 import ManuscriptPage from "@/components/ManuscriptPage";
-import { applyEffects, createInitialSave, loadSave, writeSave } from "@/lib/save";
+import PlayerNotebook from "@/components/PlayerNotebook";
+import { applyEffects, applyNoteUpdates, createInitialPlayerNotes, createInitialSave, loadSave, writeSave } from "@/lib/save";
 import { getChapter, getFirstChapterId } from "@/lib/story";
 import type { SaveData, StoryBeat } from "@/types/game";
 
@@ -28,6 +29,7 @@ function normalizeSave(data: SaveData): SaveData {
     unlockedCharacters: data.unlockedCharacters ?? [],
     completedActivities: data.completedActivities ?? [],
     clues: data.clues ?? [],
+    playerNotes: data.playerNotes ?? createInitialPlayerNotes(),
   };
 }
 
@@ -88,11 +90,17 @@ function GameContent() {
 
   const commit = useCallback((nextBeatId: string, nextSave: SaveData, index: number) => {
     if (save && beatId) setHistory((current) => [...current, { beatId, save }]);
-    const data = { ...nextSave, beatIndex: index, savedAt: Date.now() };
+    const enteringBeat = chapter?.beats.find((beat) => beat.id === nextBeatId);
+    const data = {
+      ...nextSave,
+      playerNotes: applyNoteUpdates(nextSave.playerNotes, enteringBeat?.noteUpdates, enteringBeat?.id),
+      beatIndex: index,
+      savedAt: Date.now(),
+    };
     setSave(data);
     writeSave(data);
     setBeatId(nextBeatId);
-  }, [beatId, save]);
+  }, [beatId, chapter, save]);
 
   const goBack = useCallback(() => {
     const previous = history.at(-1);
@@ -147,26 +155,7 @@ function GameContent() {
   const activity = ACTIVITY_TYPES.has(currentBeat.type ?? "");
   const choices = currentBeat.type === "choice" ? currentBeat.choices : undefined;
   const isEnd = resolveNext(currentBeat) === null;
-  const segment = currentIndex < 12 ? "开工" : currentIndex < 22 ? "旧纸" : currentIndex < 48 ? "残页" : currentIndex < 61 ? "来客" : "夜谈";
-  const atmosphere = currentIndex < 22
-    ? { verse: "大陆沉秋雨\n长河走暮雷", author: "屈大均《翁山诗外》" }
-    : currentIndex < 61
-      ? { verse: "霖雨从东来\n玄云覆山冈", author: "陈恭尹《雨夜旅江阁述怀》" }
-      : { verse: "松风一接梦魂清\n夜久流泉渐有声", author: "屈大均《夜宿广州北郊作》" };
-
-  const sceneLeft = (
-    <aside className="scene-leaf">
-      <div className="vertical-title"><span>听雨书坊</span><small>康熙九年</small></div>
-      <div className="ledger-date">康熙九年 · 九月廿三</div>
-      <h2>{segment}</h2>
-      <p className="ledger-objective">{activity ? "案上旧纸待理。所得判断，稍后记入课簿。" : "雨声隔着门板，纸墨气压在屋里。"}</p>
-      <figure className="atmosphere-verse">
-        <blockquote>{atmosphere.verse.split("\n").map((line) => <span key={line}>{line}</span>)}</blockquote>
-        <figcaption>{atmosphere.author}</figcaption>
-      </figure>
-      <p className="ledger-motto">纸寿千年，语存一日。所抄为何，须自己看清。</p>
-    </aside>
-  );
+  const sceneLeft = <PlayerNotebook notes={save.playerNotes} />;
 
   const flyleafLeft = (
     <aside className="flyleaf flyleaf--chapter" aria-label="卷首">
@@ -223,7 +212,7 @@ function GameContent() {
     />
   );
 
-  const controls = history.length > 0 && showDelayedControls ? (
+  const controls = history.length > 0 ? (
     <button type="button" className="previous-page" onClick={() => performPageTurn(goBack, "backward")} title="翻回上一页" aria-label="翻回上一页">
       <span aria-hidden>←</span><small>前页</small>
     </button>
@@ -238,6 +227,8 @@ function GameContent() {
       attributes={showFlyleaf ? undefined : attributes}
       controls={showFlyleaf ? undefined : controls}
       pageTurn={pageTurn}
+      mobileLeftLabel={showFlyleaf ? undefined : "手札"}
+      binding="right"
     />
   );
 }

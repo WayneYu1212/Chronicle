@@ -1,4 +1,4 @@
-import type { GameVariables, SaveData } from "@/types/game";
+import type { GameVariables, NoteUpdates, PlayerNote, SaveData } from "@/types/game";
 import { DEFAULT_VARIABLES, SAVE_KEY } from "@/types/game";
 
 export function loadSave(): SaveData | null {
@@ -41,6 +41,33 @@ export function applyEffects(
   return next;
 }
 
+export function applyNoteUpdates(
+  notes: PlayerNote[],
+  updates?: NoteUpdates,
+  sourceBeatId?: string
+): PlayerNote[] {
+  if (!updates) return notes;
+
+  const removed = new Set(updates.remove ?? []);
+  const patches = new Map((updates.update ?? []).map((patch) => [patch.id, patch]));
+  const next = notes
+    .filter((note) => !removed.has(note.id))
+    .map((note) => patches.has(note.id) ? { ...note, ...patches.get(note.id) } : note);
+
+  for (const note of updates.add ?? []) {
+    const value = { ...note, sourceBeatId: note.sourceBeatId ?? sourceBeatId };
+    const index = next.findIndex((current) => current.id === value.id);
+    if (index >= 0) next[index] = { ...next[index], ...value };
+    else next.push(value);
+  }
+
+  return next;
+}
+
+export function createInitialPlayerNotes(): PlayerNote[] {
+  return [];
+}
+
 export function createInitialSave(chapterId: string): SaveData {
   return {
     chapterId,
@@ -50,6 +77,7 @@ export function createInitialSave(chapterId: string): SaveData {
     unlockedCharacters: [],
     completedActivities: [],
     clues: [],
+    playerNotes: createInitialPlayerNotes(),
     savedAt: Date.now(),
   };
 }
