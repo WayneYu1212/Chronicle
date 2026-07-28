@@ -4,132 +4,62 @@
   "subtitle": "书坊旧稿",
   "date": "康熙九年 · 九月廿四",
   "place": "广州城西 · 听雨书坊",
-  "weather": "阴，街泥未干",
+  "weather": "雨后闷热",
   "beats": [
-    {
-      "id": "guangzhou-title",
-      "type": "title",
-      "text": "第二章 · 书坊旧稿\n\n留守路线",
-      "noteUpdates": {
-        "add": [
-          { "id": "today-guangzhou", "type": "to_check", "title": "今日工作", "content": "留守听雨书坊，完成县署送来的地方志清抄。", "status": "active" }
-        ]
-      }
-    },
-    {
-      "id": "guangzhou-map",
-      "type": "map",
-      "text": "沈掌柜已经沿水路离开。我在舆图上重新圈出广州，今日能够查验的范围只有书坊和县署送来的文稿。",
-      "map": {
-        "available": ["guangzhou", "nanhai", "panyu", "zhaoqing", "xiqiao", "chaozhou"],
-        "selectable": ["guangzhou"],
-        "destination": "guangzhou",
-        "confirmLabel": "留在广州书坊"
-      }
-    },
-    {
-      "id": "guangzhou-morning",
-      "speaker": "旁白",
-      "text": "天亮以后，沈掌柜的座位空着。小满刚拆下门板，一名县署书吏便送来两册地方志底稿，限三日内誊出净本。他把定金压在砚台下，特意叮嘱某一页必须照新稿抄，不许参考书坊旧藏。"
-    },
-    {
-      "id": "guangzhou-clerk",
-      "speaker": "县署书吏",
-      "text": "旧本年月舛误，措辞也杂。此次重修只求清楚稳妥。你是领工钱的佣书，照底稿落字便好。多抄一句、少抄一句，最后都记在书坊头上。"
-    },
-    {
-      "id": "guangzhou-discovery",
-      "speaker": "旁白",
-      "text": "他走后，我从书架高处找到同一卷旧抄本。两册纸幅相同，行款也几乎一致；新稿在顺治七年条目下只留了四个字，旧本却多出三行。被删的部分没有涂黑，只在新稿页边写着一个很小的‘略’字。"
-    },
-    {
-      "id": "guangzhou-comparison",
-      "type": "comparison",
-      "text": "把县署新稿与书坊旧抄本并放在案上。先确认它们是否来自同一底本，再判断删改发生在哪一层。",
-      "comparison": {
-        "question": "两册行款相同，新稿删去三行并将‘死伤’改作‘扰攘’。哪项著录最符合眼前证据？",
-        "documents": [
-          {
-            "id": "gazetteer-private",
-            "title": "书坊旧抄本",
-            "excerpt": "顺治七年，城中死伤甚众。其数传闻不一，未敢定录。",
-            "paper": "竹纸，旧折与底稿相同",
-            "ink": "灰墨，末句另手小注",
-            "handwriting": "早期馆阁体抄手"
-          },
-          {
-            "id": "gazetteer-official",
-            "title": "县署修订稿",
-            "excerpt": "顺治七年，城中扰攘。",
-            "paper": "新竹纸，照旧本版式重抄",
-            "ink": "浓墨，页边朱书‘略’",
-            "handwriting": "县署书吏净写"
-          }
-        ],
-        "options": [
-          { "id": "different-events", "text": "两册记载的是不同年份、不同地点的两件事。", "feedback": "年月、条目位置和前后文完全相同，无法解释为两件事。" },
-          { "id": "official-revision", "text": "县署以旧抄本为底稿，主动删去存疑数字并缓和措辞。", "correct": true, "feedback": "相同的行款和条目顺序说明二者存在传抄关系；‘略’字与替换词表明删改发生在修订阶段。" },
-          { "id": "private-expansion", "text": "书坊后来在官方本上增写三行，故意夸大旧事。", "feedback": "旧本纸墨和折痕更早，新稿又保留与旧本一致的行款。现有证据不支持旧本后出。" }
-        ]
-      },
-      "noteUpdates": {
-        "add": [
-          { "id": "gazetteer-variants", "type": "observation", "title": "地方志异文", "content": "县署新稿沿用旧本行款，却删去三行，并将‘死伤’改为‘扰攘’。" },
-          { "id": "official-editing", "type": "judgement", "title": "修订痕迹", "content": "删改发生在县署重修阶段，目的可能是删去难以核实的数字，也可能是降低叙述的冲突性。", "confidence": 4 }
-        ]
-      }
-    },
-    {
-      "id": "guangzhou-return",
-      "speaker": "旁白",
-      "text": "午后，书吏提前回来取走旧抄本。他显然知道书坊藏着这一册，伸手的位置也十分准确。临走前，他把三倍抄工放在桌上，让我当面裁掉旧本多出的三行，免得以后誊手混用。"
-    },
-    {
-      "id": "guangzhou-critical-choice",
-      "type": "choice",
-      "text": "沈掌柜不在，县署书吏要求立刻处理异文。这项选择会改变玩家今后能够接触的材料和书坊承担的风险。",
-      "choices": [
-        { "id": "obey-office", "text": "照县署要求裁去旧页，把删改位置和理由另记在课簿。", "effects": { "trust_qing": 2, "wage": 6 }, "goto": "guangzhou-obey-result" },
-        { "id": "preserve-copy", "text": "先完整影抄三行，再交出经过裁切的旧页，把副本藏入第十三页的空账簿。", "effects": { "trust_yimin": 2, "paper": 1 }, "goto": "guangzhou-preserve-result" }
-      ]
-    },
-    {
-      "id": "guangzhou-obey-result",
-      "speaker": "县署书吏",
-      "text": "你知道佣书的本分。修志局还缺一个能够辨认旧本的人，明日可以带书坊的保结来县署。你会看到更多正式档案，但每一页都必须按照修订规则处理。",
-      "next": "guangzhou-obey-ending",
-      "locationUpdates": { "investigate": ["guangzhou"] },
-      "noteUpdates": {
-        "add": [
-          { "id": "official-route", "type": "judgement", "title": "取舍结果", "content": "接受县署修订规则，换取进入修志局查阅正式档案的机会；异文仅在个人课簿留下记录。", "confidence": 4 }
-        ],
-        "update": [{ "id": "today-guangzhou", "status": "resolved" }]
-      }
-    },
-    {
-      "id": "guangzhou-obey-ending",
-      "type": "title",
-      "terminal": true,
-      "text": "广州路线 · 官修档案\n\n下一站：广州修志局\n\n你获得了接触正式材料的资格，同时接受了哪些文字能够进入正文的规则。"
-    },
-    {
-      "id": "guangzhou-preserve-result",
-      "speaker": "旁白",
-      "text": "书吏收走裁下的纸边，没有发现账簿夹层里的副本。傍晚，陌生客再次站到门外。他没有索要第十三页，只问我是否见过地方志中被删去的三行。留在书坊的选择把我带进了另一条更隐蔽的传抄链。",
-      "next": "guangzhou-preserve-ending",
-      "locationUpdates": { "investigate": ["guangzhou"], "unlock": ["panyu"] },
-      "noteUpdates": {
-        "add": [
-          { "id": "private-route", "type": "judgement", "title": "取舍结果", "content": "私存被删异文，保留了一份非正式副本，也使书坊和自己承担被查出的风险。下一步追查陌生客在番禺的传抄来源。", "confidence": 3 }
-        ],
-        "update": [{ "id": "today-guangzhou", "status": "resolved" }]
-      }
-    },
-    {
-      "id": "guangzhou-preserve-ending",
-      "type": "title",
-      "terminal": true,
-      "text": "广州路线 · 私人传抄\n\n下一站：番禺\n\n你保存了被正式文本排除的三行，也让一份未经公开校验的副本继续流传。"
-    }
+    { "id": "guangzhou-title", "type": "title", "text": "第二章 · 书坊旧稿\n\n留守路线" },
+    { "id": "guangzhou-map", "type": "map", "text": "沈掌柜已经沿水路离开。我在舆图上重新圈出广州，今日能够查验的范围只有书坊和县署送来的文稿。", "map": { "available": ["guangzhou"], "selectable": ["guangzhou"], "destination": "guangzhou", "confirmLabel": "留在广州书坊" }, "locationUpdates": { "investigate": ["guangzhou"] } },
+    { "id": "guangzhou-morning", "speaker": "旁白", "text": "天亮以后，沈掌柜的座位空着。他在砚盒里留下一把内柜钥匙，钥匙下压着半张纸，只写“照旧开门，申时落锁”。昨夜他邀请我同行，我选择留下。这个决定并没有让旧稿离我远去，反而让我第一次独自面对书坊的生意、账目和那些不愿留下姓名的客人。小满拆门板时往巷口看了三次，那顶青布轿已经走了，门槛上被刀划过的制钱却仍锁在茶盏里。" },
+    { "id": "guangzhou-work", "speaker": "小满", "text": "掌柜走前说，今日若有人来收旧纸，只收题名清楚、来路写得明白的。那三只箱子不许碰，内柜也不许开。可他把内柜钥匙留给你，这两句话到底听哪一句？" },
+    { "id": "guangzhou-response", "type": "choice", "text": "沈掌柜留下了互相冲突的交代。", "choices": [ { "id": "follow-words", "text": "先照他说的话做，除非书坊生意逼我开柜。", "effects": { "trust": 1 }, "goto": "guangzhou-clerk-arrival" }, { "id": "use-key", "text": "钥匙既然留下，便说明他允许我在必要时查旧藏。", "effects": { "paper": 1 }, "goto": "guangzhou-clerk-arrival" } ] },
+    { "id": "guangzhou-clerk-arrival", "speaker": "旁白", "text": "辰时刚过，一名县署书吏带着两个包袱来到书坊。他穿洗得发白的青衫，袖口却缝着官署常用的窄边。第一个包袱里是一册地方志底稿和二十张官用连史纸，第二个包袱装着空白封签。书吏先问沈掌柜何时回来，听说要三日后，反而松了一口气。他把定金压在砚台下，要求三日内誊出净本。" },
+    { "id": "guangzhou-clerk", "speaker": "县署书吏", "text": "旧本年月舛误，措辞也杂。此次重修只求清楚稳妥。你是领工钱的佣书，照底稿落字便好。多抄一句、少抄一句，最后都记在书坊头上。顺治七年的条目已经由上面核定，不许拿市面旧本补字。做完另给三十文，今日先付十文。" },
+    { "id": "guangzhou-terms", "speaker": "旁白", "text": "三十文抵得上我数日工钱。雨季书坊生意清淡，我前日赊的米还没还。书吏给的期限也算宽裕，真正奇怪的是他特意指出顺治七年。一本地方志有数百页，正常委托只会规定行款和交期，很少有人先告诉佣书哪一年不能参考旧本。小满听见三十文，已经开始磨墨，却把那句“不许补字”小声念了两遍。" },
+    { "id": "guangzhou-copy-start", "speaker": "旁白", "text": "我先照新稿誊了十页。新稿行款整齐，每处地名都换成现用写法，旧朝官职旁添了小注。写到顺治七年冬十一月，整页只剩一行：“王师定广州，城中稍有扰乱。”下方留有大片空白，页边写着一个很小的“略”字。那个字笔锋很轻，像写字的人希望它不被誊入净本，却又不愿完全不留痕迹。" },
+    { "id": "guangzhou-discovery", "speaker": "旁白", "text": "我记得内柜高处有一册同名旧志。沈掌柜从不把常用书放得那么高，也不会把一册无价孤本塞在账簿后面。钥匙插入柜锁时很涩，说明这只柜最近很少打开。旧抄本纸幅与新稿相同，行款也几乎一致；顺治七年条目却多出三行。被删的部分没有在旧本上涂黑，新稿只用“略”字让它们消失。" },
+    { "id": "guangzhou-grant", "speaker": "旁白", "text": "我把新旧两条分别抄到两张题签上，先收入长编待理栏。它们内容相反，却都是真实存在的文本。此刻能够确认的事实只有三点：新稿来自县署，旧稿来自书坊旧藏，两者使用同一行款。至于旧稿所写是否真实、新稿为何删改，还不能从字面直接判断。", "grantFragments": ["gazetteer-old-entry", "gazetteer-new-entry"] },
+    { "id": "guangzhou-inspection", "type": "inspection", "text": "先查验旧志顺治七年条。拖动灯盏观察压痕、校记和装订，确认这三行是否与整册同时写成。", "inspection": { "required": 3, "document": { "id": "gazetteer-old-entry", "title": "旧志顺治七年条", "excerpt": "冬十一月，城破。城中死伤甚众，西门内外积尸。", "paper": "竹纸", "ink": "一色旧墨", "handwriting": "方整楷书", "mark": "书坊旧藏" }, "verso": "纸背可见相邻页的旧墨背透，装订线处有两次穿孔。", "hotspots": [ { "id": "same-ink", "label": "同批旧墨", "detail": "三行正文与前后条目的墨色、颗粒和褪色程度一致，未见后补。", "x": 55, "y": 42 }, { "id": "pressure", "label": "连续压痕", "detail": "笔尖压痕从上一行自然续入删文，没有中途换纸或添写的停顿。", "x": 31, "y": 62 }, { "id": "old-note", "label": "页边旧校记", "detail": "页边小字写“数未核”，说明早期誊手也对死伤数字存疑，却没有删去整段。", "x": 82, "y": 28 }, { "id": "rebinding", "label": "二次装订", "detail": "书册重装过一次，但两次穿孔都早于新稿送来，无法解释为今日伪造。", "x": 20, "y": 76, "side": "back" } ] }, "noteUpdates": { "add": [ { "id": "old-gazetteer-evidence", "type": "observation", "title": "旧志删文", "content": "旧本三行与全册同时抄成，页边原有“数未核”校记；新稿将整段改为“稍有扰乱”。" } ] } },
+    { "id": "guangzhou-comparison", "type": "comparison", "text": "把县署新稿与书坊旧抄本并放在案上。先确认它们是否来自同一底本，再判断删改发生在哪一层。", "comparison": { "question": "哪一种判断能够同时解释相同行款、连续条目和新稿页边的“略”字？", "documents": [ { "id": "old", "title": "书坊旧抄本", "excerpt": "冬十一月，城破。城中死伤甚众，西门内外积尸。", "paper": "旧竹纸", "ink": "整册同色", "handwriting": "方整楷书" }, { "id": "new", "title": "县署修订稿", "excerpt": "冬十一月，王师定广州，城中稍有扰乱。", "paper": "官用连史纸", "ink": "新墨", "handwriting": "馆阁体" } ], "options": [ { "id": "unrelated", "text": "两册来源无关，只是碰巧记录同一年。", "feedback": "卷次、条目次序和行款连续对应，碰巧相同无法解释这些一致性。" }, { "id": "old-from-new", "text": "旧本根据县署新稿扩写了三行。", "feedback": "旧本纸墨和装订均早于新稿，时间顺序不支持这种解释。" }, { "id": "new-edited", "text": "新稿依据旧传抄链修订，并主动删改了三行。", "correct": true, "feedback": "相同结构和“略”字共同表明修订者知道旧文存在，并决定不把它带入净本。" } ] } },
+    { "id": "guangzhou-meaning", "speaker": "旁白", "text": "校勘只能证明文字如何变化，仍不能证明哪一版准确。旧志可能保存了亲历者的记忆，也可能把流言抄成事实；新志可能为了粉饰而删改，也可能在删除无法核实的数字。真正值得追问的是修订者依据了什么规则，又为什么用一个“略”字保留删改痕迹。若他只想掩盖，完全可以重写整页，不必留下可供追查的线头。" },
+    { "id": "guangzhou-xiaoman", "speaker": "小满", "text": "旧本说死伤甚众，新本说稍有扰乱。若只抄新本，旧本的话便没有了；若把旧本偷偷补进去，县署又会说我们改稿。师兄，佣书到底听给钱的人，还是听纸上原来的字？" },
+    { "id": "guangzhou-player", "speaker": "我", "text": "佣书先把两种字都认清，再决定自己愿意替哪一种承担后果。给钱的人能决定交出去的净本，不能替我决定看过什么。可我若把每一段存疑旧文都当成真相，也只是用自己的偏好改了一次书。" },
+    { "id": "guangzhou-first-compilation", "type": "compilation", "text": "先处理《旧志顺治七年条》。", "compilation": { "fragmentId": "gazetteer-old-entry", "prompt": "把旧志条目收入正文、附录或存疑卷。你的判断不会改变县署底稿，却会决定自己保留怎样的记录。", "routes": { "recorded:main": "guangzhou-record-main", "recorded:appendix": "guangzhou-record-appendix", "doubtful": "guangzhou-record-doubtful" } } },
+    { "id": "guangzhou-record-main", "speaker": "旁白", "text": "我把旧志条目收入正文，并注明“死伤数字未核”。这样写保留了灾难描述，也让读者知道早期誊手已经对细节存疑。正文的位置会使它得到更大分量，同时也让持有这份长编的人承担更高风险。", "next": "guangzhou-clerk-return" },
+    { "id": "guangzhou-record-appendix", "speaker": "旁白", "text": "我把旧志条目收入附录，与县署新稿并排记录。正文暂不采用任何一种说法，附录保留删改发生的过程。它减少了直接断言，也可能让多数只读正文的人永远看不到这三行。", "next": "guangzhou-clerk-return" },
+    { "id": "guangzhou-record-doubtful", "speaker": "旁白", "text": "我将旧志列入存疑卷，注明它成文较早、内容缺少旁证。这个处理保留了材料，也暂时拒绝让它参与叙述。小满看见“存疑”二字，问如果旁证永远找不到，这页是不是会一直关在疑卷里。我没有答案。", "next": "guangzhou-clerk-return" },
+    { "id": "guangzhou-clerk-return", "speaker": "旁白", "text": "午后，县署书吏比约定早两日回来。他没有先看我誊好的净本，径直走到高柜前，伸手的位置与旧抄本分毫不差。显然他知道听雨坊藏着这一册，也知道沈掌柜今日不在。他把旧本翻到顺治七年，指腹在那三行上停了一次，随后从袖中取出一把裁纸刀。" },
+    { "id": "guangzhou-demand", "speaker": "县署书吏", "text": "旧本是前次未定稿，留在书坊只会让以后誊手混用。你当面把三行裁下，我再加三十文。纸边交给我，剩下的书仍归听雨坊。若你不肯，我也可以整册带回县署核验，只是沈掌柜回来以后，要亲自去说明为什么私藏旧稿。" },
+    { "id": "guangzhou-pressure", "speaker": "旁白", "text": "六十文足以还清米账，再买一刀好纸。拒绝则可能让整个书坊被查。书吏没有拔高声音，也没有拿官差身份压人；他只是把两种代价清楚摆在案上。更麻烦的是，他要求带走裁下的纸边。若目的只是防止误抄，划线或封存已经足够。他想控制的不只是净本内容，也包括旧文还能否被别人看见。" },
+    { "id": "guangzhou-ledger-01", "speaker": "旁白", "text": "书吏去前堂等候时，我翻看县署随稿送来的用纸账。账上写此次重修一共雇了四家书坊，听雨坊只负责广州沿革和城防两卷。其余三家分别誊写田赋、学校和人物。这样的分工让任何一家都看不到完整地方志，也让不同卷中的矛盾很难被同一个誊手发现。若顺治七年的删改也散在数家书坊，单凭我们手中两册仍无法判断修订范围。" },
+    { "id": "guangzhou-ledger-02", "speaker": "小满", "text": "我上月替城南陈记送过纸。他们也在抄地方志，说人物卷里删掉了两个前朝举人的名字。陈记掌柜觉得只是避讳，没有留下旧稿。若县署把每一处删改都分给不同书坊，大家只会以为自己看到的是一处小改。等净本合起来，旧书里的人和事已经少了许多，却没有一个佣书知道一共少了多少。" },
+    { "id": "guangzhou-ledger-03", "speaker": "旁白", "text": "小满的话给了我一个新的查法。我把听雨坊收到的卷号、交期和纸数抄进手札，再从旧账中找其他书坊近来的购纸记录。三家都在同一旬内大量购买官式连史纸，说明重修确实同时进行。这个发现不能证明删改有统一命令，却说明县署有意把文本拆开处理。玩家未来若进入修志局，可以沿卷号追查各卷的删改记录。" },
+    { "id": "guangzhou-neighbor", "speaker": "旁白", "text": "午后送茶来的印坊老板看见桌上两册志书，只说了一句“又修”。他经历过三次改朝换代后的重刻，每次新志开局，都有人把旧版木板刨平再刻。刨掉的字不会像纸上删文那样留下痕迹，只有板面比其他地方薄。他说城南仓里或许还堆着上一版废板，如果要查一段文字何时消失，木板有时比净本更诚实。" },
+    { "id": "guangzhou-printing", "speaker": "我", "text": "誊本可以留下异文，木板一旦刨平，后印出的每一本都只剩新字。修志局现在收集净稿，下一步很可能就是刻板。今天若交出旧页，我们失去的是一份原件；刻板完成以后，整个市场将出现数百本措辞相同的新志，它们会凭数量压过零散旧抄本。保存一页无法阻止新版本流传，却能让后来的人知道版本发生过变化。" },
+    { "id": "guangzhou-wage", "speaker": "旁白", "text": "我重新算了一遍自己的账。书坊欠米铺四十文，小满这个月的饭钱还没记，后院屋顶也要补瓦。陌生客出八十文，县署前后能给六十文；拒绝双方则可能一文不得。史料在长编里可以只谈来源和可信度，原件在现实中却同时是一件能换米、招祸和牵连雇主的东西。佣书每次决定保存什么，也在决定谁为保存付钱。" },
+    { "id": "guangzhou-clerk-motive", "speaker": "县署书吏", "text": "你把我当成来毁书的人，也无妨。我只告诉你一件事：旧志三行中的死伤数字没有姓名、没有册报，也没有埋葬记录。若照抄进新志，后人会把无法核实的数字当成官府确认。修志的人删去它，要承担遮蔽之名；留下它，也要承担传讹之责。你可以质疑我们的取舍，但不能假装保留原文便没有取舍。" },
+    { "id": "guangzhou-clerk-question", "type": "choice", "text": "书吏的解释改变了哪一项判断？", "choices": [ { "id": "clerk-proves", "text": "它证明新稿一定更可靠。", "goto": "guangzhou-clerk-overreach" }, { "id": "clerk-rule", "text": "它说明修订者采用了“无旁证不入正文”的规则，但规则是否一致执行仍待查。", "goto": "guangzhou-clerk-careful" } ] },
+    { "id": "guangzhou-clerk-overreach", "speaker": "旁白", "text": "他的解释来自修订体系内部，能够说明删改理由，仍不能自动证明新稿更可靠。修志局是否对所有无旁证材料采用同一规则、是否只删去不利叙述、是否保存被删原文，都需要进入档案后才能确认。", "next": "guangzhou-before-stranger" },
+    { "id": "guangzhou-clerk-careful", "speaker": "旁白", "text": "我把这条规则写进手札，并在旁边留下三个待查问题：同类条目是否同样处理，被删原文是否另册保存，修订决定由谁签署。理解规则使调查有了具体方向，却没有替规则免除偏向。", "next": "guangzhou-before-stranger" },
+    { "id": "guangzhou-before-stranger", "speaker": "旁白", "text": "书吏说完便回到前堂。他给出的理由足以让我认真考虑删文，也让我更想知道县署是否保留删稿。此时窗外传来茶碗落桌的轻响，昨夜那位陌生客已经坐到对街。他没有催促，只让自己的存在成为第三种压力。" },
+    { "id": "guangzhou-copy-ethics-01", "speaker": "旁白", "text": "我检查刚描下的副本，发现“积尸”的“积”字因为旧纸破损只拓出一半。若凭上下文补全，副本读起来顺畅；若照残形抄录，后来的人可能认不出这个字。我最终保留残形，在旁边写“疑为积”。这一处小小处理提醒我：秘密副本也会产生新的不确定，保存文字从来不等于原样复制。" },
+    { "id": "guangzhou-copy-ethics-02", "speaker": "小满", "text": "如果以后有人只看我们的副本，会不会以为“疑为积”也是旧书上的话？我们是不是还要把自己的小字换一种墨？掌柜平日用朱笔校错，说朱字不属于正文。可县署新稿页边的“略”也是小字，最后却决定正文少了什么。旁注看起来次要，有时管的事比正文还大。" },
+    { "id": "guangzhou-copy-ethics-03", "speaker": "旁白", "text": "我改用朱墨写校记，并在副本末尾注明誊写日期、地点和经手人。主角没有姓名，便只写“听雨坊佣书录”。这个署名既保护我，也让副本失去可追查的个人身份。若它以后流入别处，别人能确认书坊和日期，却无法判断具体誊手是否可靠。匿名保护记录者，也削弱记录的证据链。" },
+    { "id": "guangzhou-copy-ethics-04", "speaker": "旁白", "text": "内柜里还有沈掌柜过去留下的几张无名副本，每张都只写书坊和年份。我第一次理解他为什么愿意雇一个来历不明的佣书。我们能替敏感文字留下手迹，又不容易把材料直接连到某个家族。代价是将来的人只能根据纸墨和书坊习惯辨认我们，无法询问一个明确作者。我的神秘身份从这一刻也成了史料传播的一部分。" },
+    { "id": "guangzhou-copy-ethics-05", "speaker": "旁白", "text": "我把副本与原页并排放好，约定无论最后怎样处理原件，副本都必须保留自己的成文说明。它不能冒充旧志，也不能因为出自我手便被视为虚构。它只证明康熙九年的今天，一名听雨坊佣书确实见过那三行字。" },
+    { "id": "guangzhou-stranger", "speaker": "旁白", "text": "书吏等我答复时，昨夜那位陌生客从对街茶摊走过。他没有进门，只把一张写着价钱的纸压在窗缝外。纸上写八十文，下面画着与制钱背面相同的刀痕。县署要我裁去旧文，陌生客愿意买走旧文，两方都准确知道它在这里。沈掌柜离开后，书坊像一张摊开的纸，所有人都等着看我会在哪一处落笔。" },
+    { "id": "guangzhou-options", "speaker": "小满", "text": "我们可以照他说的裁掉，也可以趁他去前堂时先抄一份。窗外那个人给的钱更多，可昨夜掌柜连他的制钱都不让碰。若我们什么都不做，书吏就会整册带走。师兄，你选哪一种，我都帮你守门；可掌柜回来以后，不能说是我拿的主意。" },
+    { "id": "guangzhou-secret-copy", "speaker": "旁白", "text": "我趁书吏去前堂验纸，在账簿夹层压入一张薄纸，用硬笔沿旧文描出字形。这个副本无法保存原纸、旧墨和校记，只能保存三行文字。它将成为新的传抄本，也会带上我的错误。若选择留下它，我必须在长编中注明它出自今日摹写，不能冒充旧志原页。", "grantFragments": ["gazetteer-secret-copy"] },
+    { "id": "guangzhou-critical-compilation", "type": "compilation", "text": "县署书吏等在案前。请在左页处理《旧志顺治七年条》。", "compilation": { "fragmentId": "gazetteer-old-entry", "prompt": "你可以保留在长编、列入存疑、出售、销毁或交给县署。原件离手后无法恢复，后续只能依赖副本和他人引文。", "routes": { "recorded:main": "guangzhou-preserve-result", "recorded:appendix": "guangzhou-preserve-result", "doubtful": "guangzhou-refuse-result", "sold": "guangzhou-sell-result", "destroyed": "guangzhou-obey-result", "transferred": "guangzhou-transfer-result" }, "routeEffects": { "guangzhou-preserve-result": { "risk": 2, "trust_yimin": 2 }, "guangzhou-refuse-result": { "risk": 1 }, "guangzhou-sell-result": { "risk": 3, "trust": -2 }, "guangzhou-obey-result": { "wage": 60, "risk": -2, "trust_qing": 2 }, "guangzhou-transfer-result": { "trust_qing": 3, "risk": -1 } } } },
+    { "id": "guangzhou-obey-result", "speaker": "县署书吏", "text": "你知道佣书的本分。修志局还缺一个能够辨认旧本的人，明日可以带书坊的保结来县署。你会看到更多正式档案，但每一页都必须按照修订规则处理。", "locationUpdates": { "unlock": ["gazette-office"] }, "next": "guangzhou-obey-reflection" },
+    { "id": "guangzhou-obey-reflection", "speaker": "旁白", "text": "裁刀落下时没有很大的声音。三行字连同纸边一起离开书册，原处只剩一条新白的断口。书吏把纸边收入袖中，付清六十文。我仍有自己描下的副本，却再也不能证明那三行原本与整册同纸同墨。为了生计和书坊安全，我保存了文字，失去了原件能够承担的证据。", "next": "guangzhou-obey-ending" },
+    { "id": "guangzhou-obey-ending", "type": "title", "text": "广州路线 · 官修档案\n\n下一站：广州修志局\n\n你换得正式档案的入口，也失去了能够重新查验的旧志原页。", "terminal": true },
+    { "id": "guangzhou-preserve-result", "speaker": "旁白", "text": "我没有交出旧本，只把净本和定金推回案前。书吏收走官纸，说明日会带人再来。小满立即合上门板，把旧志藏进空米缸。陌生客仍站在对街，他看见我们的动作，却没有靠近。", "locationUpdates": { "unlock": ["panyu"] }, "next": "guangzhou-preserve-reaction" },
+    { "id": "guangzhou-preserve-reaction", "speaker": "陌生客", "text": "傍晚，他从后窗递进一句话：番禺有人见过同一条目的更早底稿。你若想知道旧志从哪里抄来，明日带你的副本到南门外；若只想护住沈掌柜的书坊，今晚便把它交给我。", "next": "guangzhou-preserve-ending" },
+    { "id": "guangzhou-preserve-ending", "type": "title", "text": "广州路线 · 私人传抄\n\n下一站：番禺\n\n你保住旧本和副本，也让县署开始注意听雨书坊。", "terminal": true },
+    { "id": "guangzhou-refuse-result", "speaker": "县署书吏", "text": "你既说材料存疑，便更没有理由让它继续混在可供誊抄的旧藏里。我今日不逼你裁，明日会带修志局的封签来。到那时，整册书都要入署核验。", "locationUpdates": { "unlock": ["gazette-office"] }, "next": "guangzhou-refuse-ending" },
+    { "id": "guangzhou-refuse-ending", "type": "title", "text": "广州路线 · 暂缓判断\n\n下一站：广州修志局\n\n你没有替任何一版背书，县署将要求你公开说明存疑依据。", "terminal": true },
+    { "id": "guangzhou-sell-result", "speaker": "旁白", "text": "我把旧志原页卖给窗外的陌生客。他付的钱足够补上书坊数月欠账，却没有说明自己替谁收书。书吏回来时只看见整齐的裁口，以为我已经照令处理。两边都得到想要的结果，只有我不知道原页今晚会被收入私藏、重新转卖，还是送到另一个想让它消失的人手中。", "locationUpdates": { "unlock": ["panyu"] }, "next": "guangzhou-sell-ending" },
+    { "id": "guangzhou-sell-ending", "type": "title", "text": "广州路线 · 陌生藏家\n\n下一站：番禺\n\n原件已经出售。后续调查只能依靠你的副本和买家的去向。", "terminal": true },
+    { "id": "guangzhou-transfer-result", "speaker": "县署书吏", "text": "书吏接过整册旧志，没有再付额外的钱。他在收条上写“暂借核验”，却拒绝注明归还日期。我保留了副本和查验记录，也把原件的控制权交给了修志局。", "locationUpdates": { "unlock": ["gazette-office"] }, "next": "guangzhou-transfer-ending" },
+    { "id": "guangzhou-transfer-ending", "type": "title", "text": "广州路线 · 入署核验\n\n下一站：广州修志局\n\n原件进入官方档案。你仍能追查它如何被引用、删改或封存。", "terminal": true }
   ]
 }

@@ -65,7 +65,7 @@
     ]},
     { "id": "work-show", "speaker": "旁白", "text": "我把残页平放在他的砚旁。他磨墨的手停了一瞬，墨锭仍抵着砚堂，黑色的水纹却慢慢散开。他先看页码，又把纸翻到背面，像是在寻找一个早已知道位置的记号。他让我把灯移近，逐处说清自己看见的纸墨特征。", "next": "inspect-01" },
     { "id": "work-inspect", "speaker": "旁白", "text": "我没有立刻叫他。佣书靠眼睛吃饭，一张纸值不值钱，有时只差一个针眼般的印记。我把灯移近，先从纸筋、墨色和笔势看起。", "next": "inspect-01" },
-    { "id": "inspect-01", "type": "inspection", "text": "残页受过潮，正反两面又有不同文字。翻看纸背，再拖动灯盏，让斜光从纸面低处掠过。靠近微光停一停，找出能够判断书写先后与流传方式的三处痕迹。", "unlockArchive": ["folio-13"], "inspection": {
+    { "id": "inspect-01", "type": "inspection", "text": "残页受过潮，正反两面又有不同文字。翻看纸背，再拖动灯盏，让斜光从纸面低处掠过。靠近微光停一停，找出能够判断书写先后与流传方式的三处痕迹。", "unlockArchive": ["folio-13"], "grantFragments": ["folio-13"], "inspection": {
       "required": 3,
       "document": { "id": "folio13", "title": "第十三页", "excerpt": "……二十四日暮，城垣已弃。堂中妇孺尚聚，神父仍为众人听告解。男仆忽自门外呼曰：守城之兵已经散了……", "paper": "白棉纸，横折密集", "ink": "正文青灰，纸背另有淡墨", "handwriting": "工整译抄小楷", "mark": "十三", "archiveId": "folio-13", "anomalous": true },
       "verso": "24 de Novembro ... a muralha ... o Padre ouvia ainda as confissões ...",
@@ -109,7 +109,7 @@
     { "id": "discovery-01", "speaker": "旁白", "text": "封套夹层里还有三片手掌宽的碎纸。每片正面都有汉字，背后则是我读不懂的连写西字。若只顺着汉文句意去排，会得到两种都能读通的次序；翻到背面，横折与旧墨却只容许一种接法。" },
     { "id": "discovery-02", "speaker": "旁白", "text": "最左一片沾着暗红封蜡，中间一片有两枚细小针孔，最右一片保留信纸原边。有人先把一封从远处寄来的报告拆开，沿着西文行间译成汉字，后来又把译稿编入另一册书。" },
     { "id": "discovery-03", "speaker": "旁白", "text": "纸背反复出现一个词：Padre。我曾在澳门来的历书和教堂账目里见过相似的字形，却不知道它指人、地名还是官职。沈掌柜一定能读出更多，所以他刚才才先翻纸背。" },
-    { "id": "assembly-01", "type": "assembly", "text": "三片纸的汉文都能勉强成句。请来回查看正反两面，按撕口、横折与旧墨位置缀合。", "unlockArchive": ["west-gate-fragment"], "assembly": {
+    { "id": "assembly-01", "type": "assembly", "text": "三片纸的汉文都能勉强成句。请来回查看正反两面，按撕口、横折与旧墨位置缀合。", "unlockArchive": ["west-gate-fragment"], "grantFragments": ["west-gate-fragment"], "assembly": {
       "fragments": [
         { "id": "fragment-a", "text": "二十四日暮", "back": "24 de Novembro", "edge": "左缘封蜡", "order": 0 },
         { "id": "fragment-b", "text": "城垣已弃", "back": "a muralha", "edge": "两枚针孔", "order": 1 },

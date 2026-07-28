@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
-import type { StoryBeat } from "@/types/game";
+import type { CompilationState, GameVariables, StoryBeat } from "@/types/game";
+import { resolveCompilationRoute } from "@/lib/compilation";
 import LingnanMap from "./LingnanMap";
 import SentenceText from "./SentenceText";
 
@@ -11,6 +12,8 @@ export interface ActivityResult {
   wage?: number;
   paper?: number;
   location?: string;
+  goto?: string;
+  effects?: Partial<GameVariables>;
 }
 
 interface ActivityStageProps {
@@ -19,9 +22,10 @@ interface ActivityStageProps {
   showSkip?: boolean;
   unlockedLocations?: string[];
   investigatedLocations?: string[];
+  compilation?: CompilationState;
 }
 
-export default function ActivityStage({ beat, onComplete, showSkip = false, unlockedLocations = [], investigatedLocations = [] }: ActivityStageProps) {
+export default function ActivityStage({ beat, onComplete, showSkip = false, unlockedLocations = [], investigatedLocations = [], compilation }: ActivityStageProps) {
   let stage = null;
   if (beat.type === "sorting" && beat.sorting) {
     stage = <SortingActivity beat={beat} onComplete={onComplete} />;
@@ -45,6 +49,9 @@ export default function ActivityStage({ beat, onComplete, showSkip = false, unlo
       />
     );
   }
+  else if (beat.type === "compilation" && beat.compilation && compilation) {
+    stage = <CompilationActivity beat={beat} onComplete={onComplete} compilation={compilation} />;
+  }
 
   const skip = () => {
     if (beat.type === "sorting") onComplete({ wage: 2 });
@@ -60,6 +67,26 @@ export default function ActivityStage({ beat, onComplete, showSkip = false, unlo
       {showSkip && <button type="button" className="activity-skip" onClick={skip}>略过此课</button>}
     </div>
   );
+}
+
+function CompilationActivity({ beat, onComplete, compilation }: ActivityStageProps) {
+  const config = beat.compilation!;
+  const entry = compilation?.entries[config.fragmentId];
+  const route = compilation ? resolveCompilationRoute(compilation, config.fragmentId, config.routes) : undefined;
+  const fragment = compilation?.fragments[config.fragmentId];
+  const status = !entry || entry.disposition === "unfiled"
+    ? "这份材料仍在待理栏。请打开左页长编，完成判断或处置。"
+    : route
+      ? `当前处理：${entry.disposition === "recorded" ? entry.section === "main" ? "收入正文" : "收入附录" : entry.disposition === "doubtful" ? "列入存疑" : entry.disposition === "sold" ? "已经出售" : entry.disposition === "destroyed" ? "已经销毁" : "已经交还"}。`
+      : "当前处理还不能推进这段剧情，请补全结构化判断。";
+
+  return <section className="activity compilation-gate" aria-label="史料处置">
+    <div className="activity-heading"><span>长编落笔</span><strong>录</strong></div>
+    <p className="activity-copy"><SentenceText text={config.prompt || beat.text} /></p>
+    {fragment && <article className="compilation-gate-fragment"><small>{fragment.medium}</small><h3>{fragment.title}</h3><p>{fragment.content}</p></article>}
+    <p className="work-feedback" aria-live="polite">{status}</p>
+    {route && <button className="seal-action" type="button" onClick={() => onComplete({ goto: route, effects: config.routeEffects?.[route] })}><span>定</span> 依此入卷</button>}
+  </section>;
 }
 
 function SortingActivity({ beat, onComplete }: ActivityStageProps) {

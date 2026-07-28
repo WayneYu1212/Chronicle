@@ -3,174 +3,63 @@
   "title": "第二章",
   "subtitle": "南海旧稿",
   "date": "康熙九年 · 九月廿四",
-  "place": "广州府至南海县",
-  "weather": "雨后水涨",
+  "place": "南海县 · 周氏旧宅",
+  "weather": "江雾初散",
   "beats": [
-    {
-      "id": "nanhai-title",
-      "type": "title",
-      "text": "第二章 · 南海旧稿\n\n同行路线",
-      "noteUpdates": {
-        "add": [
-          { "id": "today-nanhai", "type": "to_check", "title": "今日工作", "content": "随沈掌柜前往南海，验看一户旧藏中的残缺卷册。", "status": "active" }
-        ]
-      }
-    },
-    {
-      "id": "nanhai-map",
-      "type": "map",
-      "text": "沈掌柜展开一张旧舆图，用朱笔圈出南海。图中旧字多有漫漶，真正可信的地点名由我重新题写。",
-      "map": {
-        "available": ["guangzhou", "nanhai", "panyu", "zhaoqing", "xiqiao", "chaozhou"],
-        "selectable": ["nanhai"],
-        "destination": "nanhai",
-        "confirmLabel": "沿水路前往南海"
-      }
-    },
-    {
-      "id": "nanhai-departure",
-      "speaker": "旁白",
-      "text": "卯时的珠江还蒙着薄雾。沈掌柜雇了一条载纸的小艇，箱笼只带了一只，里面放着空白题签、细麻绳、两把竹尺和昨夜锁起的第十三页。他没有携带兵器，也没有告诉船家此行收什么书。"
-    },
-    {
-      "id": "nanhai-boss-01",
-      "speaker": "沈掌柜",
-      "text": "我年轻时听人说过那份稿子。有人称它是亲历，有人说它只是从澳门转来的传闻。二十年里，每个经手人都抄下一点，也删去一点。我知道这些纸曾经存在，却不知道哪一层文字最早。"
-    },
-    {
-      "id": "nanhai-boss-02",
-      "speaker": "我",
-      "text": "掌柜带我来，是要找出哪一份才是真的？"
-    },
-    {
-      "id": "nanhai-boss-03",
-      "speaker": "沈掌柜",
-      "text": "我若知道真假，便不必带你。今日只做佣书该做的事：记清从谁手里接纸，纸原来放在哪里，哪一笔墨早，哪一笔墨晚。人的话可以慢慢问，纸上的次序先不要弄乱。",
-      "noteUpdates": {
-        "add": [
-          { "id": "boss-position", "type": "judgement", "title": "沈掌柜所求", "content": "他收集过互相矛盾的旧闻，也担心自己留下错误的版本；此行先查材料来路，不先断定内容真假。", "confidence": 4 }
-        ]
-      }
-    },
-    {
-      "id": "nanhai-house",
-      "speaker": "旁白",
-      "text": "旧宅在水田尽头。门楣上的三朵梅花已经被烟熏黑，院中晾着新抄的蒙学书。接待我们的是旧主人之孙周砚秋，年纪与我相仿。他承认祖父留下过一只书箱，却坚持箱中只有诗稿和田契。"
-    },
-    {
-      "id": "nanhai-zhou",
-      "speaker": "周砚秋",
-      "text": "家祖已经去世十七年。老人晚年记性不好，同一件事常说出两种年月。你们若把他随口写下的东西当作实录，错处也会跟着传下去。我可以让你们看书，但不能答应你们把每个字都带走。"
-    },
-    {
-      "id": "nanhai-box",
-      "speaker": "旁白",
-      "text": "书箱底部有一册无题抄本。正文使用寻常竹纸，中间却夹着一张白棉纸，纸幅短半寸，装订孔也不在同一条线上。那页的页脚被剪去，只剩一圈暗红封蜡和两行被水浸淡的字。"
-    },
-    {
-      "id": "nanhai-inspection",
-      "type": "inspection",
-      "text": "先移动灯盏查验夹页。纸筋、装订孔和删改墨层能够说明它何时进入这册书，却不能直接证明文字内容可靠。",
-      "unlockArchive": ["nanhai-insert"],
-      "inspection": {
-        "required": 3,
-        "document": {
-          "id": "nanhai-insert",
-          "title": "南海旧藏夹页",
-          "excerpt": "……城中死伤不可计。后有朱笔改作：城中扰攘，民多避去。两句交叠，末行只余‘闻之于海上人’六字。",
-          "paper": "白棉纸，纸幅较短",
-          "ink": "灰墨正文，朱笔删改",
-          "handwriting": "两手抄录，先后不一",
-          "mark": "无页码",
-          "archiveId": "nanhai-insert",
-          "anomalous": true
-        },
-        "verso": "纸背残留旧折，折内有暗红封蜡；装订孔穿过已经干透的朱墨。",
-        "hotspots": [
-          { "id": "nanhai-fibre", "label": "同源纸筋", "detail": "斜光下的帘纹间距与第十三页接近，纸张可能出自同一批白棉纸。", "x": 28, "y": 31, "side": "front" },
-          { "id": "nanhai-binding", "label": "后穿装订孔", "detail": "孔边压住已经干透的朱墨，说明删改完成以后，这张纸才被装入无题抄本。", "x": 78, "y": 24, "side": "back" },
-          { "id": "nanhai-redaction", "label": "朱笔改句", "detail": "朱笔没有抹去原句，只在行旁写下较缓和的说法。改写者似乎既不愿照录，也不愿彻底销毁。", "x": 58, "y": 55, "side": "front" },
-          { "id": "nanhai-wax", "label": "封蜡旧折", "detail": "封蜡位于装订孔之外。它在编册前曾作为单页折叠递送。", "x": 25, "y": 77, "side": "back" }
-        ]
-      },
-      "noteUpdates": {
-        "add": [
-          { "id": "nanhai-seen", "type": "observation", "title": "南海夹页", "content": "夹页与第十三页纸筋接近，先有灰墨正文，后有朱笔改句，最后才被装入现存抄本。" },
-          { "id": "nanhai-question", "type": "question", "title": "两种说法", "content": "“死伤不可计”与“民多避去”为何同时留在纸上？改写者想纠错、避祸，还是保留争议？" }
-        ]
-      }
-    },
-    {
-      "id": "nanhai-after-inspection",
-      "speaker": "沈掌柜",
-      "text": "纸是真的，装入此册的次序也看得清。至于上面哪一句更可信，我们还缺说话人的姓名、成文日期和另一份旁证。你若只写‘旧稿一页’，后人会把两层文字当成同一人的话；你若替它选一句，另一句便会从此消失。"
-    },
-    {
-      "id": "nanhai-critical-choice",
-      "type": "choice",
-      "text": "周砚秋只准我们抄录一次。沈掌柜把空白题签推到我面前，让我决定这页如何收入卷册。这项著录会决定下一步接触哪一类材料。",
-      "choices": [
-        { "id": "preserve-original", "text": "照录灰墨与朱笔全文，不删任何一句，并注明两层书写次序。", "effects": { "trust_yimin": 2, "paper": 1 }, "goto": "nanhai-preserve-result" },
-        { "id": "omit-doubt", "text": "只录能够确认来源与年代的部分，把两句存疑叙述暂不收入正文。", "effects": { "trust_qing": 2, "trust": 1 }, "goto": "nanhai-omit-result" },
-        { "id": "parallel-note", "text": "两句并存，另写校记说明证据边界，等待其他版本互证。", "effects": { "trust": 2, "paper": 1 }, "goto": "nanhai-parallel-result" }
-      ]
-    },
-    {
-      "id": "nanhai-preserve-result",
-      "speaker": "周砚秋",
-      "text": "你肯把改过的字也留下，我便再给你看祖父的一封家书。它未必证明原句，却能说明他为什么不敢删干净。下一步，你们可以去西樵寻找替他誊稿的僧人。",
-      "next": "nanhai-preserve-ending",
-      "locationUpdates": { "investigate": ["nanhai"], "unlock": ["xiqiao"] },
-      "noteUpdates": {
-        "add": [
-          { "id": "archive-principle-original", "type": "judgement", "title": "著录原则", "content": "原文与改文都应保存，删改本身也是材料。下一步追查西樵誊稿人。", "confidence": 3 }
-        ],
-        "update": [{ "id": "today-nanhai", "status": "resolved" }]
-      }
-    },
-    {
-      "id": "nanhai-preserve-ending",
-      "type": "title",
-      "terminal": true,
-      "text": "南海路线 · 遗民记忆\n\n下一站：西樵山\n\n你保留了未经完全证实的声音，也承担了它可能误导后人的风险。"
-    },
-    {
-      "id": "nanhai-omit-result",
-      "speaker": "沈掌柜",
-      "text": "这样著录最稳妥，却会让后来的人只看见纸墨，看不见纸上争执过什么。广州修志局正在收旧方志，你若坚持这套取舍，下一步应去查看官修底稿如何处理同类文字。",
-      "next": "nanhai-omit-ending",
-      "locationUpdates": { "investigate": ["nanhai"] },
-      "noteUpdates": {
-        "add": [
-          { "id": "archive-principle-verified", "type": "judgement", "title": "著录原则", "content": "未有旁证的叙述暂不收入正文。下一步返回广州，对照官修地方志底稿。", "confidence": 4 }
-        ],
-        "update": [{ "id": "today-nanhai", "status": "resolved" }]
-      }
-    },
-    {
-      "id": "nanhai-omit-ending",
-      "type": "title",
-      "terminal": true,
-      "text": "南海路线 · 官方史料\n\n下一站：广州修志局\n\n你提高了正文的可验证性，也让缺少旁证的记忆暂时退出了记录。"
-    },
-    {
-      "id": "nanhai-parallel-result",
-      "speaker": "沈掌柜",
-      "text": "这张题签不会替后人作决定，却把决定所需的证据留下了。肇庆还有一页据说出自同一批纸，下一步应先核对页次，再判断两种说法是否来自同一条传抄链。",
-      "next": "nanhai-parallel-ending",
-      "locationUpdates": { "investigate": ["nanhai"], "unlock": ["zhaoqing"] },
-      "noteUpdates": {
-        "add": [
-          { "id": "archive-principle-critical", "type": "judgement", "title": "著录原则", "content": "保留互相冲突的文字，同时写明来源、次序和证据不足之处。下一步核对肇庆异页。", "confidence": 5 }
-        ],
-        "update": [{ "id": "today-nanhai", "status": "resolved" }]
-      }
-    },
-    {
-      "id": "nanhai-parallel-ending",
-      "type": "title",
-      "terminal": true,
-      "text": "南海路线 · 校勘者\n\n下一站：肇庆府\n\n你没有替材料消除矛盾。你记录了矛盾如何形成，以及目前仍缺少什么。"
-    }
+    { "id": "nanhai-title", "type": "title", "text": "第二章 · 南海旧稿\n\n同行路线" },
+    { "id": "nanhai-map", "type": "map", "text": "沈掌柜展开一张旧舆图，用朱笔圈出南海。图中旧字多有漫漶，真正可信的地点名由我重新题写。", "map": { "available": ["guangzhou", "nanhai"], "selectable": ["nanhai"], "destination": "nanhai", "confirmLabel": "沿水路赴南海" }, "locationUpdates": { "unlock": ["nanhai"], "investigate": ["guangzhou"] } },
+    { "id": "nanhai-departure", "speaker": "旁白", "text": "卯时的珠江还蒙着薄雾。沈掌柜雇了一条载纸的小艇，箱笼只带了一只，里面放着空白题签、细麻绳、两把竹尺和昨夜锁起的第十三页。他没有携带兵器，也没有告诉船家此行收什么书。船离开西关以后，城墙被雾压成一条灰线，昨夜守在巷口的青布轿早已不见。我问掌柜是否认得轿里的人，他只让我记住轿夫鞋底的灰泥。那种泥不来自城西石路，往后若再遇见，至少知道对方从哪里走过。" },
+    { "id": "nanhai-river-01", "speaker": "旁白", "text": "水道两边停着运米、运陶和运纸的船。纸商把新纸裹在油布里，旧书却常常直接压在舱底，因为多数人觉得旧纸已经没有怕湿的必要。沈掌柜说，佣书真正能救下的文字很少。一本书从写成到落进书坊，中间要经过主人死亡、家产分割、火灾、水患、禁毁和无数次搬运。最后留下来的内容，常常取决于哪一页恰好被拿去垫了箱底。" },
+    { "id": "nanhai-boss-01", "speaker": "沈掌柜", "text": "我年轻时听人说过这份稿子。有人称它是亲历，有人说它只是从澳门转来的传闻。二十年里，每个经手人都抄下一点，也删去一点。我知道这些纸曾经存在，却不知道哪一层文字最早。周家祖父曾替人收过一册译稿，晚年又说自己从没见过。两句话都可能是真的：他也许只见过散页，从未见过成册。" },
+    { "id": "nanhai-boss-02", "speaker": "我", "text": "掌柜带我来，是要找出哪一份才是真的？" },
+    { "id": "nanhai-boss-03", "speaker": "沈掌柜", "text": "我若知道真假，便不必带你。今日只做佣书该做的事：记清从谁手里接纸，纸原来放在哪里，哪一笔墨早，哪一笔墨晚。人的话可以慢慢问，纸上的次序先不要弄乱。还有一条，你写下自己的判断时，要把所见和猜测分开。后人若发现你猜错，仍能凭你留下的所见重新判断。" },
+    { "id": "nanhai-arrival", "speaker": "旁白", "text": "小艇在一处窄埠靠岸。岸边没有县城的牌坊，只有几座被水田围住的村落。我们沿田埂走了约半个时辰，才看见门楣上的三朵梅花。石刻已经被烟熏黑，中间一朵缺了半片花瓣。昨夜沈掌柜说要去西关，原来只是给小满和外人听的假话；真正的周宅藏在南海水道深处。这个细节让我明白，掌柜连同行者也只肯逐步告知去向。" },
+    { "id": "nanhai-house", "speaker": "旁白", "text": "周宅比我想象中普通。院里晒着新抄的《三字经》，廊下堆着修补农具的木料，正屋没有满架藏书。接待我们的是旧主人之孙周砚秋，年纪与我相仿，手指沾着糨糊。他承认祖父留下过一只书箱，却坚持箱中只有诗稿和田契。他说话时一直站在正屋门槛内，既没有请我们入座，也没有赶人，像在等沈掌柜先说出一个双方都认识的名字。" },
+    { "id": "nanhai-zhou", "speaker": "周砚秋", "text": "家祖已经去世十七年。老人晚年记性不好，同一件事常说出两种年月。你们若把他随口写下的东西当作实录，错处也会跟着传下去。我可以让你们看书，但不能答应你们把每个字都带走。这里有些话牵连的人成家立业已久，他们的子孙未必愿意让一个陌生佣书重新抄出来。" },
+    { "id": "nanhai-owner-response", "speaker": "沈掌柜", "text": "我们只求核纸，不求拿走原件。哪一页出自谁手，无法确认便照实写无法确认。你若不许抄全文，我们只记纸墨和行款。可有一件事请你先说明：昨夜送到听雨坊的三箱纸，是谁从周家运出去的？" },
+    { "id": "nanhai-silence", "speaker": "旁白", "text": "周砚秋的目光越过我们，落在院门外。田埂上没有别人，远处却传来一声船篙敲舷。他最终说，三箱纸并非周家所有，寄放的人已经死了，家属只托他把箱子送回广州。至于为什么不在收条上写名，他没有得到允许。这个回答解释了空白收条，却又把真正的主人推到一个已经无法开口的人身上。" },
+    { "id": "nanhai-box-open", "speaker": "旁白", "text": "他领我们进西厢。房内最显眼的是一排新书，旧箱却藏在床板下面。箱盖内侧贴着防虫的樟木片，四角积灰均匀，只有右侧铜环被新布擦过。周砚秋取钥匙时先开错了一把锁，那把错误的钥匙边缘有刚磨过的亮痕，说明近来还有另一只外形相同的箱子被人开启。沈掌柜没有点破，只让我在题签上记下两把钥匙。" },
+    { "id": "nanhai-box", "speaker": "旁白", "text": "书箱底部有一册无题抄本。正文使用寻常竹纸，中间夹着一张白棉纸，纸幅短半寸，装订孔也不在同一条线上。那页的页脚被剪去，只剩一圈暗红封蜡和两行被水浸淡的字。夹页前一页记广州城门，后一页写一首悼亡诗；若只看内容，它放在哪里都显得突兀。若看装订，夹页显然在整册完成后才被塞入。" },
+    { "id": "nanhai-inspection", "type": "inspection", "text": "移动灯盏查验夹页。纸筋、装订孔和删改墨层能够说明它何时进入这册书，却不能直接证明文字内容可靠。", "grantFragments": ["zhou-interleaf"], "inspection": { "required": 3, "document": { "id": "zhou-interleaf", "title": "周氏家藏夹页", "excerpt": "城中所见，前后传言互异。旧录所称死者，后笔改作散者。", "paper": "短幅白棉纸", "ink": "正文旧墨，改字较新", "handwriting": "两种小楷", "mark": "页脚被剪" }, "verso": "纸背只有一列淡墨数目，末尾盖着半枚周氏私印。", "hotspots": [ { "id": "holes", "label": "错位装订孔", "detail": "夹页孔距比抄本短半寸，旧孔已有磨损，新孔才穿过正文。它原属另一册书。", "x": 22, "y": 28 }, { "id": "cut", "label": "页脚裁口", "detail": "页脚从页码上方整齐裁断，裁刀很利。有人移去能够确认原次序的数字。", "x": 76, "y": 78 }, { "id": "overwriting", "label": "死与散", "detail": "“散”字覆盖在被刮薄的“死”字上。改写发生较晚，却没有完全除去旧字。", "x": 58, "y": 43 }, { "id": "seal", "label": "半枚周印", "detail": "纸背私印只剩右半，另一半原本应压在相邻页上。缺失页或许仍在另一册书中。", "x": 32, "y": 68, "side": "back" } ] }, "noteUpdates": { "add": [ { "id": "zhou-interleaf-note", "type": "observation", "title": "周氏夹页", "content": "夹页来自另一册书，页脚被有意裁去；“死”字后来改作“散”。" } ] } },
+    { "id": "nanhai-after-inspection", "speaker": "沈掌柜", "text": "纸是真的，装入此册的次序也看得清。至于上面哪一句更可信，我们还缺说话人的姓名、成文日期和另一份旁证。你若只写“旧稿一页”，后人会把两层文字当成同一人的话；你若替它选一句，另一句便会从此消失。先把它收入长编。你可以保留原文，也可以列为存疑，但每一种处理都要写清理由。" },
+    { "id": "nanhai-first-compilation", "type": "compilation", "text": "打开左页史料长编，处理《周氏家藏夹页》。", "compilation": { "fragmentId": "zhou-interleaf", "prompt": "先处理周氏夹页。收入正文或附录时必须写明解释、来源和旁证；也可以暂列存疑。", "routes": { "recorded:main": "nanhai-record-main", "recorded:appendix": "nanhai-record-appendix", "doubtful": "nanhai-record-doubtful" } } },
+    { "id": "nanhai-record-main", "speaker": "周砚秋", "text": "你把它收入正文，便等于告诉后来的人，这句话足以参与叙述。祖父留下的家书里还有一处提到改字缘由，我可以给你看，但你也要把两层字都抄下，不能只取更合你心意的一层。", "next": "nanhai-letter-open" },
+    { "id": "nanhai-record-appendix", "speaker": "沈掌柜", "text": "收入附录较稳。正文暂不采用，材料仍保留原貌。可附录也会被人引用，所以不要把“存于周家”写成“周氏所作”。来处与作者是两件事。周公子若肯再给一份家书，我们或许能确认谁动过那一笔。", "next": "nanhai-letter-open" },
+    { "id": "nanhai-record-doubtful", "speaker": "周砚秋", "text": "你没有因为纸旧便把它当成真话，这一点比许多收书人强。可若所有难以证明的材料都只放进疑卷，最后正文里只会剩下有官印的东西。祖父的家书可以给你看，它证明不了城中发生什么，只能证明他为何害怕这页纸。", "next": "nanhai-letter-open" },
+    { "id": "nanhai-letter-open", "speaker": "旁白", "text": "周砚秋从衣箱底层取出一封家书。信封不是原封，封口至少被蒸开两次，边缘留着水汽造成的波纹。正文谈田租和病情，真正相关的一句话挤在末尾空白处：旧稿所记，慎勿示人；若有人来问，只说年月错乱，不可据。句后没有姓名，只有一枚很小的周氏私印。" },
+    { "id": "nanhai-letter-question", "type": "choice", "text": "这封家书能够直接证明什么？", "choices": [ { "id": "prove-event", "text": "证明夹页所记的灾难确实发生。", "goto": "nanhai-letter-wrong" }, { "id": "prove-fear", "text": "证明周氏先人曾要求家人隐瞒旧稿。", "goto": "nanhai-letter-right" }, { "id": "prove-author", "text": "证明周氏先人就是夹页作者。", "goto": "nanhai-letter-wrong-author" } ] },
+    { "id": "nanhai-letter-wrong", "speaker": "沈掌柜", "text": "家书只能证明有人害怕旧稿流传，不能替旧稿证明内容。恐惧可以来自亲历，也可以来自误传、牵连或家族秘密。把它们写在同一页，并不等于它们互为证据。", "next": "nanhai-letter-grant" },
+    { "id": "nanhai-letter-wrong-author", "speaker": "周砚秋", "text": "私印只能说明信在周家流转。夹页上的两种笔迹都与家书不同。祖父收藏、删改或转交过它，都不能直接推出他写了它。", "next": "nanhai-letter-grant" },
+    { "id": "nanhai-letter-right", "speaker": "沈掌柜", "text": "这才是它能承担的分量。它说明周家确实处理过旧稿，也说明沉默来自主动选择。至于选择出于害怕谁，我们仍要问。", "next": "nanhai-letter-grant" },
+    { "id": "nanhai-letter-grant", "speaker": "旁白", "text": "周砚秋允许我把家书逐字誊录，却要求原件留在周家。我在副本末尾注明“据周宅原件录，原封已启，未见寄信人姓名”，随后将它收入待理栏。原件仍压回衣箱，副本却从这一刻开始有了新的传抄链。", "grantFragments": ["zhou-family-letter"] },
+    { "id": "nanhai-noon", "speaker": "旁白", "text": "午后，周家留我们吃了一碗薄粥。席间没人再谈旧稿，周砚秋的母亲却问沈掌柜，广州现在还会不会查前朝诗文。她问得像在谈天气，手里的筷子却一直没有夹菜。沈掌柜说书坊只做买卖，不替官府查人。她听完才把灶边一只纸包挪回柜顶。那只纸包的尺寸与夹页相同，但我们没有理由要求打开。" },
+    { "id": "nanhai-yard-01", "speaker": "旁白", "text": "饭后周砚秋去田里找一名佃户，留下我们在西厢等候。我重新检查无题抄本的目录，发现目录一共经过三次改写。最早的目录按诗文题名排列，第二次在若干题名旁添了人名，第三次用淡墨把其中四个人名改成“旧友”。“旧友”既保留了这些文章来自不同人的事实，也切断了文章与具体作者的联系。改写者没有毁书，只把能够追问的入口变窄了。" },
+    { "id": "nanhai-yard-02", "speaker": "沈掌柜", "text": "改成代称的人未必存心骗人。顺治初年，许多人保留朋友的诗稿，却不敢让姓名与诗句留在同一处。官府查到书，代称可以保住活人；二十年后我们再看，代称又让死者失去名字。保存和遮蔽有时是同一个动作，只是面对的时间不同。你在长编里写“删名”，还要记下删名可能保护过谁。" },
+    { "id": "nanhai-yard-03", "speaker": "旁白", "text": "我把四个“旧友”的位置与夹页装订孔对照，其中一个代称旁恰好留有半枚针孔。若夹页原来属于这一部分，它前后应当是一篇无题记和一封书信。目录中的页码却从三十一直接跳到三十三，缺去的三十二页可能就是周家裁走的相邻页。第十三页和三十二页相隔太远，说明这些数字来自不同阶段的重新编页，不能直接拼成一册。" },
+    { "id": "nanhai-woman", "speaker": "周母", "text": "你们总问纸是谁写的，我只记得父亲每到冬月便把一册书搬到灶边。他不烧，也不看，只放在伸手能够拿到的地方。外面若有脚步，他便把火钳压在书上；脚步过去，又把书放回箱里。后来那册书少了一页，他整夜没有睡。你问他怕什么，他只说怕留下，也怕没留下。" },
+    { "id": "nanhai-woman-note", "speaker": "旁白", "text": "她的记忆没有年月，也没有书名，无法证明夹页内容。不过这段话说明周氏先人曾长期准备在紧急时毁书，却始终没有真正动手。恐惧并没有自动导向焚毁，它也可能造成反复转藏、拆页和改名。纸上每一道移动痕迹因此有了人的处境，却仍不能据此补出缺失的事实。" },
+    { "id": "nanhai-tenant", "speaker": "旁白", "text": "周砚秋带回的佃户姓梁，已经七十多岁。他年轻时替周家撑船，记得曾把一个蓝布书包送到西樵山下。出发时书包很重，回来时只剩一半；同行的僧人说有些纸留在寺里晾干。梁老人不识字，只记得湿纸散发出蜡和海水混在一起的味道，包角还系着一根蓝线，与第一章砖底粘住的线头相同。" },
+    { "id": "nanhai-tenant-choice", "type": "choice", "text": "梁老人提供的是二十年前的口述。哪一项可以写入所见？", "choices": [ { "id": "tenant-certain", "text": "周家把广州旧稿送到西樵寺保存。", "goto": "nanhai-tenant-overreach" }, { "id": "tenant-limited", "text": "梁老人记得曾运送蓝布书包，回程重量减少，纸曾在寺中晾干。", "goto": "nanhai-tenant-careful" } ] },
+    { "id": "nanhai-tenant-overreach", "speaker": "沈掌柜", "text": "他说的是书包、重量和晾纸，没有说广州，也没有看见包内文字。我们可以把口述与蓝线、封蜡并列，不能替他补上目的。二十年的记忆已经足够脆弱，再加上我们的推断，后来的人会分不清哪一句真正出自梁老人。", "next": "nanhai-tenant-after" },
+    { "id": "nanhai-tenant-careful", "speaker": "沈掌柜", "text": "这样写留下了他真正记得的东西，也保留了我们继续比对的余地。若西樵寺中还有相同蓝线、蜡痕或晾纸留下的水纹，三种独立痕迹才能把这次运送与眼前残页联系起来。", "next": "nanhai-tenant-after" },
+    { "id": "nanhai-tenant-after", "speaker": "旁白", "text": "我在手札上把梁老人的话单列为口述，没有把它收入夹页正文。周砚秋看完记录，第一次主动在末尾画押。他说祖父生前最怕别人把“听说”写成“亲见”，所以宁可什么都不讲。如今他愿意让这段口述留下，是因为我们没有逼一个不识字的船夫替一册书承担全部证明。" },
+    { "id": "nanhai-evening", "speaker": "旁白", "text": "日影斜到门槛时，水田上起了一层薄雾。周家把原件、抄本和家书重新分装，使用三种不同颜色的线。沈掌柜让我逐一写题签，并在每张题签上注明“亲见原件”“据原件誊录”或“据口述记录”。这些看似琐碎的字决定后来的人还能否区分材料层次。完成题签后，我们才开始讨论下一站。" },
+    { "id": "nanhai-label-01", "speaker": "旁白", "text": "第一张题签写到一半，我发现“周氏家藏”容易被理解为周氏所作，于是改成“今见于周氏家藏”。多出的“今见于”三个字把收藏地点限制在今日，也承认纸张过去可能另有来处。沈掌柜让我把被划掉的旧写法保留在题签背面。他说著录中的改字同样属于判断过程，若只留下最后答案，别人看不见我们曾经犹豫过什么。" },
+    { "id": "nanhai-label-02", "speaker": "旁白", "text": "第二张题签记录家书副本。我先写“周氏家书”，周砚秋提醒这封信没有收信人和寄信人，严格说只能称“周宅所藏无名家书”。题名因此变得笨拙，却比一个顺口的名称更诚实。史料进入长编以后会被反复引用，一个方便却过度确定的题名，可能比正文中的存疑更快影响读者。" },
+    { "id": "nanhai-label-03", "speaker": "沈掌柜", "text": "佣书最容易犯的错，是为了让书目整齐，替残缺材料补出完整身份。无题便写无题，无年便写无年。空白看着难受，也比编一个答案安全。可空白不能只留一个方框，你还要写明自己查过哪里、为什么仍然不知道。这样后来的人才明白这是材料缺失，不是你忘了做事。" },
+    { "id": "nanhai-label-04", "speaker": "旁白", "text": "我在家书题签末尾补上查验范围：未见原封，未见寄收姓名，私印与夹页纸背残印相似，尚未比合。写完以后，这封信在长编中没有变得更“真实”，却有了可以继续工作的边界。玩家下一次发现完整周印时，系统便能提醒两份材料存在可比关系，而无需把相似直接写成同源。" },
+    { "id": "nanhai-label-05", "speaker": "旁白", "text": "周砚秋最后检查题签，没有要求我们删去任何一句，只把“据说”二字圈了出来。他说据谁所说必须写明，找不到说话人时便应当留下空缺。我们把这条规则也记进长编，作为以后处理口述材料的共同约定。" },
+    { "id": "nanhai-copyist-clue", "speaker": "周砚秋", "text": "祖父不会西字。夹页最初的汉文也不是他的手。早年西樵山下有位僧人替几家誊过外来的书信，法号我只记得一个“澄”字。他后来不再认这件事，寺里的人也说没有这个人。家书里提到的“不可示人”，很可能就是写给他看的。你们若去西樵，别拿着夹页直接问，先找针孔相同的誊稿。" },
+    { "id": "nanhai-return-choice", "type": "choice", "text": "离开前，周砚秋只允许我们带走家书副本。夹页原件如何处理，由我在题签上最后注明。", "choices": [ { "id": "keep-access", "text": "请求暂借原件，承诺下一次带旁证归还。", "effects": { "trust_yimin": 2, "risk": 2 }, "goto": "nanhai-keep-access" }, { "id": "return-owner", "text": "当面交还周家，只保留完整摹本与查验记录。", "effects": { "trust": 2 }, "goto": "nanhai-return-owner" }, { "id": "leave-doubt", "text": "原件仍由沈掌柜封存，夹页与家书并列存疑。", "effects": { "paper": 1, "risk": 1 }, "goto": "nanhai-leave-doubt" } ] },
+    { "id": "nanhai-keep-access", "speaker": "周砚秋", "text": "我可以借你十日。十日后无论查到什么，都由你亲手送回。你若失约，往后周家所有纸都与你无关。", "next": "nanhai-final-compilation" },
+    { "id": "nanhai-return-owner", "speaker": "旁白", "text": "我把夹页放回无题抄本，只带走逐寸摹下的尺寸、孔距和墨层。周砚秋在题签上画押，确认原件已归还。失去原件意味着以后无法重新查验，但周家愿意让我们继续追问西樵誊稿者。", "next": "nanhai-final-compilation" },
+    { "id": "nanhai-leave-doubt", "speaker": "沈掌柜", "text": "我替你封存十日。你在长编里若仍把它列作正文，便要承担原件不在手边的风险；若列作存疑，肇庆那一页也许能补上被裁去的页码。", "next": "nanhai-final-compilation" },
+    { "id": "nanhai-final-compilation", "type": "compilation", "text": "确定夹页在本次调查结束时的位置。", "compilation": { "fragmentId": "zhou-interleaf", "prompt": "完成本章最后一次著录。正文、附录、存疑或交还会打开不同的第三章入口。", "routes": { "recorded:main": "nanhai-preserve-result", "recorded:appendix": "nanhai-preserve-result", "doubtful": "nanhai-parallel-result", "transferred": "nanhai-return-result" } } },
+    { "id": "nanhai-preserve-result", "speaker": "周砚秋", "text": "你肯把两层文字都留下，我便把西樵僧人的旧题签交给你。题签只有纸号和一个残缺法名，无法替任何一句话作证，却能带你找到下一位经手人。", "locationUpdates": { "unlock": ["xiqiao"], "investigate": ["nanhai"] }, "next": "nanhai-preserve-ending" },
+    { "id": "nanhai-preserve-ending", "type": "title", "text": "南海路线 · 已录\n\n下一站：西樵山\n\n你保留了未经完全证实的声音，也承担它可能误导后人的风险。", "terminal": true },
+    { "id": "nanhai-parallel-result", "speaker": "沈掌柜", "text": "你把矛盾留在疑卷，便要主动去找能够解开它的另一页。肇庆曾出现同样的半枚周印；若两半能够合上，我们才知道夹页原来相邻的是谁的文字。", "locationUpdates": { "unlock": ["zhaoqing"], "investigate": ["nanhai"] }, "next": "nanhai-parallel-ending" },
+    { "id": "nanhai-parallel-ending", "type": "title", "text": "南海路线 · 存疑\n\n下一站：肇庆府\n\n你保留了矛盾，也写清了目前仍缺少的旁证。", "terminal": true },
+    { "id": "nanhai-return-result", "speaker": "周砚秋", "text": "原件留在周家，你带走的是一份说明自己如何看过它的记录。西樵那位誊稿僧人欠周家一句解释，我会让船家替你递一封信。", "locationUpdates": { "unlock": ["xiqiao"], "investigate": ["nanhai"] }, "next": "nanhai-return-ending" },
+    { "id": "nanhai-return-ending", "type": "title", "text": "南海路线 · 交还\n\n下一站：西樵山\n\n你失去了原件的控制权，换得周家继续开放私人材料。", "terminal": true }
   ]
 }
