@@ -1,5 +1,6 @@
 import type { GameVariables, NoteUpdates, PlayerNote, SaveData } from "@/types/game";
 import { DEFAULT_VARIABLES, SAVE_KEY } from "@/types/game";
+import { createEmptyCompilationState } from "@/lib/compilation";
 
 export function loadSave(): SaveData | null {
   if (typeof window === "undefined") return null;
@@ -80,6 +81,7 @@ export function createInitialSave(chapterId: string): SaveData {
     playerNotes: createInitialPlayerNotes(),
     unlockedLocations: ["guangzhou"],
     investigatedLocations: [],
+    compilation: createEmptyCompilationState(),
     savedAt: Date.now(),
   };
 }

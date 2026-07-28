@@ -11,12 +11,15 @@ import PlayerNotebook from "@/components/PlayerNotebook";
 import { applyEffects, applyNoteUpdates, createInitialPlayerNotes, createInitialSave, loadSave, writeSave } from "@/lib/save";
 import { getChapter, getFirstChapterId } from "@/lib/story";
 import type { SaveData, StoryBeat } from "@/types/game";
+import type { CompilationState } from "@/types/game";
+import { grantFragments, migrateCompilationState, preserveCompilationProgress } from "@/lib/compilation";
+import { getFragments } from "@/lib/fragments";
 
-const ACTIVITY_TYPES = new Set(["sorting", "inspection", "comparison", "assembly", "map"]);
+const ACTIVITY_TYPES = new Set(["sorting", "inspection", "comparison", "assembly", "map", "compilation"]);
 type HistoryEntry = { beatId: string; save: SaveData };
 
 function normalizeSave(data: SaveData): SaveData {
-  return {
+  const migrated = migrateCompilationState({
     ...data,
     variables: {
       paper: data.variables.paper ?? 0,
@@ -25,6 +28,7 @@ function normalizeSave(data: SaveData): SaveData {
       trust_yimin: data.variables.trust_yimin ?? 0,
       trust_qing: data.variables.trust_qing ?? 0,
       trust_priest: data.variables.trust_priest ?? 0,
+      risk: data.variables.risk ?? 0,
     },
     unlockedArchive: data.unlockedArchive ?? [],
     unlockedCharacters: data.unlockedCharacters ?? [],
@@ -33,6 +37,10 @@ function normalizeSave(data: SaveData): SaveData {
     playerNotes: data.playerNotes ?? createInitialPlayerNotes(),
     unlockedLocations: data.unlockedLocations ?? ["guangzhou"],
     investigatedLocations: data.investigatedLocations ?? [],
+  }) as SaveData;
+  return {
+    ...migrated,
+    compilation: grantFragments(migrated.compilation, getFragments(migrated.unlockedArchive)),
   };
 }
 
@@ -105,12 +113,14 @@ function GameContent() {
       ...nextSave.investigatedLocations,
       ...(enteringBeat?.locationUpdates?.investigate ?? []),
     ]));
+    const compilation = grantFragments(nextSave.compilation, getFragments(enteringBeat?.grantFragments ?? []));
     const data = {
       ...nextSave,
       chapterId: nextChapterId,
       playerNotes: applyNoteUpdates(nextSave.playerNotes, enteringBeat?.noteUpdates, enteringBeat?.id),
       unlockedLocations,
       investigatedLocations,
+      compilation,
       beatIndex: index,
       savedAt: Date.now(),
     };
@@ -122,13 +132,14 @@ function GameContent() {
 
   const goBack = useCallback(() => {
     const previous = history.at(-1);
-    if (!previous) return;
+    if (!previous || !save) return;
+    const persistentPrevious = preserveCompilationProgress(previous.save, save);
     setHistory((current) => current.slice(0, -1));
-    setChapterId(previous.save.chapterId);
-    setSave(previous.save);
+    setChapterId(persistentPrevious.chapterId);
+    setSave(persistentPrevious);
     setBeatId(previous.beatId);
-    writeSave(previous.save);
-  }, [history]);
+    writeSave(persistentPrevious);
+  }, [history, save]);
 
   const resolveNext = useCallback((beat: StoryBeat) => {
     if (!chapter) return null;
@@ -159,21 +170,45 @@ function GameContent() {
   }, [advance, chapter, chapterId, commit, currentBeat, save]);
 
   const handleActivity = useCallback((result: ActivityResult) => {
-    if (!save || !currentBeat) return;
+    if (!save || !currentBeat || !chapter) return;
+    const effectedVariables = applyEffects(save.variables, result.effects);
+    effectedVariables.risk = Math.max(0, effectedVariables.risk);
+    effectedVariables.wage = Math.max(0, effectedVariables.wage);
     const nextSave: SaveData = {
       ...save,
       variables: {
-        ...save.variables,
-        wage: save.variables.wage + (result.wage ?? 0),
-        paper: save.variables.paper + (result.paper ?? 0),
+        ...effectedVariables,
+        wage: effectedVariables.wage + (result.wage ?? 0),
+        paper: effectedVariables.paper + (result.paper ?? 0),
       },
       completedActivities: Array.from(new Set([...save.completedActivities, currentBeat.id])),
       clues: Array.from(new Set([...save.clues, ...(result.clues ?? [])])),
       unlockedArchive: Array.from(new Set([...save.unlockedArchive, ...(result.archive ?? []), ...(currentBeat.unlockArchive ?? [])])),
       unlockedLocations: Array.from(new Set([...save.unlockedLocations, ...(result.location ? [result.location] : [])])),
     };
+    if (result.goto) {
+      const gotoIndex = chapter.beats.findIndex((beat) => beat.id === result.goto);
+      if (gotoIndex >= 0) commit(chapterId, chapter.beats[gotoIndex].id, nextSave, gotoIndex);
+      return;
+    }
     advance(nextSave);
-  }, [advance, currentBeat, save]);
+  }, [advance, chapter, chapterId, commit, currentBeat, save]);
+
+  const handleCompilationChange = useCallback((compilation: CompilationState, effects?: { wage?: number; risk?: number }) => {
+    if (!save) return;
+    const data: SaveData = {
+      ...save,
+      compilation,
+      variables: {
+        ...save.variables,
+        wage: Math.max(0, save.variables.wage + (effects?.wage ?? 0)),
+        risk: Math.max(0, save.variables.risk + (effects?.risk ?? 0)),
+      },
+      savedAt: Date.now(),
+    };
+    setSave(data);
+    writeSave(data);
+  }, [save]);
 
   if (!chapter || !save || !currentBeat || currentIndex < 0) {
     return <div className="loading-book">展卷中……</div>;
@@ -182,7 +217,7 @@ function GameContent() {
   const activity = ACTIVITY_TYPES.has(currentBeat.type ?? "");
   const choices = currentBeat.type === "choice" ? currentBeat.choices : undefined;
   const isEnd = resolveNext(currentBeat) === null;
-  const sceneLeft = <PlayerNotebook notes={save.playerNotes} date={chapter.date} place={chapter.place} weather={chapter.weather} />;
+  const sceneLeft = <PlayerNotebook notes={save.playerNotes} compilation={save.compilation} onCompilationChange={handleCompilationChange} date={chapter.date} place={chapter.place} weather={chapter.weather} />;
 
   const flyleafLeft = (
     <aside className="flyleaf flyleaf--chapter" aria-label="卷首">
@@ -212,6 +247,7 @@ function GameContent() {
         <div><dt>账上工钱</dt><dd>{save.variables.wage} 文</dd></div>
         <div><dt>残页</dt><dd>{save.variables.paper} 页</dd></div>
         <div><dt>掌柜</dt><dd>{save.variables.trust > 3 ? "渐信" : save.variables.trust < 0 ? "存疑" : "平常"}</dd></div>
+        <div><dt>风险</dt><dd>{save.variables.risk > 5 ? "迫近" : save.variables.risk > 2 ? "渐起" : "平静"}</dd></div>
       </dl>
       <div className="clue-notes">
         <span className="clue-kind">自查</span>
@@ -231,6 +267,7 @@ function GameContent() {
       showSkip={showDelayedControls}
       unlockedLocations={save.unlockedLocations}
       investigatedLocations={save.investigatedLocations}
+      compilation={save.compilation}
     />
   ) : (
     <ManuscriptPage

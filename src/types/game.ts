@@ -5,6 +5,67 @@ export interface GameVariables {
   trust_yimin: number;
   trust_qing: number;
   trust_priest: number;
+  risk: number;
+}
+
+export type FragmentDisposition = "unfiled" | "recorded" | "doubtful" | "sold" | "destroyed" | "transferred";
+export type CompilationSection = "main" | "appendix" | "doubtful";
+export type ReliabilityLevel = "low" | "medium" | "high";
+export type SourceClarity = "unknown" | "unclear" | "identified";
+export type TransmissionState = "original" | "copy" | "translated-copy" | "oral";
+
+export interface SourceFragment {
+  id: string;
+  title: string;
+  content: string;
+  fragmentary: boolean;
+  sourcePerson: string;
+  foundAt: string;
+  estimatedDate: string;
+  medium: string;
+  paper: string;
+  ink: string;
+  handwriting: string;
+  marks: string[];
+  value: number;
+  politicalRisk: number;
+  relatedPeople: string[];
+  relatedEvents: string[];
+  transmission: TransmissionState;
+}
+
+export interface CompilationEntry {
+  fragmentId: string;
+  disposition: FragmentDisposition;
+  section?: CompilationSection;
+  interpretation: string;
+  sourceClarity: SourceClarity;
+  reliability: ReliabilityLevel;
+  missingEvidence: string;
+  focused: boolean;
+  updatedAt: number;
+}
+
+export interface FragmentHistoryEntry {
+  fragmentId: string;
+  action: FragmentDisposition | "focus" | "unfocus";
+  at: number;
+}
+
+export interface CompilationState {
+  fragments: Record<string, SourceFragment>;
+  entries: Record<string, CompilationEntry>;
+  history: FragmentHistoryEntry[];
+  focusLimit: number;
+}
+
+export interface FragmentAction {
+  disposition: FragmentDisposition;
+  section?: CompilationSection;
+  interpretation?: string;
+  sourceClarity?: SourceClarity;
+  reliability?: ReliabilityLevel;
+  missingEvidence?: string;
 }
 
 export type LocationStatus = "undiscovered" | "discovered" | "investigated";
@@ -77,6 +138,13 @@ export interface AssemblyConfig {
   completionClue: string;
 }
 
+export interface CompilationConfig {
+  fragmentId: string;
+  prompt: string;
+  routes: Record<string, string>;
+  routeEffects?: Record<string, Partial<GameVariables>>;
+}
+
 export interface StoryChoice {
   id: string;
   text: string;
@@ -106,7 +174,7 @@ export interface NoteUpdates {
 
 export interface StoryBeat {
   id: string;
-  type?: "dialogue" | "choice" | "title" | "sorting" | "inspection" | "comparison" | "assembly" | "map";
+  type?: "dialogue" | "choice" | "title" | "sorting" | "inspection" | "comparison" | "assembly" | "map" | "compilation";
   speaker?: string;
   text: string;
   terminal?: boolean;
@@ -116,6 +184,7 @@ export interface StoryBeat {
   inspection?: InspectionConfig;
   comparison?: ComparisonConfig;
   assembly?: AssemblyConfig;
+  compilation?: CompilationConfig;
   map?: MapConfig;
   unlockArchive?: string[];
   noteUpdates?: NoteUpdates;
@@ -123,6 +192,7 @@ export interface StoryBeat {
     unlock?: string[];
     investigate?: string[];
   };
+  grantFragments?: string[];
 }
 
 export interface StoryChapter {
@@ -146,6 +216,7 @@ export interface SaveData {
   playerNotes: PlayerNote[];
   unlockedLocations: string[];
   investigatedLocations: string[];
+  compilation: CompilationState;
   savedAt: number;
 }
 
@@ -156,6 +227,7 @@ export const DEFAULT_VARIABLES: GameVariables = {
   trust_yimin: 0,
   trust_qing: 0,
   trust_priest: 0,
+  risk: 0,
 };
 
 export const SAVE_KEY = "chronicle-save";
