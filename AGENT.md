@@ -1,411 +1,101 @@
-# AGENT.md
+# 《佣书》（Chronicle）项目章程
 
-# Chronicle（《佣书》）AI Development Guide
+版本：2.0
 
-Version: 1.0
+所有者：创始人兼执行制作人
+Studio 工作流：全局 `$game-studio` Skill
 
----
+## 项目目标
 
-# 1. Project Overview
+正式完成十章结构的《佣书》，以可独立发布的个人历史叙事游戏为目标。全篇按照“起—承—转—合”推进，主线结局是玩家搜集到来自档案、亲历者口述、他人书写及其他不同传播链的足够材料，完成关于“庚寅之劫”的历史书写。按可游玩、可验证的章节里程碑推进；质量优先于数量，不为遥远章节提前搭建系统。
 
-## Project Name
+## 产品核心
 
-佣书（Chronicle）
+**玩家通过搜集、整理、查验、比对、拼接与编纂史料，寻找“真相”，记录历史。**
 
-## Project Goal
+“真相”保留引号。游戏不宣布唯一历史答案，而是让玩家面对来源、物证、立场、残缺与传播过程，形成并承担自己的判断。
 
-The long-term objective is to complete Chronicle as a full historical narrative game. Development proceeds through polished, playable chapter milestones so that every completed stage can also serve as a portfolio piece.
+玩家是一名清初岭南书坊中的年轻佣书。他没有宏大使命，只想完成今日工作、挣得今日工钱；历史从劳动、物件和日常关系中逐渐显现。
 
-Quality is always more important than quantity.
+游戏当前时间固定为康熙九年（1670），距庚寅之劫（1650）二十年。主角约二十三岁，事件时约三岁：知道广州人含混所称的“城破旧事”，但没有可靠亲历记忆，也不知道完整时间线、规模、责任与材料传播链。
 
-Do not add chapters or systems outside the active milestone unless requested. Build shared systems only when the current and next confirmed chapters both use them.
+## 体验支柱
 
----
+1. **劳动即玩法：**推进必须来自整理、查验、比对、缀合、著录、取舍等行动，而非连续点击对白。
+2. **史料有生命史：**每份材料都有来源、物证、传递状态、价值、风险和可能的永久去向。
+3. **判断有后果：**保存、质疑、收入正文、列入存疑、出售、销毁或交还，会改变证据、金钱、信任、风险和后续路径。
+4. **人物拥有真诚立场：**避免显眼反派、阴谋万能解释和全知叙述。
+5. **克制呈现：**界面让位于纸、墨、木、光与声音；动画自然、缓慢、近乎不可见。
 
-# 2. What This Game Is
+## 当前里程碑
 
-Chronicle is an interactive historical narrative game.
+验证并打磨第一章、史料编纂系统与第二章两条路线《南海旧稿》《书坊旧稿》，形成可连续游玩的章节基线。第三章保持双路线并在肇庆汇合，但在第二章完成验证前不进入详细实现。
 
-The player experiences history through work instead of exposition.
+第一章只允许为兼容编纂系统做最小数据调整。不要在未获批准时新增后续章节或远期系统。
 
-The player is a young copyist (佣书) working inside a bookstore in early Qing dynasty Lingnan.
+完整产品固定为十章：第一至二章为“起”，第三至五章为“承”，第六至八章为“转”，第九至十章为“合”。该分配定义叙事功能，不要求每章等长；具体章节内容按里程碑逐章批准。
 
-The player has no grand mission.
+## 内容规则
 
-The player simply wants to finish today's work and earn today's wage.
+- 剧情内容必须位于 `src/story/*.json`，不得硬编码进 React 组件。
+- 历史内容必须区分：可核查史实、来源支持的推断、设计推断、明确虚构。
+- 口述材料必须记录叙述时间与事件时间的距离，并区分直接见证、同时代转述、代际转述和后代记忆；未经核验不得统称“亲历者口述”。
+- 人物年龄、知识边界、语言习惯与关系连续性以 `docs/narrative/CHARACTERS.md` 为准；清初广州生活与方言素材以 `docs/research/GUANGZHOU_1670.md` 为准。
+- 不在玩家产生好奇之前解释背景，不用大段说明替代可操作的发现。
+- 第一章结束保留三个问题：残页是谁写的、老板为何认识、谁在寻找这些文稿。
+- 第二章不能完整回答上述问题。
+- 原件出售、销毁或交还后不得通过普通交互无理由恢复；后续只能出现引文、传闻或其他抄本等“回声”。
+- 结局的“完成书写”不等于宣布唯一真相。最终文本必须显露材料来源、矛盾、缺失和玩家取舍；不同来源结构与永久处置应改变最终书写的内容、可信度与留白。
 
-History slowly reveals itself during ordinary work.
+## 研究资料库
 
-Every feature added to the game should strengthen this feeling.
+- 外部只读资料库的根路径只以 `docs/research/SOURCE_LIBRARY.md` 为准，其他项目文件不自行维护第二份路径定义。
+- 不将整个资料库复制进仓库或一次性载入上下文。按 `docs/research/SOURCE_LIBRARY.md` 的路由规则只读取当前任务相关材料。
+- 优先搜索已有 Markdown/OCR 转写定位主题，再打开对应 PDF 或原始文献核对页码、版本和原文。
+- `AI产出`、对话摘要和旧论文版本只能作为检索线索，不得单独支撑 H1/H2 历史断言。
+- 项目内只保存引用、页码、分类、研究备注和审校状态；不修改外部母库文件。
 
----
+## 技术边界
 
-# 3. Current Development Scope
+- Next.js 15、React 19、TypeScript；静态导出；浏览器 `localStorage` 存档；当前无账户、后端和联网玩法。
+- 优先原生浏览器 API，不主动引入重量依赖。
+- 保持组件聚焦；不为美观代码重写架构；共享抽象必须同时服务当前和下一个已确认需求。
+- 保存数据或故事数据结构变化必须提供迁移或明确的重置决策。
+- 桌面双页与移动单页都必须可用；中文字体、缩放、触摸和键盘行为属于发布质量。
 
-Current milestone:
+## Studio 执行规则
 
-Complete the historical compilation system and the two Chapter Two routes, 《南海旧稿》 and 《书坊旧稿》.
+- 使用 `$game-studio` 对任务分级，并只启用受影响的专业组。
+- 每项任务指定一个主责组和一名主责总监。
+- 草案必须经过主责总监评审和独立审查；跨组接口变化必须由相关总监会签。
+- 创始人拥有最终决策权。L3/L4 工作及任何愿景变化必须先获批准。
+- 不得擅自提交、推送、发布、覆盖用户确认文件或删除重要数据。
+- 只修改任务范围内的文件；保留工作树中不相关的用户变更与生成物。
 
-Chapter One remains stable. Only make the minimum data changes required to grant its existing fragments to the compilation system.
+## 项目台账
 
-Chapter Three remains two separate routes and reunites at the end in Zhaoqing. Detailed Chapter Three implementation starts after Chapter Two is verified.
+Obsidian 是本项目唯一的制作台账。每次调用 `$game-studio` 时，按其 `references/ledger.md` 执行：任务开始读取磁盘最新版本，只有在验收通过后才回写。
 
-Do not create premature abstractions.
+- 当前真相：`C:\Users\UUWayne\Documents\Codex-Obsidian-Knowledge\projects\佣书项目\README.md`
+- 决策：`C:\Users\UUWayne\Documents\Codex-Obsidian-Knowledge\projects\佣书项目\decisions.md`
+- 进展：`C:\Users\UUWayne\Documents\Codex-Obsidian-Knowledge\projects\佣书项目\log.md`
+- 任务台账：`C:\Users\UUWayne\Documents\Codex-Obsidian-Knowledge\TODO.md`
 
-If something only appears in Chapter Five, do not implement it now.
+回写必须保留其他项目内容，区分已完成、部分完成和待人工／真机验证；不得因草案或自动化检查通过而提前关闭人工验收项。
 
----
+## 验证与汇报
 
-# 4. Core Design Philosophy
+按风险选择类型检查、单元测试、数据测试、生产构建、浏览器流程、移动端和真机检查。不得用自动化通过替代尚未完成的浏览器或真机验证。
 
-The player should feel like they are handling historical documents.
+每次交付必须报告：主责组与启用角色、总监结论、独立审查结论、修改文件、验证证据、可能副作用、仍需人工或真机检查的项目。
 
-The player should never feel like they are clicking through dialogue.
+## 决策优先级
 
-Reading is only one part of gameplay.
+1. 保持《佣书》的身份与主题。
+2. 强化玩家通过劳动寻找并记录历史的体验。
+3. 保证玩法选择和叙事后果一致。
+4. 保证史实边界、可读性与可访问性。
+5. 提升视听完成度。
+6. 改善架构。
 
-Interaction is equally important.
-
-Every story advancement should happen because the player performed an action.
-
-Examples:
-
-Sorting papers
-
-Comparing handwriting
-
-Matching torn pages
-
-Opening manuscripts
-
-Finding inconsistencies
-
-Organizing archives
-
-Instead of:
-
-Next
-
-Next
-
-Next
-
-Next
-
-Dialogue should never become the primary gameplay loop.
-
----
-
-# 5. Current Narrative Goal
-
-Chapter One introduces the copyist, the bookstore, the document-handling work and the missing manuscript.
-
-Chapter Two makes the player responsible for preserving, questioning, returning, selling or destroying source material. These decisions must change later access, trust, money, risk and the evidence available to the player.
-
-The player should finish Chapter One with exactly three questions:
-
-Who wrote the strange manuscript?
-
-Why did the bookstore owner react so strongly?
-
-Who is searching for these documents?
-
-Do not answer these questions completely inside Chapter Two.
-
----
-
-# 6. Gameplay Loop
-
-Every chapter should follow the same structure.
-
-Receive today's work.
-
-↓
-
-Perform actual work.
-
-↓
-
-Discover something unusual.
-
-↓
-
-Investigate.
-
-↓
-
-Obtain new historical material.
-
-↓
-
-Return to bookstore.
-
-↓
-
-Story progresses.
-
-The work itself is gameplay.
-
-The story grows naturally from work.
-
----
-
-# 7. Chapter One Gameplay
-
-Current gameplay should focus on manuscript organization.
-
-The player sorts different documents into categories.
-
-Possible categories:
-
-- 家书
-- 契约
-- 佛经
-- 地方志
-- 诗稿
-- 账本
-- 杂纸
-
-Most documents belong somewhere.
-
-One document belongs nowhere.
-
-That document begins the story.
-
-Sorting is not a mini-game.
-
-Sorting is the player's profession.
-
-Treat it seriously.
-
-# 7.1 Historical Compilation Gameplay
-
-The historical compilation is a permanent core system. Every source fragment has provenance, material evidence, transmission state, monetary value and political risk.
-
-Players may place owned material in the main text, appendix or doubtful volume. They must record a structured interpretation, source clarity, reliability and missing corroboration.
-
-Selling, destroying and transferring an original are permanent. Later chapters may preserve an echo through quotation, rumor or another copy, but the original cannot return through ordinary interaction.
-
-Focus marks are limited. A focused fragment can unlock questions and tells characters what the player currently considers important.
-
----
-
-# 8. Narrative Principles
-
-Never explain history before players become curious.
-
-Never dump background information.
-
-History should emerge from:
-
-Objects
-
-Dialogue
-
-Environment
-
-Documents
-
-Player observation
-
-Every NPC sincerely believes what they say.
-
-Avoid obvious villains.
-
-Avoid conspiracy storytelling.
-
-Avoid absolute historical truth.
-
-The theme is historical memory.
-
-Not historical certainty.
-
----
-
-# 9. UI Philosophy
-
-The interface should disappear.
-
-The manuscript should become the focus.
-
-Avoid obvious game UI.
-
-Avoid modern mobile design.
-
-Avoid colorful cards.
-
-Avoid large floating buttons.
-
-Avoid excessive shadows.
-
-Avoid flashy transitions.
-
-Players should feel they are reading inside an old bookstore.
-
-Not inside an app.
-
----
-
-# 10. Visual Language
-
-Keywords:
-
-Quiet
-
-Restrained
-
-Paper
-
-Ink
-
-Wood
-
-Warm light
-
-Breathing
-
-Silence
-
-References:
-
-Ancient Chinese manuscripts
-
-Woodblock printing
-
-Museum archive interfaces
-
-Historical document restoration
-
-Avoid:
-
-Cyberpunk
-
-Glassmorphism
-
-Material Design
-
-Game HUD
-
-Modern visual novel UI
-
----
-
-# 11. Animation Principles
-
-Animation should almost disappear.
-
-Slow.
-
-Natural.
-
-Subtle.
-
-Paper moves.
-
-Ink fades.
-
-Light changes.
-
-No bounce.
-
-No spring.
-
-No zoom.
-
-No swipe.
-
-No exaggerated easing.
-
-If players notice the animation,
-
-it is probably too strong.
-
----
-
-# 12. Coding Principles
-
-Keep components small.
-
-Keep components reusable.
-
-Do not introduce unnecessary dependencies.
-
-Prefer native browser APIs when possible.
-
-Story content belongs inside JSON files.
-
-Never hardcode story inside React components.
-
-Do not rewrite architecture unless requested.
-
----
-
-# 13. Before Every Task
-
-Before making changes:
-
-Read AGENT.md.
-
-Understand current goal.
-
-Explain your implementation plan.
-
-Wait if the requested scope is unclear.
-
-Do not start rewriting unrelated systems.
-
----
-
-# 14. After Every Task
-
-Always report:
-
-Files modified
-
-Reason for modification
-
-Possible side effects
-
-Things that should be tested manually
-
-Never claim something works unless verified.
-
----
-
-# 15. Priority Order
-
-When making decisions, always follow this priority.
-
-1. Preserve the identity of Chronicle.
-
-2. Improve gameplay.
-
-3. Improve narrative pacing.
-
-4. Improve readability.
-
-5. Improve visual polish.
-
-6. Improve architecture.
-
-Beautiful code is less important than a better player experience.
-
----
-
-# 16. Definition of Success
-
-A player finishes either Chapter Two route.
-
-They understand the difference between a document, an interpretation and a transmission history.
-
-They have made at least one lasting decision about an original source.
-
-Their compilation, money, risk and next destination visibly reflect that decision.
-
-They want to follow the consequences into Chapter Three.
-
-If these goals are achieved,
-
-Chapter One is successful.
-
-Everything else is secondary.
+产品规格见 `docs/product/PRD.md`，技术规格见 `docs/technical/TDD.md`，Studio 架构见 `docs/studio/STUDIO.md`，资料库路由见 `docs/research/SOURCE_LIBRARY.md`。

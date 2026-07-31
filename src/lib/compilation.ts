@@ -110,11 +110,12 @@ export function resolveCompilationRoute(
 }
 
 export function preserveCompilationProgress<
-  T extends { compilation: CompilationState; variables: { wage: number; risk: number } },
+  T extends { compilation: CompilationState; variables: { wage: number; risk: number }; unlockedEntrances: string[] },
 >(previous: T, current: T): T {
   return {
     ...previous,
     compilation: current.compilation,
+    unlockedEntrances: Array.from(new Set([...previous.unlockedEntrances, ...current.unlockedEntrances])),
     variables: {
       ...previous.variables,
       wage: current.variables.wage,

@@ -112,12 +112,13 @@ test("compilation route resolution uses disposition and section", () => {
   assert.equal(resolveCompilationRoute(state(), fragment.id, { recorded: "recorded-route" }), undefined);
 });
 
-test("page history cannot roll back fragment disposition, money, or risk", () => {
+test("page history cannot roll back fragment disposition, money, risk, or route entrances", () => {
   const current = applyFragmentAction(state(), fragment.id, { disposition: "sold" });
-  const previous = { compilation: state(), variables: { wage: 10, risk: 0 }, beat: "before" };
-  const now = { compilation: current, variables: { wage: 60, risk: 1 }, beat: "after" };
+  const previous = { compilation: state(), variables: { wage: 10, risk: 0 }, unlockedEntrances: [], beat: "before" };
+  const now = { compilation: current, variables: { wage: 60, risk: 1 }, unlockedEntrances: ["guangzhou-gazetteer-office"], beat: "after" };
   const restored = preserveCompilationProgress(previous, now);
   assert.equal(restored.beat, "before");
   assert.equal(restored.compilation.entries[fragment.id].disposition, "sold");
   assert.deepEqual(restored.variables, { wage: 60, risk: 1 });
+  assert.deepEqual(restored.unlockedEntrances, ["guangzhou-gazetteer-office"]);
 });

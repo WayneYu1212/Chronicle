@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 
 interface BookShellProps {
   left: ReactNode;
@@ -18,6 +18,12 @@ interface BookShellProps {
 export default function BookShell({ left, right, chapter, progress, attributes, controls, pageTurn, mobileLeftLabel, binding = "left" }: BookShellProps) {
   const [showAttributes, setShowAttributes] = useState(false);
   const [showMobileLeft, setShowMobileLeft] = useState(false);
+  const mobileLeftTriggerRef = useRef<HTMLButtonElement>(null);
+
+  const closeMobileLeft = () => {
+    setShowMobileLeft(false);
+    mobileLeftTriggerRef.current?.focus();
+  };
 
   return (
     <main className="reading-desk">
@@ -28,7 +34,7 @@ export default function BookShell({ left, right, chapter, progress, attributes, 
           </button>
         )}
         {mobileLeftLabel && (
-          <button type="button" className={`mobile-left-ribbon ${showMobileLeft ? "is-active" : ""}`} aria-expanded={showMobileLeft} onClick={() => setShowMobileLeft((current) => !current)}>
+          <button ref={mobileLeftTriggerRef} type="button" className={`mobile-left-ribbon ${showMobileLeft ? "is-active" : ""}`} aria-expanded={showMobileLeft} onClick={() => setShowMobileLeft((current) => !current)}>
             {mobileLeftLabel}
           </button>
         )}
@@ -54,8 +60,8 @@ export default function BookShell({ left, right, chapter, progress, attributes, 
             </aside>
           )}
           {mobileLeftLabel && (
-            <aside className={`mobile-left-leaf ${showMobileLeft ? "is-open" : ""}`} aria-hidden={!showMobileLeft}>
-              <button type="button" className="attribute-close" onClick={() => setShowMobileLeft(false)} aria-label={`合上${mobileLeftLabel}`} title={`合上${mobileLeftLabel}`}>×</button>
+            <aside className={`mobile-left-leaf ${showMobileLeft ? "is-open" : ""}`} aria-hidden={!showMobileLeft} inert={!showMobileLeft}>
+              <button type="button" className="attribute-close" onClick={closeMobileLeft} aria-label={`合上${mobileLeftLabel}`} title={`合上${mobileLeftLabel}`}>×</button>
               {left}
             </aside>
           )}

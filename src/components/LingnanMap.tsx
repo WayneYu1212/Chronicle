@@ -4,6 +4,7 @@ import { useMemo, useState, type CSSProperties } from "react";
 import mapImage from "../../public/assets/lingnan-map.png";
 import locationData from "@/story/locations.json";
 import type { MapConfig, MapLocation, LocationStatus } from "@/types/game";
+import { findNearestSelectableMapLocation } from "@/lib/map-selection";
 
 interface LingnanMapProps {
   config: MapConfig;
@@ -24,6 +25,12 @@ export default function LingnanMap({ config, unlockedLocations, investigatedLoca
     () => locations.filter((location) => config.available.includes(location.id)),
     [config.available, locations]
   );
+  const selectableLocationIds = useMemo(
+    () => visibleLocations
+      .filter((location) => config.selectable.includes(location.id) && locationStatus(location.id, unlockedLocations, investigatedLocations) !== "undiscovered")
+      .map((location) => location.id),
+    [config.selectable, investigatedLocations, unlockedLocations, visibleLocations],
+  );
   const [selectedId, setSelectedId] = useState(config.destination && unlockedLocations.includes(config.destination) ? config.destination : "");
   const selected = visibleLocations.find((location) => location.id === selectedId);
   const selectedStatus = selected ? locationStatus(selected.id, unlockedLocations, investigatedLocations) : "undiscovered";
@@ -37,7 +44,23 @@ export default function LingnanMap({ config, unlockedLocations, investigatedLoca
         <small>朱点为已知，双圈为已经查验</small>
       </header>
       <div className="lingnan-map-frame" style={mapStyle}>
-        <div className="lingnan-map-crop" aria-label="广东核心地区舆图">
+        <div
+          className="lingnan-map-crop"
+          aria-label="广东核心地区舆图"
+          onPointerDownCapture={(event) => {
+            if (event.pointerType === "mouse" && event.button !== 0) return;
+            const rect = event.currentTarget.getBoundingClientRect();
+            const locationId = findNearestSelectableMapLocation(
+              visibleLocations,
+              selectableLocationIds,
+              event.clientX - rect.left,
+              event.clientY - rect.top,
+              rect.width,
+              rect.height,
+            );
+            if (locationId) setSelectedId(locationId);
+          }}
+        >
           {visibleLocations.map((location) => {
             const status = locationStatus(location.id, unlockedLocations, investigatedLocations);
             const selectable = config.selectable.includes(location.id) && status !== "undiscovered";
@@ -48,7 +71,12 @@ export default function LingnanMap({ config, unlockedLocations, investigatedLoca
                   className={`map-location map-location--${status} ${selectedId === location.id ? "is-selected" : ""}`}
                   style={{ left: `${location.x}%`, top: `${location.y}%` }}
                   disabled={!selectable}
-                  onClick={() => setSelectedId(location.id)}
+                  onClick={(event) => {
+                    if (event.detail === 0) setSelectedId(location.id);
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") setSelectedId(location.id);
+                  }}
                   aria-label={`${location.name}，${status === "undiscovered" ? "尚未发现" : status === "investigated" ? "已经查验" : "已经发现"}`}
                 >
                   <i aria-hidden />

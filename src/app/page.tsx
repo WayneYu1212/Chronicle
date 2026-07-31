@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { hasSave } from "@/lib/save";
+import { GAME_TIMELINE } from "@/lib/timeline";
 
 export default function HomePage() {
   const router = useRouter();
@@ -51,7 +52,7 @@ export default function HomePage() {
         <span className="opening-page-block" aria-hidden>
           <span className="opening-leaf opening-leaf-left">
             <i className="opening-rule" />
-            <b>康熙九年</b>
+            <b>{GAME_TIMELINE.reignLabel}</b>
             <small>广州 · 雨</small>
           </span>
           <span className="opening-gutter" />
@@ -67,7 +68,7 @@ export default function HomePage() {
         <p>{saveExists ? "轻触续卷" : "轻触开卷"}</p>
         {saveExists && <button type="button" onClick={(event) => { event.stopPropagation(); open("new"); }}>从头读起</button>}
       </div>
-      <p className="cover-credit">一六七〇 · 广州</p>
+      <p className="cover-credit">{GAME_TIMELINE.gregorianLabel} · 广州</p>
     </main>
   );
 }

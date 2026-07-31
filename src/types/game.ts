@@ -32,6 +32,8 @@ export interface SourceFragment {
   relatedPeople: string[];
   relatedEvents: string[];
   transmission: TransmissionState;
+  suggestedInterpretation?: string;
+  suggestedMissingEvidence?: string;
 }
 
 export interface CompilationEntry {
@@ -152,6 +154,7 @@ export interface StoryChoice {
   goto?: string;
   chapter?: string;
   unlockLocations?: string[];
+  fragmentAction?: FragmentAction & { fragmentId: string };
 }
 
 export type PlayerNoteType = "observation" | "judgement" | "question" | "to_check" | "clue";
@@ -191,6 +194,7 @@ export interface StoryBeat {
   locationUpdates?: {
     unlock?: string[];
     investigate?: string[];
+    unlockEntrances?: string[];
   };
   grantFragments?: string[];
 }
@@ -216,6 +220,7 @@ export interface SaveData {
   playerNotes: PlayerNote[];
   unlockedLocations: string[];
   investigatedLocations: string[];
+  unlockedEntrances: string[];
   compilation: CompilationState;
   savedAt: number;
 }

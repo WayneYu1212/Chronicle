@@ -11,6 +11,10 @@ export function getFragments(ids: string[]): SourceFragment[] {
   });
 }
 
+export function getFragment(id: string): SourceFragment | undefined {
+  return byId.get(id);
+}
+
 export function listFragments(): SourceFragment[] {
   return fragments;
 }
