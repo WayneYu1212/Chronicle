@@ -17,10 +17,15 @@ test("chapter one uses the public name 沈掌柜 and fixed evidence conclusions"
   const assemblyConfig = assembly?.assembly as AssemblyConfig | undefined;
   assert.equal(assemblyConfig?.options?.length ?? 0, 0);
   assert.ok(assemblyConfig?.conclusion);
+  assert.deepEqual(assemblyConfig?.grid, { rows: 3, columns: 3 });
+  assert.equal(assemblyConfig?.tiles?.length, 9);
+  assert.deepEqual(assemblyConfig?.tiles?.map((tile) => tile.order), [0, 1, 2, 3, 4, 5, 6, 7, 8]);
+  assert.ok(assemblyConfig?.tiles?.every((tile) => tile.text.trim() && tile.back.trim()));
 });
 
 test("chapter one preserves evidence boundaries and the two character archives", () => {
   const inspection = chapter01.beats.find((beat) => beat.id === "inspect-01");
+  assert.equal(inspection?.inspection?.document.excerpt, "当整个城市更像一座坟墓，死的人比活的人还多之后，弯刀停下来了。");
   assert.match(inspection?.inspection?.document.excerpt ?? "", /坟墓/);
   assert.doesNotMatch(inspection?.inspection?.hotspots.find((spot) => spot.id === "ink")?.detail ?? "", /不能当作现场写成/);
   assert.ok(inspection?.inspection?.verso?.includes("Relação"));
@@ -38,4 +43,9 @@ test("chapter two removes route subtitles and keeps long scenes split", () => {
 
   assert.doesNotMatch(chapter02Nanhai.beats.find((beat) => beat.id === "nanhai-boss-01")?.text ?? "", /误传/);
   assert.doesNotMatch(chapter02Nanhai.beats.find((beat) => beat.id === "nanhai-departure")?.text ?? "", /青布轿|没有携带兵器/);
+  assert.doesNotMatch(chapter01Text(), /青布轿|西关/);
 });
+
+function chapter01Text() {
+  return chapter01.beats.map((beat) => `${beat.text} ${beat.speaker ?? ""}`).join("\n");
+}

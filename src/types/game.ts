@@ -142,8 +142,18 @@ export interface ComparisonConfig {
   completionClue?: string;
 }
 
+export interface AssemblyTile {
+  id: string;
+  text: string;
+  back: string;
+  edge: string;
+  order: number;
+}
+
 export interface AssemblyConfig {
   fragments: { id: string; text: string; back: string; edge: string; order: number }[];
+  grid?: { rows: number; columns: number };
+  tiles?: AssemblyTile[];
   question: string;
   options?: { id: string; text: string; correct?: boolean; feedback: string }[];
   conclusion?: EvidenceConclusion;
