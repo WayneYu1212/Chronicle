@@ -228,7 +228,7 @@ function InspectionActivity({ beat, onComplete }: ActivityStageProps) {
           </button>
           <small>按住灯盏，贴近微光处察看。</small>
         </div>
-        <div className={`inspection-sheet inspection-sheet--${side}`}>
+        <div className={`inspection-sheet inspection-sheet--${side}`} style={{ "--folio-residual": "url('/assets/folio-13-residual.png')" } as CSSProperties}>
           <span className="folio-number">{side === "front" ? "十三" : "纸背"}</span>
           <p><SentenceText text={side === "front" ? config.document.excerpt : config.verso ?? "纸背淡墨已经漫漶。"} /></p>
           {visibleHotspots.map((spot, index) => (
@@ -277,8 +277,9 @@ function InspectionActivity({ beat, onComplete }: ActivityStageProps) {
 
 function ComparisonActivity({ beat, onComplete }: ActivityStageProps) {
   const config = beat.comparison!;
-  const [feedback, setFeedback] = useState("把两页并在一处，先看纸筋，再看运笔。");
-  const [solved, setSolved] = useState(false);
+  const [feedback, setFeedback] = useState(config.conclusion?.text ?? "把两页并在一处，先看纸筋，再看运笔。");
+  const [solved, setSolved] = useState(Boolean(config.conclusion));
+  const completionClue = config.conclusion?.clue ?? config.completionClue ?? "残页同源";
   return (
     <section className="activity" aria-label="文稿比对">
       <div className="activity-heading"><span>两纸互校</span><strong>比</strong></div>
@@ -291,13 +292,20 @@ function ComparisonActivity({ beat, onComplete }: ActivityStageProps) {
           </article>
         ))}
       </div>
-      <div className="comparison-options">
-        {config.options.map((option) => (
-          <button type="button" key={option.id} onClick={() => { setFeedback(option.feedback); setSolved(Boolean(option.correct)); }}>{option.text}</button>
-        ))}
-      </div>
+      {config.conclusion ? (
+        <article className="evidence-conclusion">
+          <small>{config.conclusion.title}</small>
+          <p><SentenceText text={config.conclusion.text} /></p>
+        </article>
+      ) : config.options?.length ? (
+        <div className="comparison-options">
+          {config.options.map((option) => (
+            <button type="button" key={option.id} onClick={() => { setFeedback(option.feedback); setSolved(Boolean(option.correct)); }}>{option.text}</button>
+          ))}
+        </div>
+      ) : null}
       <p className="work-feedback"><SentenceText text={feedback} /></p>
-      {solved && <button className="seal-action" type="button" onClick={() => onComplete({ clues: ["残页同源"] })}><span>合</span> 收下判断</button>}
+      {solved && <button className="seal-action" type="button" onClick={() => onComplete({ clues: [completionClue] })}><span>合</span> {config.conclusion?.actionLabel ?? "收下判断"}</button>}
     </section>
   );
 }
@@ -334,6 +342,7 @@ function AssemblyActivity({ beat, onComplete }: ActivityStageProps) {
     setBacklit(true);
     if (correct) {
       setJoined(true);
+      setSolved(Boolean(config.conclusion));
       setMessage("横折在灯下连成一线，三处纤维断口也严丝合缝。翻到纸背，西字恢复为同一行报告。");
     } else {
       setMessage("透光以后有折痕悬断，纸背墨线也发生错位。换一处接法，再看断口的毛边方向。");
@@ -380,7 +389,12 @@ function AssemblyActivity({ beat, onComplete }: ActivityStageProps) {
           </button>
         ))}
       </div>
-      {joined && (
+      {joined && config.conclusion ? (
+        <article className="evidence-conclusion">
+          <small>{config.conclusion.title}</small>
+          <p><SentenceText text={config.conclusion.text} /></p>
+        </article>
+      ) : joined && config.options?.length ? (
         <div className="source-options">
           {config.options.map((option) => (
             <button type="button" key={option.id} onClick={() => { setMessage(option.feedback); setSolved(Boolean(option.correct)); }}>
@@ -388,10 +402,10 @@ function AssemblyActivity({ beat, onComplete }: ActivityStageProps) {
             </button>
           ))}
         </div>
-      )}
+      ) : null}
       <p className="work-feedback" aria-live="polite"><SentenceText text={message} /></p>
       {!joined && placedIds.length === config.fragments.length && <button className="ink-action" type="button" onClick={check}>覆纸透看</button>}
-      {solved && <button className="seal-action" type="button" onClick={() => onComplete({ clues: [config.completionClue], archive: beat.unlockArchive })}><span>录</span> 著录来源</button>}
+      {solved && <button className="seal-action" type="button" onClick={() => onComplete({ clues: [config.conclusion?.clue ?? config.completionClue], archive: beat.unlockArchive })}><span>录</span> {config.conclusion?.actionLabel ?? "著录来源"}</button>}
     </section>
   );
 }

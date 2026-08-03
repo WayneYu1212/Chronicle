@@ -51,7 +51,7 @@ test("validator rejects chapters and contemporary fragments outside the approved
 
 test("the translated folio uses the reviewed short translation and every fragment has editable draft prompts", () => {
   const folio = fragments.find((fragment) => fragment.id === "folio-13");
-  assert.equal(folio?.content, "第二天……下午前往城墙那边，……聆听告解一直到五点多钟，……“神父，士兵们已经放弃城墙逃跑了！”");
+  assert.equal(folio?.content, "当整个城市更像一座坟墓，死的人比活的人还多之后，弯刀停下来了。");
   for (const fragment of fragments) {
     assert.ok(fragment.suggestedInterpretation?.trim(), `${fragment.id} needs an interpretation draft`);
     assert.ok(fragment.suggestedMissingEvidence?.trim(), `${fragment.id} needs a missing-evidence draft`);
@@ -155,7 +155,15 @@ test("Chapter Two keeps every legacy beat index and appends deterministic Chapte
   } as const;
 
   for (const chapter of [chapter02Guangzhou, chapter02Nanhai] as StoryChapter[]) {
-    assert.deepEqual(chapter.beats.slice(0, 55).map((beat) => beat.id), [...chapter02Prefixes[chapter.id as keyof typeof chapter02Prefixes]]);
+    const expectedPrefix = [...chapter02Prefixes[chapter.id as keyof typeof chapter02Prefixes]];
+    assert.deepEqual(chapter.beats.slice(0, expectedPrefix.length).map((beat) => beat.id), expectedPrefix);
+    if (chapter.id === "chapter02-guangzhou") {
+      assert.equal(chapter.beats.find((beat) => beat.id === "guangzhou-terms")?.next, "guangzhou-terms-02");
+      assert.equal(chapter.beats.find((beat) => beat.id === "guangzhou-terms-02")?.next, "guangzhou-copy-start");
+    } else {
+      assert.equal(chapter.beats.find((beat) => beat.id === "nanhai-departure")?.next, "nanhai-departure-02");
+      assert.equal(chapter.beats.find((beat) => beat.id === "nanhai-departure-02")?.next, "nanhai-river-01");
+    }
     const chapterTransitions = transitions[chapter.id as keyof typeof transitions];
     for (const [endingId, [continueId, preludeId, entranceId]] of Object.entries(chapterTransitions)) {
       const ending = chapter.beats.find((beat) => beat.id === endingId);

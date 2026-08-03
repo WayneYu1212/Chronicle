@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import mapImage from "../../public/assets/lingnan-map.png";
 import locationData from "@/story/locations.json";
 import type { MapConfig, MapLocation, LocationStatus } from "@/types/game";
@@ -32,10 +32,22 @@ export default function LingnanMap({ config, unlockedLocations, investigatedLoca
     [config.selectable, investigatedLocations, unlockedLocations, visibleLocations],
   );
   const [selectedId, setSelectedId] = useState(config.destination && unlockedLocations.includes(config.destination) ? config.destination : "");
+  const [traveling, setTraveling] = useState(false);
+  const travelTimerRef = useRef<number | null>(null);
   const selected = visibleLocations.find((location) => location.id === selectedId);
   const selectedStatus = selected ? locationStatus(selected.id, unlockedLocations, investigatedLocations) : "undiscovered";
   const canSelect = Boolean(selected && config.selectable.includes(selected.id) && selectedStatus !== "undiscovered");
   const mapStyle = { "--lingnan-map-image": `url(${mapImage.src})` } as CSSProperties;
+
+  useEffect(() => () => {
+    if (travelTimerRef.current !== null) window.clearTimeout(travelTimerRef.current);
+  }, []);
+
+  const confirmTravel = () => {
+    if (!selected || !canSelect || !onComplete || traveling) return;
+    setTraveling(true);
+    travelTimerRef.current = window.setTimeout(() => onComplete(selected.id), 260);
+  };
 
   return (
     <section className="lingnan-map-activity" aria-label="岭南舆图">
@@ -71,9 +83,7 @@ export default function LingnanMap({ config, unlockedLocations, investigatedLoca
                   className={`map-location map-location--${status} ${selectedId === location.id ? "is-selected" : ""}`}
                   style={{ left: `${location.x}%`, top: `${location.y}%` }}
                   disabled={!selectable}
-                  onClick={(event) => {
-                    if (event.detail === 0) setSelectedId(location.id);
-                  }}
+                  onClick={() => setSelectedId(location.id)}
                   onKeyDown={(event) => {
                     if (event.key === "Enter" || event.key === " ") setSelectedId(location.id);
                   }}
@@ -85,7 +95,6 @@ export default function LingnanMap({ config, unlockedLocations, investigatedLoca
               </div>
             );
           })}
-          <div className="map-scale-note" aria-hidden>山川依旧 · 文字后添</div>
         </div>
         <aside className="map-docket" aria-live="polite">
           {selected ? (
@@ -95,8 +104,8 @@ export default function LingnanMap({ config, unlockedLocations, investigatedLoca
               <p>{selectedStatus === "investigated" ? selected.investigatedRecord : selected.record}</p>
               <dl><dt>当前线索</dt><dd>{selected.clue}</dd></dl>
               {canSelect && onComplete && (
-                <button type="button" className="map-travel" onClick={() => onComplete(selected.id)}>
-                  <span>往</span>{config.confirmLabel ?? `前往${selected.name}`}
+                <button type="button" className={`map-travel ${traveling ? "is-confirmed" : ""}`} onClick={confirmTravel} disabled={traveling} aria-live="polite">
+                  <span>{traveling ? "定" : "往"}</span>{traveling ? "已选定" : config.confirmLabel ?? `前往${selected.name}`}
                 </button>
               )}
             </>
