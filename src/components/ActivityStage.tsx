@@ -228,7 +228,7 @@ function InspectionActivity({ beat, onComplete }: ActivityStageProps) {
           </button>
           <small>按住灯盏，贴近微光处察看。</small>
         </div>
-        <div className={`inspection-sheet inspection-sheet--${side}`}>
+        <div className={`inspection-sheet inspection-sheet--${side}`} style={{ "--folio-residual": "url('/assets/folio-13-residual.png')" } as CSSProperties}>
           <span className="folio-number">{side === "front" ? "十三" : "纸背"}</span>
           <p><SentenceText text={side === "front" ? config.document.excerpt : config.verso ?? "纸背淡墨已经漫漶。"} /></p>
           {visibleHotspots.map((spot, index) => (
@@ -277,8 +277,9 @@ function InspectionActivity({ beat, onComplete }: ActivityStageProps) {
 
 function ComparisonActivity({ beat, onComplete }: ActivityStageProps) {
   const config = beat.comparison!;
-  const [feedback, setFeedback] = useState("把两页并在一处，先看纸筋，再看运笔。");
-  const [solved, setSolved] = useState(false);
+  const [feedback, setFeedback] = useState(config.conclusion?.text ?? "把两页并在一处，先看纸筋，再看运笔。");
+  const [solved, setSolved] = useState(Boolean(config.conclusion));
+  const completionClue = config.conclusion?.clue ?? config.completionClue ?? "残页同源";
   return (
     <section className="activity" aria-label="文稿比对">
       <div className="activity-heading"><span>两纸互校</span><strong>比</strong></div>
@@ -291,33 +292,44 @@ function ComparisonActivity({ beat, onComplete }: ActivityStageProps) {
           </article>
         ))}
       </div>
-      <div className="comparison-options">
-        {config.options.map((option) => (
-          <button type="button" key={option.id} onClick={() => { setFeedback(option.feedback); setSolved(Boolean(option.correct)); }}>{option.text}</button>
-        ))}
-      </div>
+      {config.conclusion ? (
+        <article className="evidence-conclusion">
+          <small>{config.conclusion.title}</small>
+          <p><SentenceText text={config.conclusion.text} /></p>
+        </article>
+      ) : config.options?.length ? (
+        <div className="comparison-options">
+          {config.options.map((option) => (
+            <button type="button" key={option.id} onClick={() => { setFeedback(option.feedback); setSolved(Boolean(option.correct)); }}>{option.text}</button>
+          ))}
+        </div>
+      ) : null}
       <p className="work-feedback"><SentenceText text={feedback} /></p>
-      {solved && <button className="seal-action" type="button" onClick={() => onComplete({ clues: ["残页同源"] })}><span>合</span> 收下判断</button>}
+      {solved && <button className="seal-action" type="button" onClick={() => onComplete({ clues: [completionClue] })}><span>合</span> {config.conclusion?.actionLabel ?? "收下判断"}</button>}
     </section>
   );
 }
 
 function AssemblyActivity({ beat, onComplete }: ActivityStageProps) {
   const config = beat.assembly!;
-  const [slots, setSlots] = useState<(string | null)[]>(() => config.fragments.map(() => null));
+  const tiles = config.tiles ?? config.fragments;
+  const rows = config.grid?.rows ?? 1;
+  const columns = config.grid?.columns ?? tiles.length;
+  const slotCount = rows * columns;
+  const [slots, setSlots] = useState<(string | null)[]>(() => Array.from({ length: slotCount }, () => null));
   const [selected, setSelected] = useState<string | null>(null);
   const [side, setSide] = useState<"front" | "back">("front");
   const [joined, setJoined] = useState(false);
   const [backlit, setBacklit] = useState(false);
   const [solved, setSolved] = useState(false);
-  const [message, setMessage] = useState("先逐片翻看，再把残片放到透光架上。纸边、横折和纸背旧墨必须同时接续。");
+  const [message, setMessage] = useState("九块纸片来自三处残纸。先看句子接续，再翻面核对折痕、针孔和葡文节译。");
   const placedIds = slots.filter((id): id is string => Boolean(id));
-  const trayOrder = [1, 2, 0];
-  const available = config.fragments
-    .filter((fragment) => !placedIds.includes(fragment.id))
-    .sort((a, b) => trayOrder.indexOf(a.order) - trayOrder.indexOf(b.order));
-  const correct = useMemo(() => slots.every((id, index) => id && config.fragments.find((fragment) => fragment.id === id)?.order === index), [config.fragments, slots]);
+  const available = tiles
+    .filter((tile) => !placedIds.includes(tile.id))
+    .sort((a, b) => ((a.order * 5 + 2) % tiles.length) - ((b.order * 5 + 2) % tiles.length));
+  const correct = useMemo(() => slots.length === slotCount && slots.every((id, index) => id && tiles.find((tile) => tile.id === id)?.order === index), [slotCount, slots, tiles]);
   const place = (id: string, slotIndex: number) => {
+    if (!tiles.some((tile) => tile.id === id) || slotIndex < 0 || slotIndex >= slotCount) return;
     setJoined(false);
     setBacklit(false);
     setSolved(false);
@@ -331,56 +343,64 @@ function AssemblyActivity({ beat, onComplete }: ActivityStageProps) {
     setSlots((current) => current.map((item) => item === id ? null : item));
   };
   const check = () => {
+    if (placedIds.length !== slotCount) return;
     setBacklit(true);
     if (correct) {
       setJoined(true);
-      setMessage("横折在灯下连成一线，三处纤维断口也严丝合缝。翻到纸背，西字恢复为同一行报告。");
+      setSolved(Boolean(config.conclusion));
+      setMessage("九格接缝在透光下连成一页，三处残纸的纸边、墨线和背面译句也能相互照应。");
     } else {
-      setMessage("透光以后有折痕悬断，纸背墨线也发生错位。换一处接法，再看断口的毛边方向。");
+      setMessage("有几处接缝仍接不上：正面句意、纸边或背面译句至少有一项错位。换一块，再透看。");
     }
   };
   return (
-    <section className="activity assembly-activity" aria-label="残页校勘">
-      <div className="activity-heading"><span>透光缀合</span><strong>{joined ? "合" : `${placedIds.length}/${config.fragments.length}`}</strong></div>
+    <section className="activity assembly-activity" aria-label="九格残页校勘">
+      <div className="activity-heading"><span>九格缀合</span><strong>{joined ? "合" : `${placedIds.length}/${slotCount}`}</strong></div>
       <p className="activity-copy"><SentenceText text={joined ? config.question : beat.text} /></p>
       <div className="folio-side-toggle" aria-label="查看纸面">
         <button type="button" className={side === "front" ? "is-active" : ""} onClick={() => setSide("front")}>汉文正面</button>
         <button type="button" className={side === "back" ? "is-active" : ""} onClick={() => setSide("back")}>西字纸背</button>
       </div>
       <div className={`assembly-light-table ${backlit ? "is-backlit" : ""} ${joined ? "is-joined" : ""}`}>
-        <span className="light-table-caption">覆纸透看 · 对折痕与墨线</span>
-        <div className="assembly-line">
+        <span className="light-table-caption">九格透光架 · 对折痕、针孔与墨线</span>
+        <div className="assembly-grid" style={{ "--assembly-columns": columns } as CSSProperties}>
           {slots.map((id, slotIndex) => {
-            const fragment = id ? config.fragments.find((item) => item.id === id) : null;
-            if (!fragment) return (
+            const tile = id ? tiles.find((item) => item.id === id) : null;
+            if (!tile) return (
               <button
                 type="button"
                 key={`slot-${slotIndex}`}
-                className={`fragment-slot ${selected ? "can-place" : ""}`}
+                className={`assembly-grid__slot assembly-grid__slot--empty ${selected ? "can-place" : ""}`}
                 onClick={() => selected && place(selected, slotIndex)}
                 onDragOver={(event) => event.preventDefault()}
                 onDrop={(event) => place(event.dataTransfer.getData("text/plain"), slotIndex)}
-                aria-label="空的残片位置"
-              ><i aria-hidden /></button>
+                aria-label={`第${slotIndex + 1}格，空位`}
+              ><span className="assembly-slot-number">{String(slotIndex + 1).padStart(2, "0")}</span><i aria-hidden /></button>
             );
-          return (
-            <button type="button" key={fragment.id} className={`manuscript-fragment fragment-${fragment.order + 1} is-placed ${side === "back" ? "is-verso" : ""}`} onClick={() => remove(fragment.id)}>
-              <small>{fragment.edge}</small><span className="fragment-copy"><SentenceText text={side === "front" ? fragment.text : fragment.back} /></span>
-              <i className="fragment-fold" aria-hidden />
-            </button>
-          );
+            return (
+              <button type="button" key={tile.id} className={`assembly-grid__slot assembly-grid__slot--filled ${side === "back" ? "is-verso" : ""}`} onClick={() => remove(tile.id)} aria-label={`第${slotIndex + 1}格，纸片${tile.order + 1}，点击取回`}>
+                <small>{tile.edge}</small><span className="assembly-tile-copy"><SentenceText text={side === "front" ? tile.text : tile.back} /></span>
+                <i className="fragment-fold" aria-hidden />
+              </button>
+            );
           })}
         </div>
       </div>
-      <div className="fragment-tray">
-        {available.map((fragment) => (
-          <button type="button" draggable key={fragment.id} className={`manuscript-fragment fragment-${fragment.order + 1} ${selected === fragment.id ? "is-selected" : ""} ${side === "back" ? "is-verso" : ""}`} onDragStart={(event) => event.dataTransfer.setData("text/plain", fragment.id)} onClick={() => setSelected(fragment.id)}>
-            <small>{fragment.edge}</small><span className="fragment-copy"><SentenceText text={side === "front" ? fragment.text : fragment.back} /></span>
+      <p className="assembly-placement-hint">先点选一块纸，再点九格中的位置；桌面端也可以直接拖入。点已放入的纸片可取回重排。</p>
+      <div className="assembly-tile-bank" aria-label="待拼九块纸片">
+        {available.map((tile) => (
+          <button type="button" draggable key={tile.id} className={`assembly-tile ${selected === tile.id ? "is-selected" : ""} ${side === "back" ? "is-verso" : ""}`} onDragStart={(event) => event.dataTransfer.setData("text/plain", tile.id)} onClick={() => setSelected(tile.id)} aria-label={`选择纸片${tile.order + 1}`}>
+            <small>纸片 {tile.order + 1} · {tile.edge}</small><span className="assembly-tile-copy"><SentenceText text={side === "front" ? tile.text : tile.back} /></span>
             <i className="fragment-fold" aria-hidden />
           </button>
         ))}
       </div>
-      {joined && (
+      {joined && config.conclusion ? (
+        <article className="evidence-conclusion">
+          <small>{config.conclusion.title}</small>
+          <p><SentenceText text={config.conclusion.text} /></p>
+        </article>
+      ) : joined && config.options?.length ? (
         <div className="source-options">
           {config.options.map((option) => (
             <button type="button" key={option.id} onClick={() => { setMessage(option.feedback); setSolved(Boolean(option.correct)); }}>
@@ -388,10 +408,10 @@ function AssemblyActivity({ beat, onComplete }: ActivityStageProps) {
             </button>
           ))}
         </div>
-      )}
+      ) : null}
       <p className="work-feedback" aria-live="polite"><SentenceText text={message} /></p>
-      {!joined && placedIds.length === config.fragments.length && <button className="ink-action" type="button" onClick={check}>覆纸透看</button>}
-      {solved && <button className="seal-action" type="button" onClick={() => onComplete({ clues: [config.completionClue], archive: beat.unlockArchive })}><span>录</span> 著录来源</button>}
+      {!joined && placedIds.length === slotCount && <button className="ink-action" type="button" onClick={check}>透光核对九格</button>}
+      {solved && <button className="seal-action" type="button" onClick={() => onComplete({ clues: [config.conclusion?.clue ?? config.completionClue], archive: beat.unlockArchive })}><span>录</span> {config.conclusion?.actionLabel ?? "著录来源"}</button>}
     </section>
   );
 }

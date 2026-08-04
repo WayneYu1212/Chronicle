@@ -4,6 +4,7 @@ import { useEffect, useId, useMemo, useState } from "react";
 import { applyFragmentAction, toggleFocus } from "@/lib/compilation";
 import { getFragment } from "@/lib/fragments";
 import { GAME_TIMELINE } from "@/lib/timeline";
+import { notesNewestFirst } from "@/lib/notes";
 import type {
   CompilationSection,
   CompilationState,
@@ -56,6 +57,7 @@ export default function PlayerNotebook({
   const [target, setTarget] = useState<"recorded" | "doubtful">("recorded");
   const selected = selectedId ? getFragment(selectedId) ?? compilation.fragments[selectedId] : undefined;
   const selectedEntry = selectedId ? compilation.entries[selectedId] : undefined;
+  const newestFirstNotes = useMemo(() => notesNewestFirst(notes), [notes]);
   const [interpretation, setInterpretation] = useState("");
   const [sourceClarity, setSourceClarity] = useState<SourceClarity>("unknown");
   const [reliability, setReliability] = useState<ReliabilityLevel>("low");
@@ -170,8 +172,8 @@ export default function PlayerNotebook({
               <cite>李商隐《宿骆氏亭寄怀崔雍崔衮》</cite>
             </section>
           )}
-          {notes.map((note, index) => (
-            <article key={note.id} className={`notebook-entry notebook-entry--${note.type} ${note.status === "resolved" ? "is-resolved" : ""} ${index === notes.length - 1 ? "is-latest" : ""}`}>
+          {newestFirstNotes.map((note, index) => (
+            <article key={note.id} className={`notebook-entry notebook-entry--${note.type} ${note.status === "resolved" ? "is-resolved" : ""} ${index === 0 ? "is-latest" : ""}`}>
               <span className="notebook-kind">{NOTE_LABELS[note.type]}</span>
               <div><h3>{note.title}</h3><p>{note.content}</p>
                 {note.type === "judgement" && note.confidence && <small className="note-confidence">可信度　{"●".repeat(note.confidence)}{"○".repeat(5 - note.confidence)}</small>}
