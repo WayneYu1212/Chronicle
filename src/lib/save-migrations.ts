@@ -47,7 +47,20 @@ function variables(value: unknown): GameVariables {
   return result;
 }
 
-const dispositions = new Set(["unfiled", "recorded", "doubtful", "sold", "destroyed", "transferred"]);
+const dispositions = new Set([
+  "unfiled",
+  "recorded",
+  "doubtful",
+  "sold",
+  "destroyed",
+  "transferred",
+  "retained-illicit",
+  "retained-mei",
+  "transferred-bookshop",
+  "transferred-sealed",
+  "joint-custody",
+]);
+const lockedDispositions = new Set(["sold", "destroyed", "transferred", "retained-mei", "transferred-bookshop", "transferred-sealed", "joint-custody"]);
 const sections = new Set(["main", "appendix", "doubtful"]);
 const sourceClarities = new Set(["unknown", "unclear", "identified"]);
 const reliabilities = new Set(["low", "medium", "high"]);
@@ -83,7 +96,7 @@ function compilationState(value: unknown): CompilationState {
     if (typeof entry.sourceClarity !== "string" || !sourceClarities.has(entry.sourceClarity)) throw new Error(`存档中的来源清晰度无效：${id}`);
     if (typeof entry.reliability !== "string" || !reliabilities.has(entry.reliability)) throw new Error(`存档中的可靠度无效：${id}`);
     if (typeof entry.focused !== "boolean" || typeof entry.updatedAt !== "number" || !Number.isFinite(entry.updatedAt)) throw new Error(`存档中的朱记状态无效：${id}`);
-    if (["sold", "destroyed", "transferred"].includes(entry.disposition) && entry.focused) throw new Error(`已离手史料不能保留朱记：${id}`);
+    if (lockedDispositions.has(entry.disposition) && entry.focused) throw new Error(`已决定存放的史料不能保留朱记：${id}`);
     entries[id] = entry as unknown as CompilationEntry;
   }
 

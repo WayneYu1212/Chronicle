@@ -3,12 +3,34 @@ import chapter01 from "@/story/chapter01.json";
 import chapter02Guangzhou from "@/story/chapter02-guangzhou.json";
 import chapter02Nanhai from "@/story/chapter02-nanhai.json";
 import chapter03 from "@/story/chapter03.json";
+import chapter04 from "@/story/chapter04.json";
+import chapter05 from "@/story/chapter05.json";
+
+const chapter03Playable: StoryChapter = {
+  ...(chapter03 as StoryChapter),
+  beats: (chapter03 as StoryChapter).beats.map((beat) => beat.id === "ch03-ending-zhaoqing"
+    ? {
+        ...beat,
+        type: "choice",
+        terminal: false,
+        choices: [{
+          id: "enter-chapter04",
+          text: "沿共簿暗记前往第四章《二十七叶》。",
+          chapter: "chapter04",
+          goto: "ch04-title",
+          effects: { paper: 1 },
+        }],
+      }
+    : beat),
+};
 
 export const chapterRegistry: Readonly<Record<string, StoryChapter>> = {
   chapter01: chapter01 as StoryChapter,
   "chapter02-guangzhou": chapter02Guangzhou as StoryChapter,
   "chapter02-nanhai": chapter02Nanhai as StoryChapter,
-  chapter03: chapter03 as StoryChapter,
+  chapter03: chapter03Playable,
+  chapter04: chapter04 as StoryChapter,
+  chapter05: chapter05 as StoryChapter,
 };
 
 export function getChapter(id: string): StoryChapter | undefined {

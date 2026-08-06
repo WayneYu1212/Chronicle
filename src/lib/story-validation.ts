@@ -33,7 +33,7 @@ export function validateStoryData(
     if (!fragment.id) issues.push({ code: "fragment-id", location: "fragments", message: "史料缺少 ID" });
     else if (fragmentIds.has(fragment.id)) issues.push({ code: "duplicate-fragment", location: fragment.id, message: `史料 ID 重复：${fragment.id}` });
     fragmentIds.add(fragment.id);
-    if (!(["original", "copy", "translated-copy", "oral"] as const).includes(fragment.transmission)) {
+    if (!(["original", "copy", "translated-copy", "oral", "oral-copy"] as const).includes(fragment.transmission)) {
       issues.push({ code: "fragment-transmission", location: fragment.id, message: `史料传播类型无效：${fragment.transmission}` });
     }
     if (!Array.isArray(fragment.marks) || !Array.isArray(fragment.relatedPeople) || !Array.isArray(fragment.relatedEvents)) {
@@ -98,6 +98,9 @@ export function validateStoryData(
       for (const id of beat.grantFragments ?? []) {
         if (!fragmentIds.has(id)) issues.push({ code: "unknown-fragment", location: from, message: `授予未知史料：${id}` });
       }
+      if (beat.fragmentAction && !fragmentIds.has(beat.fragmentAction.fragmentId)) {
+        issues.push({ code: "unknown-fragment", location: from, message: `处置引用未知史料：${beat.fragmentAction.fragmentId}` });
+      }
       for (const id of beat.unlockArchive ?? []) {
         if (!archiveIds.has(id)) issues.push({ code: "unknown-archive", location: from, message: `解锁未知档案：${id}` });
       }
@@ -125,9 +128,14 @@ export function validateStoryData(
             issues.push({ code: "unknown-fragment", location: `${from}:${choice.id}`, message: `选择引用未知史料：${choice.fragmentAction.fragmentId}` });
           }
           for (const id of choice.unlockLocations ?? []) checkLocation(`${from}:${choice.id}`, id);
+          for (const id of choice.locationUpdates?.unlock ?? []) checkLocation(`${from}:${choice.id}`, id);
+          for (const id of choice.locationUpdates?.investigate ?? []) checkLocation(`${from}:${choice.id}`, id);
+          for (const id of choice.locationUpdates?.unlockEntrances ?? []) {
+            if (!knownEntrances.has(id)) issues.push({ code: "unknown-entrance", location: `${from}:${choice.id}`, message: `路线入口不存在：${id}` });
+          }
           if (choice.chapter && !choice.goto) {
             issues.push({ code: "chapter-without-goto", location: `${from}:${choice.id}`, message: "跨章选择必须给出目标节点" });
-          } else if (choice.goto) addTarget(from, choice.chapter ?? chapter.id, choice.goto);
+          } else if (choice.goto && !(beat.terminal && choice.goto.endsWith("-locked"))) addTarget(from, choice.chapter ?? chapter.id, choice.goto);
           else if (index + 1 < chapter.beats.length) addTarget(from, chapter.id, chapter.beats[index + 1].id);
         }
       } else if (beat.next) {

@@ -19,7 +19,32 @@ import { GAME_TIMELINE } from "@/lib/timeline";
 import { mergeRouteEntrances } from "@/lib/route-entrances";
 import { readTutorialCompletion, saveTutorialCompletion, shouldAutoOpenTutorial } from "@/lib/tutorial";
 
-const ACTIVITY_TYPES = new Set(["sorting", "inspection", "comparison", "assembly", "map", "compilation"]);
+const ACTIVITY_TYPES = new Set([
+  "sorting",
+  "inspection",
+  "comparison",
+  "assembly",
+  "map",
+  "compilation",
+  "edge_match",
+  "transcription",
+  "packing",
+  "alignment",
+  "exploration",
+  "interview_plan",
+  "deduction",
+  "state_summary",
+  "search",
+  "spatial_reconstruction",
+  "facsimile_layout",
+  "interview",
+  "association",
+  "access_protocol",
+  "access_log",
+  "redaction",
+  "chronicle_draft",
+  "versioning",
+]);
 type HistoryEntry = { beatId: string; save: SaveData };
 
 function GameContent() {
@@ -181,7 +206,17 @@ function GameContent() {
   const advance = useCallback((override?: SaveData) => {
     if (!currentBeat || !save) return;
     const resolved = resolveNext(currentBeat);
-    if (resolved) commit(chapterId, resolved.beat.id, override ?? save, resolved.index);
+    if (!resolved) return;
+    let nextSave = override ?? save;
+    if (currentBeat.fragmentAction) {
+      try {
+        nextSave = { ...nextSave, compilation: applyFragmentAction(nextSave.compilation, currentBeat.fragmentAction.fragmentId, currentBeat.fragmentAction) };
+      } catch (error) {
+        setRuntimeIssue(error instanceof Error ? error.message : "无法执行史料处置");
+        return;
+      }
+    }
+    commit(chapterId, resolved.beat.id, nextSave, resolved.index);
   }, [chapterId, commit, currentBeat, resolveNext, save]);
 
   const handleChoice = useCallback((choiceIndex: number) => {
@@ -199,7 +234,16 @@ function GameContent() {
       compilation,
       variables: applyEffects(save.variables, choice.effects),
       unlockedLocations: Array.from(new Set([...save.unlockedLocations, ...(choice.unlockLocations ?? [])])),
+      investigatedLocations: Array.from(new Set([
+        ...save.investigatedLocations,
+        ...(choice.locationUpdates?.investigate ?? []),
+      ])),
+      unlockedEntrances: mergeRouteEntrances(save.unlockedEntrances, choice.locationUpdates?.unlockEntrances ?? []),
     };
+    nextSave.unlockedLocations = Array.from(new Set([
+      ...nextSave.unlockedLocations,
+      ...(choice.locationUpdates?.unlock ?? []),
+    ]));
     if (choice.goto) {
       const target = resolveChoiceStoryTarget(choice, chapterId);
       if (target) commit(target.chapterId, target.beat.id, nextSave, target.index);
@@ -294,6 +338,7 @@ function GameContent() {
         <div><dt>账上工钱</dt><dd>{save.variables.wage} 文</dd></div>
         <div><dt>残页</dt><dd>{save.variables.paper} 页</dd></div>
         <div><dt>掌柜</dt><dd>{save.variables.trust > 3 ? "渐信" : save.variables.trust < 0 ? "存疑" : "平常"}</dd></div>
+        <div><dt>人情</dt><dd>{save.variables.trust_people > 3 ? "渐厚" : save.variables.trust_people < 0 ? "有隙" : "平常"}</dd></div>
         <div><dt>风险</dt><dd>{save.variables.risk > 5 ? "迫近" : save.variables.risk > 2 ? "渐起" : "平静"}</dd></div>
       </dl>
       <div className="clue-notes">

@@ -5,6 +5,7 @@ import type { CompilationState, GameVariables, StoryBeat } from "@/types/game";
 import { resolveCompilationRoute } from "@/lib/compilation";
 import LingnanMap from "./LingnanMap";
 import SentenceText from "./SentenceText";
+import ChapterActivityStage, { customActivityCompletion, isCustomActivityType } from "./ChapterActivityStages";
 
 export interface ActivityResult {
   clues?: string[];
@@ -52,6 +53,9 @@ export default function ActivityStage({ beat, onComplete, showSkip = false, unlo
   else if (beat.type === "compilation" && beat.compilation && compilation) {
     stage = <CompilationActivity beat={beat} onComplete={onComplete} compilation={compilation} />;
   }
+  else if (isCustomActivityType(beat.type)) {
+    stage = <ChapterActivityStage beat={beat} onComplete={onComplete} />;
+  }
 
   const skip = () => {
     if (beat.type === "sorting") onComplete({ wage: 2 });
@@ -59,6 +63,10 @@ export default function ActivityStage({ beat, onComplete, showSkip = false, unlo
     else if (beat.type === "comparison") onComplete({ clues: ["残页同源"] });
     else if (beat.type === "assembly") onComplete({ clues: beat.assembly ? [beat.assembly.completionClue] : [], archive: beat.unlockArchive });
     else if (beat.type === "map" && beat.map?.destination) onComplete({ location: beat.map.destination });
+    else if (isCustomActivityType(beat.type)) {
+      const completion = customActivityCompletion(beat);
+      onComplete({ clues: completion ? [completion] : [] });
+    }
   };
 
   return (
