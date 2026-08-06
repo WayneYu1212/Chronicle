@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import TutorialOverlay from "../components/TutorialOverlay";
@@ -9,6 +11,8 @@ import {
   markTutorialComplete,
   shouldAutoOpenTutorial,
 } from "./tutorial";
+
+const globalsCss = readFileSync(fileURLToPath(new URL("../app/globals.css", import.meta.url)), "utf8");
 
 test("tutorial copy explains the two notebook views within 30 characters", () => {
   const copy = TUTORIAL_STEPS.flatMap((step) => [step.title, step.body]);
@@ -47,4 +51,10 @@ test("auto tutorial waits for the book and skips completed players", () => {
   assert.equal(shouldAutoOpenTutorial(false, false), false);
   assert.equal(shouldAutoOpenTutorial(true, false), true);
   assert.equal(shouldAutoOpenTutorial(true, true), false);
+});
+
+test("mobile book shell uses dynamic height and safe containment", () => {
+  assert.match(globalsCss, /height:calc\(100dvh - 80px\)/);
+  assert.match(globalsCss, /max-width:calc\(100vw - 16px\)/);
+  assert.match(globalsCss, /safe-area-inset-bottom/);
 });

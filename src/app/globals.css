@@ -448,3 +448,21 @@ button { color:inherit; }
 @media (max-width:900px){.compilation-editor textarea,.compilation-editor input,.compilation-editor select{min-height:44px;font-size:16px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.rain-shadow{display:none}}
 .reduce-motion *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+
+@media (max-width:900px){
+  .reading-desk{overflow-x:hidden;padding-bottom:calc(58px + env(safe-area-inset-bottom))}
+  .open-book{height:calc(100vh - 80px);height:calc(100svh - 80px);height:calc(100dvh - 80px);max-width:100%;overflow-x:hidden}
+  .book-page-scroll,.narrative-page,.activity-stage,.player-notebook,.compilation-workspace{max-width:100%;min-width:0}
+  .book-page-scroll{overflow-x:hidden}
+  .book-ribbons{width:calc(100vw - 16px);max-width:calc(100vw - 16px);padding-bottom:env(safe-area-inset-bottom)}
+  .book-ribbons a,.book-ribbons button{flex:1 1 0;width:auto;min-width:0;padding:10px 6px;font-size:12px}
+  .mobile-left-leaf{max-width:100%;min-width:0;overflow-x:hidden}
+}
+
+@media (max-width:420px){
+  .tutorial-dialog{padding:30px 22px 22px}
+  .tutorial-dialog h2{font-size:21px;letter-spacing:.08em}
+  .tutorial-description{font-size:15px}
+  .tutorial-actions{gap:6px}
+  .tutorial-actions button{min-width:80px;padding:9px 10px}
+}
