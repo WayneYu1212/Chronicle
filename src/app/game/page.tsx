@@ -8,6 +8,7 @@ import type { ActivityResult } from "@/components/ActivityStage";
 import BookShell from "@/components/BookShell";
 import ManuscriptPage from "@/components/ManuscriptPage";
 import PlayerNotebook from "@/components/PlayerNotebook";
+import TutorialOverlay from "@/components/TutorialOverlay";
 import { applyEffects, applyNoteUpdates, createInitialSave, loadSaveResult, writeSave } from "@/lib/save";
 import { getChapter, getFirstChapterId, resolveChoiceStoryTarget, resolveNextStoryBeat } from "@/lib/story";
 import type { SaveData, StoryBeat } from "@/types/game";
@@ -16,6 +17,7 @@ import { applyFragmentAction, grantFragments, preserveCompilationProgress } from
 import { getFragments } from "@/lib/fragments";
 import { GAME_TIMELINE } from "@/lib/timeline";
 import { mergeRouteEntrances } from "@/lib/route-entrances";
+import { readTutorialCompletion, saveTutorialCompletion, shouldAutoOpenTutorial } from "@/lib/tutorial";
 
 const ACTIVITY_TYPES = new Set(["sorting", "inspection", "comparison", "assembly", "map", "compilation"]);
 type HistoryEntry = { beatId: string; save: SaveData };
@@ -30,12 +32,14 @@ function GameContent() {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [showDelayedControls, setShowDelayedControls] = useState(false);
   const [showFlyleaf, setShowFlyleaf] = useState(mode === "new");
+  const [showTutorial, setShowTutorial] = useState(false);
   const [pageTurn, setPageTurn] = useState<"forward" | "backward" | null>(null);
   const [loadIssue, setLoadIssue] = useState<string | null>(null);
   const [saveIssue, setSaveIssue] = useState<string | null>(null);
   const [runtimeIssue, setRuntimeIssue] = useState<string | null>(null);
   const turnTimers = useRef<number[]>([]);
   const turning = useRef(false);
+  const tutorialAutoShown = useRef(false);
 
   const performPageTurn = useCallback((action: () => void, direction: "forward" | "backward" = "forward") => {
     if (turning.current) return;
@@ -56,6 +60,8 @@ function GameContent() {
   useEffect(() => {
     setLoadIssue(null);
     setRuntimeIssue(null);
+    tutorialAutoShown.current = false;
+    setShowTutorial(false);
     let initial: SaveData;
     if (mode === "continue") {
       const result = loadSaveResult();
@@ -84,6 +90,19 @@ function GameContent() {
     setHistory([]);
     setShowFlyleaf(mode === "new");
   }, [mode]);
+
+  useEffect(() => {
+    if (tutorialAutoShown.current || !save || showFlyleaf) return;
+    tutorialAutoShown.current = true;
+    setShowTutorial(shouldAutoOpenTutorial(true, readTutorialCompletion()));
+  }, [save, showFlyleaf]);
+
+  const closeTutorial = useCallback(() => setShowTutorial(false), []);
+  const openTutorial = useCallback(() => setShowTutorial(true), []);
+  const completeTutorial = useCallback(() => {
+    saveTutorialCompletion();
+    setShowTutorial(false);
+  }, []);
 
   const persist = useCallback((data: SaveData) => {
     const result = writeSave(data);
@@ -329,6 +348,10 @@ function GameContent() {
       controls={showFlyleaf ? undefined : controls}
       pageTurn={pageTurn}
       mobileLeftLabel={showFlyleaf ? undefined : "手札"}
+      tutorialOpen={showTutorial}
+      showTutorialHelp={!showFlyleaf}
+      onOpenTutorial={openTutorial}
+      tutorial={<TutorialOverlay open={showTutorial} onClose={closeTutorial} onComplete={completeTutorial} />}
       binding="right"
     />
   );

@@ -1,9 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import TutorialOverlay from "../components/TutorialOverlay";
 import {
   TUTORIAL_STEPS,
   hasCompletedTutorial,
   markTutorialComplete,
+  shouldAutoOpenTutorial,
 } from "./tutorial";
 
 test("tutorial copy explains the two notebook views within 30 characters", () => {
@@ -24,4 +28,23 @@ test("marking tutorial complete writes the versioned completion value", () => {
   let value = "";
   markTutorialComplete({ setItem: (_key, next) => { value = next; } });
   assert.equal(value, "done");
+});
+
+test("tutorial overlay exposes an accessible first step", () => {
+  const markup = renderToStaticMarkup(createElement(TutorialOverlay, {
+    open: true,
+    onClose: () => undefined,
+    onComplete: () => undefined,
+  }));
+
+  assert.match(markup, /role="dialog"/);
+  assert.match(markup, /aria-modal="true"/);
+  assert.match(markup, /先看正文，再做选择/);
+  assert.match(markup, /人物名在左/);
+});
+
+test("auto tutorial waits for the book and skips completed players", () => {
+  assert.equal(shouldAutoOpenTutorial(false, false), false);
+  assert.equal(shouldAutoOpenTutorial(true, false), true);
+  assert.equal(shouldAutoOpenTutorial(true, true), false);
 });

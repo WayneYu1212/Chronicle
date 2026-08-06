@@ -22,7 +22,7 @@ export default function ManuscriptPage({ speaker, text, isTitle, canTurn, onTurn
   };
 
   const speakerKind = speaker === "我" ? "self" : speaker === "旁白" ? "narrator" : speaker ? "other" : "plain";
-  const speakerLabel = speaker === "旁白" ? "记" : speaker;
+  const speakerLabel = speaker === "旁白" ? "旁白" : speaker;
   const paragraphs = <SentenceText text={text} />;
 
   return (

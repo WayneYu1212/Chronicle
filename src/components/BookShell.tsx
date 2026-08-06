@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 interface BookShellProps {
   left: ReactNode;
@@ -13,12 +13,23 @@ interface BookShellProps {
   pageTurn?: "forward" | "backward" | null;
   mobileLeftLabel?: string;
   binding?: "left" | "right";
+  tutorialOpen?: boolean;
+  showTutorialHelp?: boolean;
+  onOpenTutorial?: () => void;
+  tutorial?: ReactNode;
 }
 
-export default function BookShell({ left, right, chapter, progress, attributes, controls, pageTurn, mobileLeftLabel, binding = "left" }: BookShellProps) {
+export default function BookShell({ left, right, chapter, progress, attributes, controls, pageTurn, mobileLeftLabel, binding = "left", tutorialOpen = false, showTutorialHelp = false, onOpenTutorial, tutorial }: BookShellProps) {
   const [showAttributes, setShowAttributes] = useState(false);
   const [showMobileLeft, setShowMobileLeft] = useState(false);
   const mobileLeftTriggerRef = useRef<HTMLButtonElement>(null);
+  const tutorialTriggerRef = useRef<HTMLButtonElement>(null);
+  const previousTutorialOpen = useRef(tutorialOpen);
+
+  useEffect(() => {
+    if (previousTutorialOpen.current && !tutorialOpen) tutorialTriggerRef.current?.focus();
+    previousTutorialOpen.current = tutorialOpen;
+  }, [tutorialOpen]);
 
   const closeMobileLeft = () => {
     setShowMobileLeft(false);
@@ -27,6 +38,9 @@ export default function BookShell({ left, right, chapter, progress, attributes, 
 
   return (
     <main className="reading-desk">
+      {showTutorialHelp && (
+        <button ref={tutorialTriggerRef} type="button" className="tutorial-trigger" aria-expanded={tutorialOpen} aria-label="打开新手指引" title="新手指引" onClick={onOpenTutorial}>?</button>
+      )}
       <nav className="book-ribbons" aria-label="书内导航">
         {attributes && (
           <button type="button" className={showAttributes ? "is-active" : ""} aria-expanded={showAttributes} onClick={() => setShowAttributes((current) => !current)} title="查看书课与账目">
@@ -75,6 +89,7 @@ export default function BookShell({ left, right, chapter, progress, attributes, 
         )}
         {controls}
       </section>
+      {tutorial}
     </main>
   );
 }
