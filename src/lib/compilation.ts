@@ -7,6 +7,13 @@ import type {
 } from "../types/game";
 
 const LOST_DISPOSITIONS = new Set<FragmentDisposition>(["sold", "destroyed", "transferred"]);
+const LOCKED_DISPOSITIONS = new Set<FragmentDisposition>([
+  ...LOST_DISPOSITIONS,
+  "retained-mei",
+  "transferred-bookshop",
+  "transferred-sealed",
+  "joint-custody",
+]);
 
 export function createCompilationEntry(fragmentId: string): CompilationEntry {
   return {
@@ -59,7 +66,7 @@ export function applyFragmentAction(
   const fragment = state.fragments[fragmentId];
   if (!fragment) throw new Error(`找不到史料：${fragmentId}`);
   const current = state.entries[fragmentId] ?? createCompilationEntry(fragmentId);
-  if (LOST_DISPOSITIONS.has(current.disposition) && action.disposition !== current.disposition) {
+  if (LOCKED_DISPOSITIONS.has(current.disposition) && action.disposition !== current.disposition) {
     throw new Error("这份史料已经永久离手，无法重新收入长编。");
   }
   if ((action.disposition === "recorded" || action.disposition === "doubtful") && !action.section) {
@@ -73,7 +80,7 @@ export function applyFragmentAction(
       [fragmentId]: {
         ...current,
         ...action,
-        focused: LOST_DISPOSITIONS.has(action.disposition) ? false : current.focused,
+        focused: LOCKED_DISPOSITIONS.has(action.disposition) ? false : current.focused,
         section: action.disposition === "unfiled" ? undefined : action.section ?? current.section,
         updatedAt: now,
       },
@@ -84,7 +91,7 @@ export function applyFragmentAction(
 
 export function toggleFocus(state: CompilationState, fragmentId: string): CompilationState {
   const entry = state.entries[fragmentId] ?? createCompilationEntry(fragmentId);
-  if (LOST_DISPOSITIONS.has(entry.disposition)) throw new Error("已经离手的史料不能加朱记。");
+  if (LOCKED_DISPOSITIONS.has(entry.disposition)) throw new Error("已决定存放的史料不能再加朱记。");
   const nextFocused = !entry.focused;
   const focusedCount = Object.values(state.entries).filter((item) => item.focused).length;
   if (nextFocused && focusedCount >= state.focusLimit) {
@@ -106,7 +113,9 @@ export function resolveCompilationRoute(
   const entry = state.entries[fragmentId];
   if (!entry || entry.disposition === "unfiled") return undefined;
   const exact = entry.section ? `${entry.disposition}:${entry.section}` : entry.disposition;
-  return routes[exact] ?? routes[entry.disposition];
+  return routes[exact]
+    ?? routes[entry.disposition]
+    ?? (entry.disposition === "retained-illicit" ? routes.doubtful : undefined);
 }
 
 export function preserveCompilationProgress<

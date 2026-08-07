@@ -11,11 +11,21 @@
     "paper": "白棉纸，横折密集",
     "ink": "正文青灰，纸背淡褐",
     "handwriting": "工整编抄小楷",
-    "marks": ["页码十三", "暗红封蜡", "后注日期"],
+    "marks": [
+      "页码十三",
+      "暗红封蜡",
+      "后注日期"
+    ],
     "value": 50,
     "politicalRisk": 4,
-    "relatedPeople": ["沈掌柜", "原记录者未详", "汉文编抄者未详"],
-    "relatedEvents": ["庚寅之劫"],
+    "relatedPeople": [
+      "沈掌柜",
+      "原记录者未详",
+      "汉文编抄者未详"
+    ],
+    "relatedEvents": [
+      "庚寅之劫"
+    ],
     "transmission": "translated-copy",
     "suggestedInterpretation": "这份后出译抄保存了一段叙述：神父在城墙边听告解时，男仆报告士兵已经逃离城墙。它只能证明较早记录曾如此记载。",
     "suggestedMissingEvidence": "原西文记录、编抄者及年代、译抄路径、精确日期，以及独立的现场记录。"
@@ -32,11 +42,21 @@
     "paper": "白棉纸，三片撕口相接",
     "ink": "西文在先，汉文在后",
     "handwriting": "西字连写与汉文小楷",
-    "marks": ["针孔", "封蜡", "原纸边"],
+    "marks": [
+      "针孔",
+      "封蜡",
+      "原纸边"
+    ],
     "value": 36,
     "politicalRisk": 4,
-    "relatedPeople": ["沈掌柜", "原记录者未详", "汉文编抄者未详"],
-    "relatedEvents": ["庚寅之劫"],
+    "relatedPeople": [
+      "沈掌柜",
+      "原记录者未详",
+      "汉文编抄者未详"
+    ],
+    "relatedEvents": [
+      "庚寅之劫"
+    ],
     "transmission": "translated-copy",
     "suggestedInterpretation": "纸墨层次和拼口表明三片来自同纸，西字在先、汉文在后，属于后出编抄，并非现场写成的汉文原记。",
     "suggestedMissingEvidence": "西文全文、原记录者与编抄者、编抄时间地点、它与第十三页的关系，以及独立来源。"
@@ -53,11 +73,20 @@
     "paper": "短幅白棉纸",
     "ink": "正文旧墨，改字较新",
     "handwriting": "两种小楷",
-    "marks": ["装订孔错位", "页脚被剪", "改字覆墨"],
+    "marks": [
+      "装订孔错位",
+      "页脚被剪",
+      "改字覆墨"
+    ],
     "value": 42,
     "politicalRisk": 3,
-    "relatedPeople": ["周砚秋", "沈掌柜"],
-    "relatedEvents": ["广州旧事"],
+    "relatedPeople": [
+      "周砚秋",
+      "沈掌柜"
+    ],
+    "relatedEvents": [
+      "广州旧事"
+    ],
     "transmission": "copy",
     "suggestedInterpretation": "夹页显示同一事件出现“死者”与“散者”两种文字，只能证明文本曾被改动，不能判断哪一种说法为真。",
     "suggestedMissingEvidence": "两种笔迹的身份与年代、所据母本、其他版本、改字缘由和事件旁证。"
@@ -74,11 +103,19 @@
     "paper": "本地竹纸",
     "ink": "松烟墨",
     "handwriting": "行楷",
-    "marks": ["周氏私印", "封口重复开启"],
+    "marks": [
+      "周氏私印",
+      "封口重复开启"
+    ],
     "value": 28,
     "politicalRisk": 3,
-    "relatedPeople": ["周砚秋", "西樵誊稿僧"],
-    "relatedEvents": ["周氏藏稿"],
+    "relatedPeople": [
+      "周砚秋",
+      "西樵誊稿僧"
+    ],
+    "relatedEvents": [
+      "周氏藏稿"
+    ],
     "transmission": "original",
     "suggestedInterpretation": "家书显示周氏有人要求秘藏旧稿，并以年月错乱为由否定其可信度；仅凭此信无法判断是在避祸还是辨伪。",
     "suggestedMissingEvidence": "写信人与收信人、成信日期、所指旧稿、信件流传经过和其他周氏记录。"
@@ -95,11 +132,20 @@
     "paper": "竹纸",
     "ink": "一色旧墨",
     "handwriting": "方整楷书",
-    "marks": ["书坊旧藏印", "页边旧校记"],
+    "marks": [
+      "书坊旧藏印",
+      "页边旧校记"
+    ],
     "value": 80,
     "politicalRisk": 4,
-    "relatedPeople": ["县署书吏", "沈掌柜"],
-    "relatedEvents": ["广州旧事", "地方志重修"],
+    "relatedPeople": [
+      "县署书吏",
+      "沈掌柜"
+    ],
+    "relatedEvents": [
+      "广州旧事",
+      "地方志重修"
+    ],
     "transmission": "copy",
     "suggestedInterpretation": "这份旧抄将城破记为死伤甚众；它只能证明该抄本保存这种说法，不能单独证实死亡情况或规模。",
     "suggestedMissingEvidence": "母本、成书年代、纂修者、版本源流，以及同时代的独立记录。"
@@ -116,11 +162,18 @@
     "paper": "官用连史纸",
     "ink": "新墨",
     "handwriting": "馆阁体",
-    "marks": ["县署骑缝印", "页边略字"],
+    "marks": [
+      "县署骑缝印",
+      "页边略字"
+    ],
     "value": 20,
     "politicalRisk": 1,
-    "relatedPeople": ["县署书吏"],
-    "relatedEvents": ["地方志重修"],
+    "relatedPeople": [
+      "县署书吏"
+    ],
+    "relatedEvents": [
+      "地方志重修"
+    ],
     "transmission": "original",
     "suggestedInterpretation": "新底稿以“王师定广州”和“稍有扰乱”重述此事，说明它与旧抄的措辞和立场不同；不能仅凭差异断定奉命删改。",
     "suggestedMissingEvidence": "编纂指令、所据底本、执笔人与修改痕迹、正式刊本和其他馆稿。"
@@ -137,11 +190,20 @@
     "paper": "书坊余纸",
     "ink": "新磨松烟墨",
     "handwriting": "佣书手迹",
-    "marks": ["无印", "折入账簿夹层"],
+    "marks": [
+      "无印",
+      "折入账簿夹层"
+    ],
     "value": 18,
     "politicalRisk": 5,
-    "relatedPeople": ["县署书吏", "陌生客", "沈掌柜"],
-    "relatedEvents": ["地方志重修"],
+    "relatedPeople": [
+      "县署书吏",
+      "陌生客",
+      "沈掌柜"
+    ],
+    "relatedEvents": [
+      "地方志重修"
+    ],
     "transmission": "copy",
     "suggestedInterpretation": "这份私抄保存了玩家曾见的旧志文字，但它是从旧稿派生的副本，不能增加一条独立来源。",
     "suggestedMissingEvidence": "被抄原件、誊录校核、删改者及理由，以及其他可以核对的版本。"
@@ -158,11 +220,20 @@
     "paper": "官用连史纸，左缘装订",
     "ink": "新墨，两人复笔",
     "handwriting": "行楷与小楷批注",
-    "marks": ["卷号残缺", "裁存字样", "值房小印"],
+    "marks": [
+      "卷号残缺",
+      "裁存字样",
+      "值房小印"
+    ],
     "value": 12,
     "politicalRisk": 4,
-    "relatedPeople": ["县署书吏", "沈掌柜"],
-    "relatedEvents": ["地方志重修"],
+    "relatedPeople": [
+      "县署书吏",
+      "沈掌柜"
+    ],
+    "relatedEvents": [
+      "地方志重修"
+    ],
     "transmission": "original",
     "suggestedInterpretation": "登记表明修订者知道旧文存在，并决定不把三行带入净本；它能证明一次处理程序，不能说明删改理由正当或旧文内容为真。",
     "suggestedMissingEvidence": "完整卷号、裁下原叶的去向、执笔人与核定者、删改指令和正式刊本。"
@@ -179,11 +250,21 @@
     "paper": "薄竹纸，边缘烟黄",
     "ink": "正文旧墨，题跋稍新",
     "handwriting": "两种楷书",
-    "marks": ["旧卷号", "借阅题跋", "两次折痕"],
+    "marks": [
+      "旧卷号",
+      "借阅题跋",
+      "两次折痕"
+    ],
     "value": 46,
     "politicalRisk": 4,
-    "relatedPeople": ["番禺抄本持有人", "沈掌柜"],
-    "relatedEvents": ["地方志重修", "广州旧事"],
+    "relatedPeople": [
+      "番禺抄本持有人",
+      "沈掌柜"
+    ],
+    "relatedEvents": [
+      "地方志重修",
+      "广州旧事"
+    ],
     "transmission": "copy",
     "suggestedInterpretation": "这份早抄与书坊旧志共享部分语句，却在末句不同，说明同一文本链可能存在分支；版本数量不能直接证明事件细节。",
     "suggestedMissingEvidence": "母本、抄写年代、借阅题跋身份、与书坊旧志的先后关系及独立事件记录。"
@@ -200,11 +281,20 @@
     "paper": "粗竹纸，横折两道",
     "ink": "急写浓墨",
     "handwriting": "行草",
-    "marks": ["价银已清", "无买主名", "经手花押"],
+    "marks": [
+      "价银已清",
+      "无买主名",
+      "经手花押"
+    ],
     "value": 22,
     "politicalRisk": 3,
-    "relatedPeople": ["陌生客", "番禺旧书经手人"],
-    "relatedEvents": ["旧志原页转手"],
+    "relatedPeople": [
+      "陌生客",
+      "番禺旧书经手人"
+    ],
+    "relatedEvents": [
+      "旧志原页转手"
+    ],
     "transmission": "original",
     "suggestedInterpretation": "收条能够证明一张旧志散叶经过一次匿名交易，并保留价款与经手花押；它不能证明当前持有人、交易动机或散叶内容。",
     "suggestedMissingEvidence": "买主身份、交付地点、散叶目验记录、后续转手和经手花押的可比样本。"
@@ -221,11 +311,22 @@
     "paper": "本地竹纸，多处水皱",
     "ink": "旧墨，后添朱点",
     "handwriting": "僧人小楷与后人批点",
-    "marks": ["蓝线记号", "十三叶", "残缺澄字"],
+    "marks": [
+      "蓝线记号",
+      "十三叶",
+      "残缺澄字"
+    ],
     "value": 34,
     "politicalRisk": 3,
-    "relatedPeople": ["西樵“澄”字僧", "周砚秋", "梁老人"],
-    "relatedEvents": ["周氏藏稿", "旧稿转运"],
+    "relatedPeople": [
+      "西樵“澄”字僧",
+      "周砚秋",
+      "梁老人"
+    ],
+    "relatedEvents": [
+      "周氏藏稿",
+      "旧稿转运"
+    ],
     "transmission": "original",
     "suggestedInterpretation": "题签簿支持一包蓝线湿纸曾被拆包、晾纸和重穿针孔，并留下十三叶的数量记录；它不能确认纸上文字或送来人身份。",
     "suggestedMissingEvidence": "原包纸张、完整法号、收纸日期、送来人、原书名，以及能与周氏夹页直接比合的孔距记录。"
@@ -242,13 +343,499 @@
     "paper": "厚竹纸，右下角缺损",
     "ink": "正文淡墨，印泥暗红",
     "handwriting": "账房行楷",
-    "marks": ["半枚交接印", "蓝线记号", "二十七叶"],
+    "marks": [
+      "半枚交接印",
+      "蓝线记号",
+      "二十七叶"
+    ],
     "value": 40,
     "politicalRisk": 4,
-    "relatedPeople": ["肇庆旧书经手人", "沈掌柜"],
-    "relatedEvents": ["旧稿转运", "材料链汇合"],
+    "relatedPeople": [
+      "肇庆旧书经手人",
+      "沈掌柜"
+    ],
+    "relatedEvents": [
+      "旧稿转运",
+      "材料链汇合"
+    ],
     "transmission": "original",
     "suggestedInterpretation": "纸边、数量与半印支持两包材料曾在同一交接环节被验收并分送；这只能连接传播链，不能让两包文字彼此证明。",
     "suggestedMissingEvidence": "交接日期、两包完整内容、收送双方身份、另一半印的连续保管记录和独立经手簿。"
+  },
+  {
+    "id": "zhaoqing-common-ledger",
+    "title": "肇庆纸包共簿页",
+    "content": "蓝线十三叶，无题十四叶。两包相隔半日到岸，同柜夜存，次日验边分送。",
+    "fragmentary": false,
+    "sourcePerson": "肇庆码头多家船行与纸铺共用账房",
+    "foundAt": "肇庆旧书铺后房共簿",
+    "estimatedDate": "顺治末至康熙初，具体日次由潮牌与相邻凭条推定",
+    "medium": "多家共用的纸包交接簿页",
+    "paper": "厚竹纸，右缘后补",
+    "ink": "淡墨，多人续笔",
+    "handwriting": "账房行楷与船户花押",
+    "marks": [
+      "断桨花押",
+      "绳结花押",
+      "梅花门残文",
+      "潮州商号后补暗记"
+    ],
+    "value": 54,
+    "politicalRisk": 4,
+    "relatedPeople": [
+      "陆七叔",
+      "冯船户",
+      "梅介臣"
+    ],
+    "relatedEvents": [
+      "二十七叶分送",
+      "旧稿转运"
+    ],
+    "transmission": "original",
+    "suggestedInterpretation": "共簿支持两包纸先后抵达肇庆、同柜一夜并在次日验边分送。广州梅花门见于原收件栏，潮州属于后补追记。",
+    "suggestedMissingEvidence": "完整收件姓名、两包到肇庆以前的来源、分送后的连续收货记录及包内正文。"
+  },
+  {
+    "id": "feng-boat-private-ledger",
+    "title": "冯船户私账",
+    "content": "湿蓝线一包先到，无题一包晚至；合验后分送，脚钱多年未清。",
+    "fragmentary": false,
+    "sourcePerson": "冯姓船户，部分条目由码头代写",
+    "foundAt": "冯阿绫家藏油布卷",
+    "estimatedDate": "顺治末至康熙初",
+    "medium": "船户私人航运与欠费账",
+    "paper": "账簿余纸，油布久包",
+    "ink": "淡墨与炭笔数点",
+    "handwriting": "码头代笔与船户花押",
+    "marks": [
+      "两次靠岸",
+      "紧结花押",
+      "三点梅记",
+      "未清脚钱"
+    ],
+    "value": 38,
+    "politicalRisk": 3,
+    "relatedPeople": [
+      "冯阿绫",
+      "冯船户",
+      "陆七叔"
+    ],
+    "relatedEvents": [
+      "二十七叶分送"
+    ],
+    "transmission": "original",
+    "suggestedInterpretation": "私账把共簿的一笔拆成两次到岸，说明蓝线包与无题包在合验前可能拥有不同来源。",
+    "suggestedMissingEvidence": "病中旅客身份、无题包此前行程、蓝线包最初送出人及三点记号含义。"
+  },
+  {
+    "id": "ch04-ledger-extract",
+    "title": "二十七叶目验摘要",
+    "content": "据肇庆共簿与冯船户私账目验：两包相隔半日到岸，同柜夜存，次日合验纸边后分送。",
+    "fragmentary": false,
+    "sourcePerson": "听雨坊佣书",
+    "foundAt": "肇庆旧书铺",
+    "estimatedDate": "康熙九年九月廿九",
+    "medium": "限时目验后的查验摘要",
+    "paper": "题签纸两张",
+    "ink": "当日新墨",
+    "handwriting": "佣书手迹",
+    "marks": [
+      "陆七叔花押",
+      "冯阿绫见证",
+      "原件处置状态附记"
+    ],
+    "value": 20,
+    "politicalRisk": 3,
+    "relatedPeople": [
+      "陆七叔",
+      "冯阿绫",
+      "沈掌柜"
+    ],
+    "relatedEvents": [
+      "二十七叶分送"
+    ],
+    "transmission": "copy",
+    "suggestedInterpretation": "摘要保存玩家当日亲见的经手顺序，但不能替代共簿原件的纸墨、内折和后补层。",
+    "suggestedMissingEvidence": "共簿后续保管状态、完整凭条、再次目验及其他共用人确认。"
+  },
+  {
+    "id": "zhaoqing-packet-edge-rubbing",
+    "title": "肇庆蓝线包外层边角摹记",
+    "content": "蓝线包外层右上角见斜缺、水涨纤维外翻和线压。",
+    "fragmentary": true,
+    "sourcePerson": "肇庆码头验边账房",
+    "foundAt": "旧书铺楼上边簿箱",
+    "estimatedDate": "与二十七叶交接同期",
+    "medium": "纸包外层边角轮廓摹记",
+    "paper": "摹纸",
+    "ink": "炭墨",
+    "handwriting": "验边符号",
+    "marks": [
+      "斜缺",
+      "蓝线压痕",
+      "水涨纤维"
+    ],
+    "value": 18,
+    "politicalRisk": 2,
+    "relatedPeople": [
+      "陆七叔",
+      "冯船户"
+    ],
+    "relatedEvents": [
+      "蓝线十三叶转运"
+    ],
+    "transmission": "copy",
+    "suggestedInterpretation": "可用于比对潮州商号是否收下同一外包，不能与包内第十三页直接拼接。",
+    "suggestedMissingEvidence": "潮州外包原物或可靠摹形、连续封绳记录和换包记录。"
+  },
+  {
+    "id": "chaozhou-receipt-ledger",
+    "title": "潮州商号蓝线包收货簿",
+    "content": "旧号入，白棉纸十三叶，湿，另晾；内有西字，不估价。后分出六叶，余七留仓。",
+    "fragmentary": false,
+    "sourcePerson": "潮州商号账房",
+    "foundAt": "潮州旧商号内柜",
+    "estimatedDate": "顺治末至康熙元年间",
+    "medium": "商号收货总单与验货薄单",
+    "paper": "厚账纸，夹验货薄单",
+    "ink": "当日浓墨与后补淡墨",
+    "handwriting": "账房行楷与仓管小字",
+    "marks": [
+      "旧收货号",
+      "蓝线",
+      "另晾",
+      "十三个仓中小圈"
+    ],
+    "value": 62,
+    "politicalRisk": 4,
+    "relatedPeople": [
+      "林素娘",
+      "梅介臣",
+      "何姓药商"
+    ],
+    "relatedEvents": [
+      "蓝线十三叶转运",
+      "潮州六叶取回"
+    ],
+    "transmission": "original",
+    "suggestedInterpretation": "商号簿支持蓝线包以十三叶抵达潮州，包内至少有西字，后来再次拆为六叶与七叶。",
+    "suggestedMissingEvidence": "十三叶完整内容、原始送货人、外包连续保管、六叶取件人实名和七叶母本关系。"
+  },
+  {
+    "id": "chaozhou-receipt-ledger-summary",
+    "title": "潮州蓝线包收货摘要",
+    "content": "据潮州商号转寄摘要：蓝线包十三叶到仓，后分出六叶，余七仍存。",
+    "fragmentary": false,
+    "sourcePerson": "潮州商号林素娘据原簿制作",
+    "foundAt": "转寄至广州梅花门",
+    "estimatedDate": "康熙九年十月初",
+    "medium": "商号见证摘要",
+    "paper": "商号信纸",
+    "ink": "当日新墨",
+    "handwriting": "林素娘或商号账房",
+    "marks": [
+      "商号押",
+      "未目验原件提示"
+    ],
+    "value": 16,
+    "politicalRisk": 3,
+    "relatedPeople": [
+      "林素娘",
+      "沈掌柜",
+      "梅介臣"
+    ],
+    "relatedEvents": [
+      "蓝线十三叶转运"
+    ],
+    "transmission": "copy",
+    "suggestedInterpretation": "可证明商号当前如此查见原簿，未亲赴潮州的玩家不能凭摘要补写原件纸墨和折痕。",
+    "suggestedMissingEvidence": "原簿目验、七叶原件、六叶取件条原件及商号旧号前缀。"
+  },
+  {
+    "id": "chaozhou-parallel-leaf",
+    "title": "潮州蓝线包留存异页",
+    "content": "城中死者难数，街巷久不得通。",
+    "fragmentary": true,
+    "sourcePerson": "西文与汉文执笔者未详",
+    "foundAt": "潮州商号蓝线包余七叶",
+    "estimatedDate": "顺治七年以后，具体编抄年代待考",
+    "medium": "西文在先、汉文后抄的白棉纸异页",
+    "paper": "白棉纸，水皱较宽",
+    "ink": "纸背西文旧墨，正面汉文较晚",
+    "handwriting": "与第十三页不同的汉文誊手",
+    "marks": [
+      "仓中第九圈",
+      "缺角",
+      "无连续页码"
+    ],
+    "value": 48,
+    "politicalRisk": 4,
+    "relatedPeople": [
+      "林素娘",
+      "原记录者未详",
+      "汉文誊手未详"
+    ],
+    "relatedEvents": [
+      "广州旧事",
+      "蓝线十三叶"
+    ],
+    "transmission": "translated-copy",
+    "suggestedInterpretation": "异页与第十三页可能处于同一译抄包或编抄网络，主题相近与不同誊手都不能证明事件独立性。",
+    "suggestedMissingEvidence": "西文全文、母本关系、译者、十三叶页序及被取六叶内容。"
+  },
+  {
+    "id": "chaozhou-six-leaf-receipt",
+    "title": "潮州六叶取件条",
+    "content": "旧号分出六叶，代介臣收；原包余七，仍寄。",
+    "fragmentary": false,
+    "sourcePerson": "潮州商号账房",
+    "foundAt": "潮州商号押簿",
+    "estimatedDate": "康熙元年",
+    "medium": "旧纸取件与分包收条",
+    "paper": "薄竹纸",
+    "ink": "浓墨，姓名处刮薄",
+    "handwriting": "商号账房体",
+    "marks": [
+      "半枚梅花押",
+      "代介臣收",
+      "取件人姓名刮去"
+    ],
+    "value": 44,
+    "politicalRisk": 4,
+    "relatedPeople": [
+      "梅介臣",
+      "何姓药商",
+      "林素娘"
+    ],
+    "relatedEvents": [
+      "潮州六叶取回"
+    ],
+    "transmission": "original",
+    "suggestedInterpretation": "取件条把“介臣”与潮州六叶建立直接联系，并显示六叶向西离开；梅介臣是否亲自到场及取件人全名仍需核验。",
+    "suggestedMissingEvidence": "取件人完整姓名、梅花押连续样本、到广州后的交付记录和六叶原件。"
+  },
+  {
+    "id": "chaozhou-six-leaf-receipt-copy",
+    "title": "潮州六叶取件条摹本",
+    "content": "据潮州原条摹录：旧号分出六叶，代介臣收；原包余七，仍寄。",
+    "fragmentary": false,
+    "sourcePerson": "潮州商号据原件制作",
+    "foundAt": "转寄至广州梅花门",
+    "estimatedDate": "康熙九年十月初",
+    "medium": "见证摹本",
+    "paper": "商号余纸",
+    "ink": "当日新墨",
+    "handwriting": "商号誊手",
+    "marks": [
+      "原件未随信",
+      "摹本日期",
+      "商号押"
+    ],
+    "value": 14,
+    "politicalRisk": 3,
+    "relatedPeople": [
+      "林素娘",
+      "梅介臣"
+    ],
+    "relatedEvents": [
+      "潮州六叶取回"
+    ],
+    "transmission": "copy",
+    "suggestedInterpretation": "摹本保存原条文字，未亲眼查原件者不能补记刮痕深浅、纸背船期和印泥特征。",
+    "suggestedMissingEvidence": "原条目验、誊录校核和取件人实名。"
+  },
+  {
+    "id": "mei-compilation-draft",
+    "title": "三梅草目",
+    "content": "本地十二叶。西来译纸十三叶。取一附后，标十三。",
+    "fragmentary": false,
+    "sourcePerson": "梅介臣",
+    "foundAt": "广州长寿巷梅花门内",
+    "estimatedDate": "顺治末至康熙初，多层续写",
+    "medium": "私人编目草纸",
+    "paper": "薄竹纸，四折",
+    "ink": "旧墨、淡墨与朱点三层",
+    "handwriting": "梅介臣主手与校记",
+    "marks": [
+      "本地十二叶",
+      "西来十三叶",
+      "取一附后",
+      "三点梅花记"
+    ],
+    "value": 78,
+    "politicalRisk": 5,
+    "relatedPeople": [
+      "梅介臣",
+      "沈掌柜",
+      "何姓药商"
+    ],
+    "relatedEvents": [
+      "本地十二叶编纂",
+      "第十三页后加编页"
+    ],
+    "transmission": "original",
+    "suggestedInterpretation": "草目支持梅介臣先编本地十二叶，后接触西来译纸十三叶，并从中抽一叶附后、加页码十三。",
+    "suggestedMissingEvidence": "草目精确日期、十二叶逐页原件、被抽译页在原包中的位置和何姓药商身份。"
+  },
+  {
+    "id": "local-leaf-seven",
+    "title": "本地十二叶 · 第七页",
+    "content": "许继衡引持刃者入东巷。据李成一人言，未核。陈氏称许曾引二童出侧门，所见止于门内。二说并存，候访。",
+    "fragmentary": false,
+    "sourcePerson": "梅介臣据不同口述编记",
+    "foundAt": "梅花门《幼学琼林》残册封皮夹层",
+    "estimatedDate": "顺治八年至十年间初记，后有补记",
+    "medium": "本地口述编记页",
+    "paper": "薄竹纸，四折",
+    "ink": "正文与旁注同墨，补记稍晚",
+    "handwriting": "梅介臣主手与另一补记手",
+    "marks": [
+      "第七",
+      "据一人言",
+      "未核",
+      "候访",
+      "门向草图"
+    ],
+    "value": 90,
+    "politicalRisk": 5,
+    "relatedPeople": [
+      "许继衡",
+      "李成（身份待核）",
+      "陈阿葵",
+      "梅介臣"
+    ],
+    "relatedEvents": [
+      "长寿巷个案",
+      "本地十二叶"
+    ],
+    "transmission": "original",
+    "suggestedInterpretation": "第七页并列一条单一来源的未核指控与一条范围有限的相反所见，编者未作最终裁断。",
+    "suggestedMissingEvidence": "李姓口述者身份与位置、许继衡完整行动时序、陈阿葵当年居住旁证及其他同日记录。"
+  },
+  {
+    "id": "xu-family-oral-account",
+    "title": "许氏老夫人转述家中旧说",
+    "content": "许家旧说称许继衡进入巷中是为了带出两名孩子；说话人当年不在长寿巷现场。",
+    "fragmentary": false,
+    "sourcePerson": "许氏老夫人，经许端礼转述",
+    "foundAt": "广州梅花门",
+    "estimatedDate": "康熙九年口述，内容回忆顺治七年",
+    "medium": "家族口述记录",
+    "paper": "玩家题签",
+    "ink": "当日新墨",
+    "handwriting": "佣书手迹，许端礼签名",
+    "marks": [
+      "亲属利害关系",
+      "非亲见",
+      "访问条件"
+    ],
+    "value": 24,
+    "politicalRisk": 3,
+    "relatedPeople": [
+      "许继衡",
+      "许端礼",
+      "许氏老夫人"
+    ],
+    "relatedEvents": [
+      "长寿巷个案"
+    ],
+    "transmission": "oral-copy",
+    "suggestedInterpretation": "口述说明许家如何解释先人行动及未核指控对家族的长期影响，不能替代现场证据。",
+    "suggestedMissingEvidence": "最早家族记录、说法传承链、被救儿童身份和其他当日见证。"
+  },
+  {
+    "id": "chen-akui-eyewitness-account",
+    "title": "陈阿葵门内所见访谈",
+    "content": "陈阿葵称自己从厨房门内看见许继衡先带两名孩子进入侧门，之后独自出去；多人脚步和撞门声在后，间隔不明。",
+    "fragmentary": false,
+    "sourcePerson": "陈阿葵",
+    "foundAt": "广州城南义冢旁",
+    "estimatedDate": "康熙九年访谈，回忆顺治七年",
+    "medium": "逐项口述访谈与在场见证副本",
+    "paper": "访谈记录纸",
+    "ink": "当日新墨",
+    "handwriting": "佣书手迹，小满见证",
+    "marks": [
+      "位置限定",
+      "可见范围",
+      "本人按印",
+      "复制许可"
+    ],
+    "value": 68,
+    "politicalRisk": 4,
+    "relatedPeople": [
+      "陈阿葵",
+      "许继衡",
+      "小满"
+    ],
+    "relatedEvents": [
+      "长寿巷个案"
+    ],
+    "transmission": "oral-copy",
+    "suggestedInterpretation": "访谈能够支持陈阿葵在门内看见的具体动作与先后，无法覆盖东巷转角、正门和许继衡其余行动。",
+    "suggestedMissingEvidence": "陈阿葵当年居住或雇佣记录、两名孩子身份、李姓口述者位置及同日街巷记录。"
+  },
+  {
+    "id": "xu-family-access-letter",
+    "title": "许家亲阅条件短笺",
+    "content": "许家接受原页保留姓名，但任何引用必须同时保留“据一人言、未核”和陈阿葵可见范围。",
+    "fragmentary": false,
+    "sourcePerson": "许氏老夫人，经许端礼提交",
+    "foundAt": "广州梅花门",
+    "estimatedDate": "康熙九年十月初",
+    "medium": "家属访问与引用条件短笺",
+    "paper": "许家信纸",
+    "ink": "当日墨",
+    "handwriting": "许氏老夫人或代笔，许端礼确认",
+    "marks": [
+      "完整上下文",
+      "限制摘抄",
+      "当前授权"
+    ],
+    "value": 18,
+    "politicalRisk": 2,
+    "relatedPeople": [
+      "许端礼",
+      "许氏老夫人",
+      "许继衡"
+    ],
+    "relatedEvents": [
+      "第七页亲阅"
+    ],
+    "transmission": "original",
+    "suggestedInterpretation": "短笺证明许家当前接受在完整上下文中保留姓名，并提出引用条件；不能倒写为家族过去一直持此态度。",
+    "suggestedMissingEvidence": "代笔身份、许氏老夫人直接画押及后续授权变更。"
+  },
+  {
+    "id": "burial-register-loan-note",
+    "title": "第十二叶借记",
+    "content": "第十二叶，城南瘗簿夹存。七名可识，三人仅姓，四处埋记。",
+    "fragmentary": false,
+    "sourcePerson": "梅介臣",
+    "foundAt": "梅介臣枕下",
+    "estimatedDate": "康熙初以后",
+    "medium": "指向原瘗簿的私人借记",
+    "paper": "普通账纸，非第十二叶原纸",
+    "ink": "梅介臣中年手迹",
+    "handwriting": "行楷",
+    "marks": [
+      "香火箱第二格",
+      "半枚义冢印",
+      "阿葵见证"
+    ],
+    "value": 34,
+    "politicalRisk": 4,
+    "relatedPeople": [
+      "梅介臣",
+      "陈阿葵",
+      "城南守冢人"
+    ],
+    "relatedEvents": [
+      "本地十二叶",
+      "城南埋葬记录"
+    ],
+    "transmission": "original",
+    "suggestedInterpretation": "借记提供第十二叶与城南瘗簿的查验入口，只能证明梅介臣记录过这一存放关系。",
+    "suggestedMissingEvidence": "第十二叶原件、瘗簿日期与经手、七名身份、四处埋葬地点和钥匙保管链。"
   }
 ]

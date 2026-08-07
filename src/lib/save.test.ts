@@ -16,6 +16,17 @@ test("new saves round-trip through the current envelope", () => {
   }
 });
 
+test("new chapter effects have a separate people-trust ledger", () => {
+  const initial = createInitialSave("chapter01");
+  assert.equal(initial.variables.trust_people, 0);
+  const decoded = decodeSave(encodeSave({
+    ...initial,
+    variables: { ...initial.variables, trust_people: 3 },
+  }));
+  assert.equal(decoded.status, "ok");
+  if (decoded.status === "ok") assert.equal(decoded.data.variables.trust_people, 3);
+});
+
 test("legacy unversioned saves migrate missing fields and unlocked fragments", () => {
   const legacy = {
     chapterId: "chapter01",

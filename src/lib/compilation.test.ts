@@ -112,6 +112,19 @@ test("compilation route resolution uses disposition and section", () => {
   assert.equal(resolveCompilationRoute(state(), fragment.id, { recorded: "recorded-route" }), undefined);
 });
 
+test("chapter four and five custody states preserve permanent control decisions", () => {
+  const illicit = applyFragmentAction(state(), fragment.id, { disposition: "retained-illicit" });
+  assert.equal(illicit.entries[fragment.id].disposition, "retained-illicit");
+  assert.equal(resolveCompilationRoute(illicit, fragment.id, { doubtful: "doubtful-route" }), "doubtful-route");
+
+  const sealed = applyFragmentAction(state(), fragment.id, { disposition: "transferred-sealed" });
+  assert.equal(sealed.entries[fragment.id].focused, false);
+  assert.throws(
+    () => applyFragmentAction(sealed, fragment.id, { disposition: "recorded", section: "main" }),
+    /永久离手|决定存放/,
+  );
+});
+
 test("page history cannot roll back fragment disposition, money, risk, or route entrances", () => {
   const current = applyFragmentAction(state(), fragment.id, { disposition: "sold" });
   const previous = { compilation: state(), variables: { wage: 10, risk: 0 }, unlockedEntrances: [], beat: "before" };

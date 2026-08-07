@@ -23,10 +23,13 @@ const NOTE_LABELS: Record<PlayerNoteType, string> = {
   clue: "线索",
 };
 
-const SHELVES: { disposition: FragmentDisposition; label: string; hint: string }[] = [
+type ShelfDisposition = FragmentDisposition | "custody";
+
+const SHELVES: { disposition: ShelfDisposition; label: string; hint: string }[] = [
   { disposition: "unfiled", label: "待理", hint: "尚未判断" },
   { disposition: "recorded", label: "已录", hint: "正文或附录" },
   { disposition: "doubtful", label: "存疑", hint: "等待旁证" },
+  { disposition: "custody", label: "保管", hint: "访问条件已立" },
   { disposition: "sold", label: "已失", hint: "售、毁、交还" },
 ];
 
@@ -39,8 +42,13 @@ interface PlayerNotebookProps {
   weather?: string;
 }
 
-function shelfFor(disposition: FragmentDisposition): FragmentDisposition {
+function shelfFor(disposition: FragmentDisposition): ShelfDisposition {
+  if (["retained-illicit", "retained-mei", "transferred-bookshop", "transferred-sealed", "joint-custody"].includes(disposition)) return "custody";
   return disposition === "destroyed" || disposition === "transferred" ? "sold" : disposition;
+}
+
+function isLockedDisposition(disposition: FragmentDisposition): boolean {
+  return ["sold", "destroyed", "transferred", "retained-mei", "transferred-bookshop", "transferred-sealed", "joint-custody"].includes(disposition);
 }
 
 export default function PlayerNotebook({
@@ -200,7 +208,7 @@ export default function PlayerNotebook({
                   {shelf.ids.map((id) => {
                     const item = compilation.fragments[id];
                     const entry = compilation.entries[id];
-                    return <button type="button" aria-pressed={selectedId === id} draggable={!(["sold", "destroyed", "transferred"] as FragmentDisposition[]).includes(entry.disposition)} key={id} className={`compilation-slip ${selectedId === id ? "is-selected" : ""} ${entry.focused ? "is-focused" : ""}`} onDragStart={(event) => event.dataTransfer.setData("text/plain", id)} onClick={() => setSelectedId(id)}><span>{entry.focused ? "朱" : "录"}</span><b>{item.title}</b></button>;
+                    return <button type="button" aria-pressed={selectedId === id} draggable={!isLockedDisposition(entry.disposition)} key={id} className={`compilation-slip ${selectedId === id ? "is-selected" : ""} ${entry.focused ? "is-focused" : ""}`} onDragStart={(event) => event.dataTransfer.setData("text/plain", id)} onClick={() => setSelectedId(id)}><span>{entry.focused ? "朱" : "录"}</span><b>{item.title}</b></button>;
                   })}
                 </div>
               </section>
@@ -212,7 +220,7 @@ export default function PlayerNotebook({
               <header><small>{selected.medium} · 风险 {selected.politicalRisk}/5</small><h3>{selected.title}</h3></header>
               <p className="fragment-excerpt">{selected.content}</p>
               <dl><div><dt>来处</dt><dd>{selected.foundAt}</dd></div><div><dt>纸墨</dt><dd>{selected.paper}；{selected.ink}</dd></div></dl>
-              {!["sold", "destroyed", "transferred"].includes(selectedEntry.disposition) ? <>
+              {!isLockedDisposition(selectedEntry.disposition) ? <>
                 <div className="compilation-guided-field">
                   <div className="compilation-field-heading"><label htmlFor={interpretationId}>据此可见</label><button type="button" aria-label="代拟材料解释" disabled={!selected.suggestedInterpretation || Boolean(interpretation.trim())} onClick={() => fillSuggested("interpretation")}>代拟</button></div>
                   <textarea id={interpretationId} placeholder="这份材料说明了什么" value={interpretation} onChange={(event) => setInterpretation(event.target.value)} rows={3} />
@@ -228,7 +236,7 @@ export default function PlayerNotebook({
                 </div>
                 <div className="compilation-actions"><button type="button" onClick={() => { setTarget("recorded"); setSection(section === "doubtful" ? "main" : section); }}>收入长编</button><button type="button" onClick={() => { setTarget("doubtful"); setSection("doubtful"); }}>列入存疑</button><button type="button" className="seal-action-inline" onClick={saveJudgement}>落笔</button></div>
                 <div className="fragment-disposition-actions"><button type="button" onClick={changeFocus}>{selectedEntry.focused ? "撤去朱记" : "加朱记"}</button><button type="button" onClick={() => loseFragment("transferred")}>交还</button><button type="button" onClick={() => loseFragment("sold")}>出售 {selected.value} 文</button><button type="button" onClick={() => loseFragment("destroyed")}>销毁</button></div>
-              </> : <p className="lost-fragment-notice">原件已经{selectedEntry.disposition === "sold" ? "出售" : selectedEntry.disposition === "destroyed" ? "销毁" : "交还"}，这里只保留你当时见过的摘要。</p>}
+              </> : <p className="lost-fragment-notice">这份材料的保管状态已经固定为“{selectedEntry.disposition}”，这里只保留访问条件、收条和你当时见过的摘要，不能用普通长编操作改回原件。</p>}
             </section>
           )}
           {!fragmentIds.length && <p className="empty-compilation">尚未取得可收入长编的史料。</p>}

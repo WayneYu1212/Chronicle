@@ -197,8 +197,9 @@ test("Chapter Three exposes five gateways, two labor routes, one convergence, an
     "ch03-ending-zhaoqing",
   ]) assert.ok(ids.has(id), `chapter03 needs ${id}`);
 
-  const terminals = chapter.beats.filter((beat) => beat.terminal);
-  assert.deepEqual(terminals.map((beat) => beat.id), ["ch03-ending-zhaoqing"]);
+  const chapterFourGateway = chapter.beats.find((beat) => beat.id === "ch03-ending-zhaoqing");
+  assert.equal(chapterFourGateway?.type, "choice");
+  assert.deepEqual(chapterFourGateway?.choices?.map((choice) => [choice.chapter, choice.goto]), [["chapter04", "ch04-title"]]);
   assert.ok(chapter.beats.reduce((sum, beat) => sum + beat.text.length, 0) >= 3000, "chapter03 narrative text is too thin");
   for (const beat of chapter.beats) {
     assert.ok(!(beat.grantFragments ?? []).includes("gazetteer-old-entry"), `${beat.id} resurrects the old gazetteer original`);

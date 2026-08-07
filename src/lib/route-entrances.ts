@@ -5,6 +5,9 @@ export const routeEntranceIds = [
   "xiqiao-copyist",
   "zhaoqing-half-seal",
   "zhaoqing-common-ledger",
+  "chaozhou-merchant-ledger",
+  "guangzhou-plum-gate",
+  "guangzhou-burial-register",
 ] as const;
 
 export type RouteEntranceId = (typeof routeEntranceIds)[number];
