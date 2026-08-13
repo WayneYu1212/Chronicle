@@ -83,7 +83,9 @@ export default function LingnanMap({ config, unlockedLocations, investigatedLoca
                   className={`map-location map-location--${status} ${selectedId === location.id ? "is-selected" : ""}`}
                   style={{ left: `${location.x}%`, top: `${location.y}%` }}
                   disabled={!selectable}
-                  onClick={() => setSelectedId(location.id)}
+                  onClick={(event) => {
+                    if (event.detail === 0) setSelectedId(location.id);
+                  }}
                   onKeyDown={(event) => {
                     if (event.key === "Enter" || event.key === " ") setSelectedId(location.id);
                   }}

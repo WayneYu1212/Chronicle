@@ -1,16 +1,11 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import test from "node:test";
-import { fileURLToPath } from "node:url";
-import type { MapLocation, StoryChapter } from "../types/game";
+import type { MapLocation } from "../types/game";
 import archiveJson from "../story/archive.json";
 import fragmentsJson from "../story/fragments.json";
 import locationsJson from "../story/locations.json";
 import { chapterRegistry } from "./story";
 
-const packageDirectory = fileURLToPath(new URL("../../佣书-第四第五章扩写包/", import.meta.url));
-const packageChapter04 = JSON.parse(readFileSync(`${packageDirectory}chapter04.json`, "utf8")) as StoryChapter;
-const packageChapter05 = JSON.parse(readFileSync(`${packageDirectory}chapter05.json`, "utf8")) as StoryChapter;
 const locations = (locationsJson as { locations: MapLocation[] }).locations;
 
 const NEW_FRAGMENT_IDS = [
@@ -81,21 +76,24 @@ test("the package's updated map records are present", () => {
   assert.match(byId.get("chaozhou")?.investigatedRecord ?? "", /六叶与七叶/);
 });
 
-test("every supplied custom activity has a matching data payload", () => {
-  const chapters = [packageChapter04, packageChapter05];
+test("every registered custom activity has a matching data payload", () => {
+  const chapters = [chapterRegistry.chapter04, chapterRegistry.chapter05];
+  assert.ok(chapters.every(Boolean), "chapters four and five must be registered");
   for (const type of CUSTOM_ACTIVITY_TYPES) {
-    const beats = chapters.flatMap((chapter) => chapter.beats.filter((beat) => beat.type === type));
-    assert.ok(beats.length > 0, `package does not exercise ${type}`);
+    const beats = chapters.flatMap((chapter) => chapter?.beats.filter((beat) => beat.type === type) ?? []);
+    assert.ok(beats.length > 0, `runtime does not exercise ${type}`);
     for (const beat of beats) {
       assert.ok((beat as unknown as Record<string, unknown>)[type], `${beat.id} is missing ${type} payload`);
     }
   }
 });
 
-test("package beats preserve top-level fragment actions and choice location updates", () => {
-  const chapter04 = packageChapter04.beats.find((beat) => beat.id === "ch04-hide") as StoryChapter["beats"][number] & { fragmentAction?: unknown };
-  const routeChoice = packageChapter04.beats.find((beat) => beat.id === "ch04-route-choice")?.choices?.find((choice) => choice.id === "to-chaozhou") as { locationUpdates?: unknown } | undefined;
-  assert.deepEqual(chapter04.fragmentAction, { fragmentId: "zhaoqing-common-ledger", disposition: "retained-illicit" });
+test("runtime beats preserve top-level fragment actions and choice location updates", () => {
+  const chapter04 = chapterRegistry.chapter04;
+  assert.ok(chapter04, "chapter04 must be registered");
+  const hideBeat = chapter04.beats.find((beat) => beat.id === "ch04-hide");
+  const routeChoice = chapter04.beats.find((beat) => beat.id === "ch04-route-choice")?.choices?.find((choice) => choice.id === "to-chaozhou");
+  assert.deepEqual(hideBeat?.fragmentAction, { fragmentId: "zhaoqing-common-ledger", disposition: "retained-illicit" });
   assert.deepEqual(routeChoice?.locationUpdates, {
     unlock: ["chaozhou"],
     investigate: ["zhaoqing"],
@@ -103,8 +101,37 @@ test("package beats preserve top-level fragment actions and choice location upda
   });
 });
 
-test("supplied fourth and fifth chapter beat IDs are unique", () => {
-  for (const chapter of [packageChapter04, packageChapter05]) {
+test("the three Chapter Five page-seven judgements continue into spatial reconstruction", () => {
+  const chapter05 = chapterRegistry.chapter05;
+  assert.ok(chapter05, "chapter05 must be registered");
+
+  for (const id of [
+    "ch05-page7-overreach",
+    "ch05-page7-overreach-family",
+    "ch05-page7-careful",
+  ]) {
+    assert.equal(
+      chapter05.beats.find((beat) => beat.id === id)?.next,
+      "ch05-lane-map-intro",
+      `${id} must not repeat the already completed first interview`,
+    );
+  }
+});
+
+test("the Xu family retelling keeps the 1670 and 1650 ages twenty years apart", () => {
+  const chapter05 = chapterRegistry.chapter05;
+  assert.ok(chapter05, "chapter05 must be registered");
+
+  for (const id of ["ch05-xu-01", "ch05-family-fragment"]) {
+    const text = chapter05.beats.find((beat) => beat.id === id)?.text ?? "";
+    assert.match(text, /五十六岁/, `${id} must use the age implied by seventy-six in 1670`);
+    assert.doesNotMatch(text, /十二岁/, `${id} must not collapse a twenty-year interval into sixty-four years`);
+  }
+});
+
+test("registered fourth and fifth chapter beat IDs are unique", () => {
+  for (const chapter of [chapterRegistry.chapter04, chapterRegistry.chapter05]) {
+    assert.ok(chapter, "chapters four and five must be registered");
     const ids = chapter.beats.map((beat) => beat.id);
     assert.equal(new Set(ids).size, ids.length, `${chapter.id} has duplicate beat IDs`);
   }
